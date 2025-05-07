@@ -1,14 +1,33 @@
-proj_conformal <- function(input_sf,output_type = "proj4") {
-  new_boundary = sf::st_bbox(input_sf)
+#' Projection for the area of interest with conformal projection
+#'
+#' Auto selecting conformal projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
+#' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
+#' @param output_type A string for expected output, either "proj4" or "WKT"
+#'
+#' @returns A `proj4` or `WKT` string
+#' @export
+#'
+#' @examples proj_conformal(spData::alaska)
+proj_conformal <- function(obj,output_type = "proj4") {
+  if(!sf::st_is_longlat(obj)) {
+    obj = sf::st_transform(obj, 4326)
+  }
+  new_boundary = sf::st_bbox(obj)
   lonmax = new_boundary$xmax
   lonmin = new_boundary$xmin
   latmax = new_boundary$ymax
   latmin = new_boundary$ymin
-  center <- list(lng = (lonmax + lonmin) / 2, lat = (latmax + latmin) / 2)
-  scale <- 720 / (lonmax - lonmin) / (sin(latmax * pi / 180) - sin(latmin * pi / 180))
-
   # computing longitude extent
-  dlon <- (lonmax - lonmin)
+  dlon0 <- abs(lonmax - lonmin)
+  dlon <- ifelse(dlon0 > 180, 360-dlon0, dlon0)
+  if (lonmax < lonmin) {
+    temp_mid = (lonmax + 360 + lonmin) / 2
+    mid_lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
+  } else {
+    mid_lon = (lonmax + lonmin) / 2
+  }
+  center <- list(lng = mid_lon, lat = (latmax + latmin) / 2)
+  # scale <- 720 / dlon / (sin(latmax * pi / 180) - sin(latmin * pi / 180))
 
   # reading central meridian - Assuming outputLON is defined elsewhere
   lng <- center$lng
@@ -46,7 +65,7 @@ proj_conformal <- function(input_sf,output_type = "proj4") {
     } else if (ratio < 0.8) {
       message("## East-west extent")
       # Regional maps with an east-west extent
-      outputTEXT <- printEWextent("Conformal", center, scale,latmax,latmin,lonmax,lonmin)
+      outputTEXT <- printEWextent("Conformal", center,latmax,latmin,lonmax,lonmin)
     } else {
       message("## Square-shaped extent")
       # Regional maps in square format
@@ -57,7 +76,7 @@ proj_conformal <- function(input_sf,output_type = "proj4") {
   #   # general note for maps showing a smaller area
   #   message("## For maps at this scale, you can try some official projections.\nMost countries use a conformal projection for their official large-scale maps.\nYou can search for official projections in https://epsg.org/")
   # }
-  if (requireNamespace(geosphere,quietly = TRUE)) {
+  if (requireNamespace("geosphere",quietly = TRUE)) {
     p1 = matrix(
       c(lonmin, latmin,lonmin, latmin,lonmax, latmax,lonmax, latmax),
       ncol = 2, byrow = TRUE

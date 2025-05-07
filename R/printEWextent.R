@@ -1,5 +1,17 @@
-# Funcion for regional maps with an east-west extent
-printEWextent <- function(property, center, scale, latmax, latmin,lonmax,lonmin) {
+#' Funcion for regional maps with an east-west extent
+#'
+#' @param property Longitude value to be corrected
+#' @param center Median longitude value
+#' @param latmax description
+#' @param latmin description
+#' @param lonmax description
+#' @param lonmin description
+#'
+#' @returns A string
+#' @keywords internal
+#'
+#' @examples printEWextent("Equalarea", center, latmax, latmin)
+printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin) {
   lng <- center$lng
   # case: close to poles
   if (center$lat > 70) {
@@ -24,7 +36,7 @@ printEWextent <- function(property, center, scale, latmax, latmin,lonmax,lonmin)
       message("## Select Lambert azimuthal equal area projection")
       outputTEXT <- stringLinks("laea", NaN, -90.0, NaN, NaN, center$lng, NaN)
     }
-  } else if (abs(center$lat) < 15) { 
+  } else if (abs(center$lat) < 15) {
     # case: close to equator
     message("## Close to equator")
     if ((latmax * latmin) <= 0 ) { # extent is touching or crossing equator
@@ -41,13 +53,13 @@ printEWextent <- function(property, center, scale, latmax, latmin,lonmax,lonmin)
       message("## Select Cylindrical equal area projection")
       outputTEXT <- stringLinks("cea", NaN, NaN, latS, NaN, center$lng, NaN)
     }
-    
+
   } else {
     # case: between pole and equator
     message("## Mid-Latitude away from pole and equator")
     # formating coordinates of the center
     interval <- (latmax - latmin) / 6
-    
+
     if (property == "Conformal") {
       # Check if the fan of the selected extent exposes a cone opening at a pole
       if (checkConicOK(center$lat, center$lng, "Lambert conformal conic",latmax,latmin,lonmax,lonmin) > 0) {
@@ -88,7 +100,6 @@ printEWextent <- function(property, center, scale, latmax, latmin,lonmax,lonmin)
       }
     }
   }
-  
+
   return(outputTEXT)
 }
-# printEWextent("Equalarea", center,scale, latmax, latmin)

@@ -3,7 +3,7 @@ Title: R Implementataion of Projection Wizard
 Version: 0.0.0.9000
 Authors@R: 
     person("Zhaoyang", "Shi", , "fumeshroom4@gmail.com", role = c("aut", "cre"))
-Description: Map projection selection and specifiation for regions with unofficial geographical projections
+Description: Map projection selection and specifiation for regions with unofficial geographical projections.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

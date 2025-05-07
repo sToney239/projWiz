@@ -1,20 +1,33 @@
-
+#' Title
+#'
+#' @param prj A string of the shorthand of desired prjection
+#' @param x0 A numerical value for offset
+#' @param lat0 A numerical value for centeral latitude
+#' @param lat1 A numerical value for standard parallel 1
+#' @param lat2 A numerical value for standard parallel 2
+#' @param lon0 A numerical value for centeral longitude
+#' @param k0 A numerical value for scale factor
+#'
+#' @returns A list contains `proj` and `WKT` string
+#' @keywords internal
+#'
+#' @examples stringLinks("aeqd", NaN, 90.0, NaN, NaN, 130, NaN)
 stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
   PROJstr <- "+proj="
   WKTstr <- 'PROJCS[\\\"ProjWiz_Custom_'
-  
+
   # FORMATING GEOGRAPHIC\GEODETIC DATUM
   # Assuming document.getElementById("datum").value is replaced by a variable 'datum' passed to the function
   # datum <- document.getElementById("datum").value # This needs to be passed as an argument
   # Example usage: stringLinks("aeqd", 0, 0, 0, 0, 0, 1, datum = "WGS84", unit = "m")
-  
+
   #Checking if datum and unit are defined, if not return ""
   datum = "WGS84"
   unit = "m"
   if(is.na(datum) || is.na(unit)){
     stop("No reference ellipse or unit is provided")
   }
-  
+
   # PROJ and WKT strings
   if (datum == "WGS84") {
     datum_str <- " +datum=WGS84"
@@ -29,8 +42,8 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
     stop("Sorry, currently your reference ellipse is not supported")
   }
   # END of FORMATING GEOGRAPHIC\GEODETIC DATUM
-  
-  
+
+
   # FORMATING PROJECTION
   # PROJ string
   if (prj == "latlong") {
@@ -38,7 +51,7 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
   } else {
     PROJstr <- paste0(PROJstr, prj)
   }
-  
+
   # WKT string
   WKTstr <- switch(prj,
                    "aeqd" = paste0(WKTstr, 'Azimuthal_Equidistant\\\",', gcs_str, '</br>&nbsp;PROJECTION[\\\"Azimuthal_Equidistant\\\"],'),
@@ -69,8 +82,8 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
                    "ortho" = paste0(WKTstr, 'Orthographic\\\",', gcs_str, '</br>&nbsp;PROJECTION[\\\"Orthographic\\\"],')
   )
   # END of FORMATING PROJECTION
-  
-  
+
+
   # FORMATING PROJECTION PARAMETERS
   # False Easting and False Northing
   if (!is.na(x0)) {
@@ -79,13 +92,13 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
   } else {
     WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"False_Easting\\\",0.0],</br>&nbsp;PARAMETER[\\\"False_Northing\\\",0.0],')
   }
-  
+
   # Format output values
   lat0 <- round(lat0 * 1e7) / 1e7
   lat1 <- round(lat1 * 1e7) / 1e7
   lat2 <- round(lat2 * 1e7) / 1e7
   lon0 <- round(lon0 * 1e7) / 1e7
-  
+
   # Other proj parameters
   switch(prj,
          "aeqd" = ,
@@ -149,11 +162,11 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
            WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"Latitude_Of_1st_Point\\\",', lat0, '],</br>&nbsp;PARAMETER[\\\"Latitude_Of_2nd_Point\\\",', lat2, '],</br>&nbsp;PARAMETER[\\\"Longitude_Of_1st_Point\\\",', lat1, '],</br>&nbsp;PARAMETER[\\\"Longitude_Of_2nd_Point\\\",', lon0, '],')
          }
   )
-  
+
   # FORMATING LINEAR UNIT and CLOSING STRINGS
   # Assuming document.getElementById("unit").value is replaced by a variable 'unit' passed to the function
   # unit <- document.getElementById("unit").value # This needs to be passed as an argument
-  
+
   # PROJ and WKT strings
   if (unit == "m") {
     PROJstr <- paste0(PROJstr, datum_str, " +units=m +no_defs")
@@ -165,7 +178,6 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
     stop("Sorry, currently only 'm' & 'ft' supported as proj unit")
   }
   # END of FORMATING LINEAR UNIT and CLOSING STRINGS
-  
+
   return(list(PROJ = PROJstr, WKT = WKTstr))
 }
-# stringLinks("aeqd", NaN, 90.0, NaN, NaN, 130, NaN)

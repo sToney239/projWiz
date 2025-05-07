@@ -1,4 +1,3 @@
-source("scripts/checkConicOK.R")
 # Funcion for regional maps with an east-west extent
 printEWextent <- function(property, center, scale, latmax, latmin,lonmax,lonmin) {
   lng <- center$lng

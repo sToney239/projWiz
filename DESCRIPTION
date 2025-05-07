@@ -1,11 +1,16 @@
 Package: projWiz
-Title: What the Package Does (One Line, Title Case)
+Title: R Implementataion of Projection Wizard
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Zhaoyang", "Shi", , "fumeshroom4@gmail.com", role = c("aut", "cre"))
+Description: Map projection selection and specifiation for regions with unofficial geographical projections
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Suggests: 
+    geosphere,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    sf

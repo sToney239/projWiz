@@ -2,7 +2,7 @@
 # please use proj_world directly
 proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",unit = "m", x0 = NA_real_) {
   
-  new_boundary = st_bbox(input_sf)
+  new_boundary = sf::st_bbox(input_sf)
   lonmax = new_boundary$xmax
   lonmin = new_boundary$xmin
   latmax = new_boundary$ymax

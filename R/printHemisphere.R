@@ -1,5 +1,5 @@
 printHemisphere = function(input_sf, property) {
-  new_boundary = st_bbox(input_sf)
+  new_boundary = sf::st_bbox(input_sf)
   lon = (new_boundary$xmax + new_boundary$xmin)/2
   lat = (new_boundary$ymax + new_boundary$ymin)/2
   if (property == 'Equalarea') {

@@ -4,12 +4,14 @@
 #' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
 #' @param property Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".
 #' @param output_type A string for expected output, either "proj4" or "WKT"
+#' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
+#' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #'
 #' @returns A `proj4` or `WKT` string
 #' @export
 #'
 #' @examples proj_conformal(spData::alaska, "Equalarea")
-proj_region <- function(obj, property,output_type = "proj4") {
+proj_region <- function(obj, property,output_type = "proj4",datum = "WGS84", unit = "m") {
   if(!sf::st_is_longlat(obj)) {
     obj = sf::st_transform(obj, 4326)
   }
@@ -44,14 +46,14 @@ proj_region <- function(obj, property,output_type = "proj4") {
     if (center$lat > 70) {
       message("## Close to poles")
       # case: close to poles
-      outputTEXT <- stringLinks("aeqd", NaN, 90.0, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("aeqd", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (center$lat < -70) {
       message("## Close to poles")
-      outputTEXT <- stringLinks("aeqd", NaN, -90.0, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("aeqd", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (ratio > 1.25) {
       message("## North-south extent")
       # case: with an north-south extent
-      outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (abs(center$lat) < 15) {
       message("## Close to equator")
       # case: close to equator
@@ -62,46 +64,46 @@ proj_region <- function(obj, property,output_type = "proj4") {
         message("## Extent is not crossing equator")
         latS = center$lat
       }
-      outputTEXT <- stringLinks("eqc", NaN, NaN, latS, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("eqc", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
     } else {
       message("## Mid-Latitude away from pole and equator")
       # case: between pole and equator
       interval <- (latmax - latmin) / 6
       message("## Select Oblique azimuthal equidistant projection")
-      outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
     }
   }  else if ((latmin >= 84) && (property == "Conformal")) {
     message("## very large scale, Universal Polar Stereographic")
     # case: very large scale, Universal Polar Stereographic - North Pole
-    outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, 0.994)
+    outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, 0.994, datum, unit)
   } else if ((latmax <= -80) && (property == "Conformal")) {
     message("## very large scale, Universal Polar Stereographic")
     # case: very large scale, Universal Polar Stereographic - South Pole
-    outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, 0.994)
+    outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, 0.994, datum, unit)
   } else if ((dlon <= 3) && (property == "Conformal")) {
     message("## longitude delta<=3, like on 'state plane' coordinate system")
     # case: very large scale, like on "state plane" coord. sys.
     # False easting: 500000.0 & Scale factor: 0.9999
-    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999)
+    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
   } else if ((dlon <= 6) && (property == "Conformal")) {
     message("## longitude delta between 3 and 6, like on 'state plane' coordinate system")
     # case: very large scale, like Universal Transverse Mercator
     # False easting: 500000.0 & Scale factor: 0.9996
-    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996)
+    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
   } else {
     # Different map formats
     if (ratio > 1.25) {
       # Regional maps with an north-south extent
       message("## North-south extent")
-      outputTEXT <- printNSextent(property, center,latmax,latmin)
+      outputTEXT <- printNSextent(property, center,latmax,latmin, datum, unit)
     } else if (ratio < 0.8) {
       message("## East-west extent")
       # Regional maps with an east-west extent
-      outputTEXT <- printEWextent(property, center,latmax,latmin,lonmax,lonmin)
+      outputTEXT <- printEWextent(property, center, latmax, latmin, lonmax, lonmin, datum, unit)
     } else {
       message("## Square-shaped extent")
       # Regional maps in square format
-      outputTEXT <- printSquareFormat(property, center,latmax,latmin)
+      outputTEXT <- printSquareFormat(property, center, latmax, latmin, datum, unit)
     }
   }
   # if (scale > 260) {

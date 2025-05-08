@@ -3,12 +3,14 @@
 #' Auto selecting equidistant projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
 #' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
 #' @param output_type A string for expected output, either "proj4" or "WKT"
+#' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
+#' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #'
 #' @returns A `proj4` or `WKT` string
 #' @export
 #'
 #' @examples proj_conformal(spData::alaska)
-proj_equidstant <- function(obj,output_type = "proj4") {
+proj_equidstant <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
   if(!sf::st_is_longlat(obj)) {
     obj = sf::st_transform(obj, 4326)
   }
@@ -43,14 +45,14 @@ proj_equidstant <- function(obj,output_type = "proj4") {
   if (center$lat > 70) {
     message("## Close to poles")
     # case: close to poles
-    outputTEXT <- stringLinks("aeqd", NaN, 90.0, NaN, NaN, center$lng, NaN)
+    outputTEXT <- stringLinks("aeqd", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
   } else if (center$lat < -70) {
     message("## Close to poles")
-    outputTEXT <- stringLinks("aeqd", NaN, -90.0, NaN, NaN, center$lng, NaN)
+    outputTEXT <- stringLinks("aeqd", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
   } else if (ratio > 1.25) {
     message("## North-south extent")
     # case: with an north-south extent
-    outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN)
+    outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN, datum, unit)
   } else if (abs(center$lat) < 15) {
     message("## Close to equator")
     # case: close to equator
@@ -61,7 +63,7 @@ proj_equidstant <- function(obj,output_type = "proj4") {
       message("## Extent is not crossing equator")
       latS = center$lat
     }
-    outputTEXT <- stringLinks("eqc", NaN, NaN, latS, NaN, center$lng, NaN)
+    outputTEXT <- stringLinks("eqc", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
   } else {
     message("## Mid-Latitude away from pole and equator")
     # case: between pole and equator
@@ -69,7 +71,7 @@ proj_equidstant <- function(obj,output_type = "proj4") {
     interval <- (latmax - latmin) / 6
     # Oblique azimuthal equidistant
     message("## Select Oblique azimuthal equidistant projection")
-    outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN)
+    outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
     # outputTEXT <- list(
     #   "Equidistant conic" = stringLinks("eqdc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN),
     #   "Oblique azimuthal equidistant" = stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN)

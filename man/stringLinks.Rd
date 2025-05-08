@@ -2,7 +2,7 @@
 % Please edit documentation in R/stringLinks.R
 \name{stringLinks}
 \alias{stringLinks}
-\title{Title}
+\title{Function to generate proj4 and WKT string}
 \usage{
 stringLinks(prj, x0, lat0, lat1, lat2, lon0, k0)
 }
@@ -22,10 +22,10 @@ stringLinks(prj, x0, lat0, lat1, lat2, lon0, k0)
 \item{k0}{A numerical value for scale factor}
 }
 \value{
-A list contains \code{proj} and \code{WKT} string
+A list of strings named with \code{PROJ} & \code{WKT}
 }
 \description{
-Title
+Function to generate proj4 and WKT string
 }
 \examples{
 stringLinks("aeqd", NaN, 90.0, NaN, NaN, 130, NaN)

@@ -1,32 +1,48 @@
-# note that world proj is not supported here
-# please use proj_world directly
-proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",unit = "m", x0 = NA_real_) {
-  
-  new_boundary = sf::st_bbox(input_sf)
+#' Generating projection by the geo-boundary and the shorthand name
+#'
+#' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
+#' @param prj A string representing the shorthand name of the desired projection
+#' @param output_type A string for expected output, either "proj4" or "WKT"
+#' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
+#' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
+#' @param x0 A numeric value specifying the longitude offset
+#'
+#' @returns A `proj4` or `WKT` string as `output_type` specified
+#' @export
+#'
+#' @examples proj_specify(sf::st_bbox(c(xmin = -30,ymin = -25,xmax = 20,ymax = 5),crs = 4326), "lcc")
+proj_specify <- function(obj, prj, output_type = "proj4", datum = "WGS84",unit = "m", x0 = NA_real_) {
+
+  new_boundary = sf::st_bbox(obj)
   lonmax = new_boundary$xmax
   lonmin = new_boundary$xmin
   latmax = new_boundary$ymax
   latmin = new_boundary$ymin
   lat0 = (latmax + latmin) / 2
-  lon0 = (lonmax + lonmin) / 2
+  if (lonmax < lonmin) {
+    temp_mid = (lonmax + 360 + lonmin) / 2
+    lon0 = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
+  } else {
+    lon0 = (lonmax + lonmin) / 2
+  }
   interval <- (latmax - latmin) / 6
   lat1 = latmin + interval
   lat2 = latmax - interval
   k0 = NA_real_
-  
+
   PROJstr <- "+proj="
   WKTstr <- 'PROJCS[\\\"ProjWiz_Custom_'
   # FORMATING GEOGRAPHIC\GEODETIC DATUM
   # Assuming document.getElementById("datum").value is replaced by a variable 'datum' passed to the function
   # datum <- document.getElementById("datum").value # This needs to be passed as an argument
   # Example usage: stringLinks("aeqd", 0, 0, 0, 0, 0, 1, datum = "WGS84", unit = "m")
-  
+
   #Checking if datum and unit are defined, if not return ""
-  
+
   if(is.na(datum) || is.na(unit)){
     stop("No reference ellipse or unit is provided")
   }
-  
+
   # PROJ and WKT strings
   if (datum == "WGS84") {
     datum_str <- " +datum=WGS84"
@@ -47,7 +63,7 @@ proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",u
   } else {
     PROJstr <- paste0(PROJstr, prj)
   }
-  
+
   # WKT string
   WKTstr <- switch(prj,
                    "aeqd" = paste0(WKTstr, 'Azimuthal_Equidistant\\\",', gcs_str, '</br>&nbsp;PROJECTION[\\\"Azimuthal_Equidistant\\\"],'),
@@ -77,20 +93,20 @@ proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",u
                    "tpeqd" = paste0(WKTstr, 'Two_Point_Equidistant\\\",', gcs_str, '</br>&nbsp;PROJECTION[\\\"Two_Point_Equidistant\\\"],'),
                    "ortho" = paste0(WKTstr, 'Orthographic\\\",', gcs_str, '</br>&nbsp;PROJECTION[\\\"Orthographic\\\"],')
   )
-  
+
   if (!is.na(x0)) {
     PROJstr <- paste0(PROJstr, " +x_0=", x0)
     WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"False_Easting\\\",', x0, '],</br>&nbsp;PARAMETER[\\\"False_Northing\\\",0.0],')
   } else {
     WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"False_Easting\\\",0.0],</br>&nbsp;PARAMETER[\\\"False_Northing\\\",0.0],')
   }
-  
+
   # Format output values
   lat0 <- round(lat0 * 1e7) / 1e7
   lat1 <- round(lat1 * 1e7) / 1e7
   lat2 <- round(lat2 * 1e7) / 1e7
   lon0 <- round(lon0 * 1e7) / 1e7
-  
+
   # Other proj parameters
   switch(prj,
          "aeqd" = ,
@@ -117,7 +133,12 @@ proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",u
          "cea" = ,
          "eqc" = ,
          "merc" = {
-           PROJstr <- paste0(PROJstr, " +lon_0=", lon0, " +lat_ts=", lat1)
+           if ((latmax * latmin) <= 0 ) {
+             latS = max(abs(latmax), abs(latmin)) / 2
+           } else{
+             latS = lat0
+           }
+           PROJstr <- paste0(PROJstr, " +lon_0=", lon0, " +lat_ts=", latS)
            WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"Central_Meridian\\\",', lon0, '],</br>&nbsp;PARAMETER[\\\"Standard_Parallel_1\\\",', lat1, '],')
          },
          "tcea" = ,
@@ -154,7 +175,7 @@ proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",u
            WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"Latitude_Of_1st_Point\\\",', lat0, '],</br>&nbsp;PARAMETER[\\\"Latitude_Of_2nd_Point\\\",', lat2, '],</br>&nbsp;PARAMETER[\\\"Longitude_Of_1st_Point\\\",', lat1, '],</br>&nbsp;PARAMETER[\\\"Longitude_Of_2nd_Point\\\",', lon0, '],')
          }
   )
-  
+
   if (unit == "m") {
     PROJstr <- paste0(PROJstr, datum_str, " +units=m +no_defs")
     WKTstr <- paste0(WKTstr, '</br>&nbsp;UNIT[\\\"Meter\\\",1.0]]')
@@ -171,3 +192,5 @@ proj_specify <- function(input_sf, prj, output_type = "proj4", datum = "WGS84",u
   }
 }
 
+# note that world proj is not supported here
+# please use proj_world directly

@@ -1,17 +1,19 @@
 #' Funcion for regional maps with an east-west extent
 #'
-#' @param property Longitude value to be corrected
-#' @param center Median longitude value
-#' @param latmax description
-#' @param latmin description
-#' @param lonmax description
-#' @param lonmin description
+#' @param property Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".
+#' @param center A list with with numerical values named with `lng` & `lat` element, which are the median longitude and latitude values
+#' @param latmax A numerical value, max latitude of the map extent
+#' @param latmin A numerical value, min latitude of the map extent
+#' @param lonmax A numerical value, max longitude of the map extent
+#' @param lonmin A numerical value, min longitude of the map extent
+#' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
+#' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #'
-#' @returns A string
+#' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
 #'
 #' @examples printEWextent("Equalarea", center, latmax, latmin)
-printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin) {
+printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin, datum, unit) {
   lng <- center$lng
   # case: close to poles
   if (center$lat > 70) {
@@ -19,22 +21,22 @@ printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin) {
     if (property == "Conformal") {
       # "Stereographic"
       message("## Select Stereographic projection")
-      outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (property == 'Equalarea') {
       message("## Select Lambert azimuthal equal area projection")
       # "Lambert azimuthal equal area"
-      outputTEXT <- stringLinks("laea", NaN, 90.0, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("laea", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
     }
   } else if (center$lat < -70) {
     message("## Close to poles")
     if (property == "Conformal") {
       # "Stereographic"
       message("## Select Stereographic projection")
-      outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (property == 'Equalarea') {
       #  "Lambert azimuthal equal area"
       message("## Select Lambert azimuthal equal area projection")
-      outputTEXT <- stringLinks("laea", NaN, -90.0, NaN, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("laea", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
     }
   } else if (abs(center$lat) < 15) {
     # case: close to equator
@@ -47,11 +49,11 @@ printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin) {
     if (property == "Conformal") {
       # "Mercator"
       message("## Select Mercator projection")
-      outputTEXT <- stringLinks("merc", NaN, NaN, latS, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("merc", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
     } else if (property == 'Equalarea') {
       # "Cylindrical equal area"
       message("## Select Cylindrical equal area projection")
-      outputTEXT <- stringLinks("cea", NaN, NaN, latS, NaN, center$lng, NaN)
+      outputTEXT <- stringLinks("cea", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
     }
 
   } else {
@@ -64,15 +66,15 @@ printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin) {
       # Check if the fan of the selected extent exposes a cone opening at a pole
       if (checkConicOK(center$lat, center$lng, "Lambert conformal conic",latmax,latmin,lonmax,lonmin) > 0) {
         message("## Lambert conformal conic passed the conic check\n## Select Lambert conformal conic projection")
-        outputTEXT <- stringLinks("lcc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN)
+        outputTEXT <- stringLinks("lcc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN, datum, unit)
       } else {
       # When the fan of the selected extent exposes a cone opening at a pole
         message("## Lambert conformal conic proj failed to pass the conic check\n## Select Stereographic projection")
         # "Stereographic"
         if (center$lat > 0) { # North Pole case
-          outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, NaN)
+          outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
         } else { # South Pole case
-          outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, NaN)
+          outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
         }
       }
     } else if (property == 'Equalarea') {
@@ -80,22 +82,22 @@ printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin) {
       conicTest <- checkConicOK(center$lat, center$lng, "Albers equal area conic",latmax,latmin,lonmax,lonmin)
       if (conicTest > 0) {
         message("## Albers equal area conic passed the conic check\n## Select Albers equal area conic projection")
-        outputTEXT <- stringLinks("aea", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN)
+        outputTEXT <- stringLinks("aea", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN, datum, unit)
       } else {
         message("## Albers equal area conic failed to pass the conic check\n## Select Lambert azimuthal equal area projection")
         # When the fan of the selected extent exposes a cone opening at a pole
-        conicTest <- checkConicOK(center$lat, center$lng, "Lambert azimuthal equal area",latmax,latmin,lonmax,lonmin)
+        # conicTest <- checkConicOK(center$lat, center$lng, "Lambert azimuthal equal area",latmax,latmin,lonmax,lonmin)
         # Case when the fan of the selected extent spans less than 180deg around a pole
         if (conicTest == 0) {
-          outputTEXT <- stringLinks("laea", NaN, center$lat, NaN, NaN, center$lng, NaN)
+          outputTEXT <- stringLinks("laea", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
         } else if (center$lat > 0) {
           # North Pole case
           message("## The fan of the selected extent spans around the pole")
-          outputTEXT <- stringLinks("laea", NaN, 90.0, NaN, NaN, center$lng, NaN)
+          outputTEXT <- stringLinks("laea", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
         } else {
           # South Pole case
           message("## The fan of the selected extent spans around the pole")
-          outputTEXT <- stringLinks("laea", NaN, -90.0, NaN, NaN, center$lng, NaN)
+          outputTEXT <- stringLinks("laea", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
         }
       }
     }

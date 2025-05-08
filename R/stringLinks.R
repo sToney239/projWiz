@@ -1,18 +1,20 @@
-#' Title
+#' Function to generate proj4 and WKT string
 #'
-#' @param prj A string of the shorthand of desired prjection
-#' @param x0 A numerical value for offset
+#' @param prj A string representing the shorthand name of the desired projection
+#' @param x0 A numeric value specifying the longitude offset
 #' @param lat0 A numerical value for centeral latitude
 #' @param lat1 A numerical value for standard parallel 1
 #' @param lat2 A numerical value for standard parallel 2
 #' @param lon0 A numerical value for centeral longitude
 #' @param k0 A numerical value for scale factor
+#' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
+#' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #'
-#' @returns A list contains `proj` and `WKT` string
+#' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
 #'
 #' @examples stringLinks("aeqd", NaN, 90.0, NaN, NaN, 130, NaN)
-stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
+stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0,datum = "WGS84", unit = "m") {
   PROJstr <- "+proj="
   WKTstr <- 'PROJCS[\\\"ProjWiz_Custom_'
 
@@ -22,8 +24,7 @@ stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0) {
   # Example usage: stringLinks("aeqd", 0, 0, 0, 0, 0, 1, datum = "WGS84", unit = "m")
 
   #Checking if datum and unit are defined, if not return ""
-  datum = "WGS84"
-  unit = "m"
+
   if(is.na(datum) || is.na(unit)){
     stop("No reference ellipse or unit is provided")
   }

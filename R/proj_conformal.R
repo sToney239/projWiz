@@ -3,12 +3,14 @@
 #' Auto selecting conformal projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
 #' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
 #' @param output_type A string for expected output, either "proj4" or "WKT"
+#' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
+#' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #'
 #' @returns A `proj4` or `WKT` string
 #' @export
 #'
 #' @examples proj_conformal(spData::alaska)
-proj_conformal <- function(obj,output_type = "proj4") {
+proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
   if(!sf::st_is_longlat(obj)) {
     obj = sf::st_transform(obj, 4326)
   }
@@ -41,35 +43,35 @@ proj_conformal <- function(obj,output_type = "proj4") {
   if (latmin >= 84)  {
     message("## very large scale, Universal Polar Stereographic")
     # case: very large scale, Universal Polar Stereographic - North Pole
-    outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, 0.994)
+    outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, 0.994, datum, unit)
   } else if (latmax <= -80)  {
     message("## very large scale, Universal Polar Stereographic")
     # case: very large scale, Universal Polar Stereographic - South Pole
-    outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, 0.994)
+    outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, 0.994, datum, unit)
   } else if (dlon <= 3) {
     message("## longitude delta<=3, like on 'state plane' coordinate system")
     # case: very large scale, like on "state plane" coord. sys.
     # False easting: 500000.0 & Scale factor: 0.9999
-    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999)
+    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
   } else if (dlon <= 6) {
     message("## longitude delta between 3 and 6, like on 'state plane' coordinate system")
     # case: very large scale, like Universal Transverse Mercator
     # False easting: 500000.0 & Scale factor: 0.9996
-    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996)
+    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
   } else {
     # Different map formats
     if (ratio > 1.25) {
       # Regional maps with an north-south extent
       message("## North-south extent")
-      outputTEXT <- printNSextent("Conformal", center,latmax,latmin)
+      outputTEXT <- printNSextent("Conformal", center,latmax,latmin, datum, unit)
     } else if (ratio < 0.8) {
       message("## East-west extent")
       # Regional maps with an east-west extent
-      outputTEXT <- printEWextent("Conformal", center,latmax,latmin,lonmax,lonmin)
+      outputTEXT <- printEWextent("Conformal", center,latmax,latmin,lonmax,lonmin, datum, unit)
     } else {
       message("## Square-shaped extent")
       # Regional maps in square format
-      outputTEXT <- printSquareFormat("Conformal", center,latmax,latmin)
+      outputTEXT <- printSquareFormat("Conformal", center,latmax,latmin, datum, unit)
     }
   }
   # if (scale > 260) {

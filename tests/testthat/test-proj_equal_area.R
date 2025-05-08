@@ -17,7 +17,18 @@ test_that("proj_equal_area works", {
                "+proj=laea +lon_0=-59 +lat_0=90 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equal_area(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326)),
                "+proj=laea +lon_0=-79 +lat_0=0 +datum=WGS84 +units=m +no_defs")
-  expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 70,ymin = -78,xmax = 162 ,ymax = -67),crs = 4326)),
-               "+proj=laea +lon_0=116 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),output_type="WKT"),
+               'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
+ GEOGCS["GCS_WGS_1984",
+  DATUM["D_WGS_1984",
+   SPHEROID["WGS_1984",6378137.0,298.257223563]],
+  PRIMEM["Greenwich",0.0],
+  UNIT["Degree",0.0174532925199433]],
+ PROJECTION["Lambert_Azimuthal_Equal_Area"],
+ PARAMETER["False_Easting",0.0],
+ PARAMETER["False_Northing",0.0],
+ PARAMETER["Central_Meridian",89.5],
+ PARAMETER["Latitude_Of_Origin",90],
+ UNIT["Meter",1.0]]')
 })
 

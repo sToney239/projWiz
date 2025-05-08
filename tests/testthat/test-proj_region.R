@@ -11,6 +11,30 @@ test_that("proj_region Equalarea works", {
                  proj_region("Equalarea"),"+proj=cea +lon_0=86 +lat_ts=-12 +datum=WGS84 +units=m +no_defs")
   expect_equal(sf::st_bbox(c(xmin = 168,ymin = 40,xmax = -171 ,ymax = 55),crs = 4326) |>
                  proj_region("Equalarea"),"+proj=laea +lon_0=178.5 +lat_0=47.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326),property = "Equalarea"),
+               "+proj=laea +lon_0=-79 +lat_0=0 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),property = "Equalarea",output_type="WKT"),
+               'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
+ GEOGCS["GCS_WGS_1984",
+  DATUM["D_WGS_1984",
+   SPHEROID["WGS_1984",6378137.0,298.257223563]],
+  PRIMEM["Greenwich",0.0],
+  UNIT["Degree",0.0174532925199433]],
+ PROJECTION["Lambert_Azimuthal_Equal_Area"],
+ PARAMETER["False_Easting",0.0],
+ PARAMETER["False_Northing",0.0],
+ PARAMETER["Central_Meridian",89.5],
+ PARAMETER["Latitude_Of_Origin",90],
+ UNIT["Meter",1.0]]')
+
+  expect_equal(proj_region(c(
+    sf::st_point(c(12801741,-3248974)),
+    sf::st_point(c(12801741,-2391879)),
+    sf::st_point(c(13692297,-3248974)),
+    sf::st_point(c(13692297,-2391879))
+  ) |>
+    sf::st_sfc(crs = 3857), "Equalarea"),
+  "+proj=laea +lon_0=118.9999964 +lat_0=-24.5000026 +datum=WGS84 +units=m +no_defs")
 })
 
 
@@ -29,6 +53,23 @@ test_that("proj_region Conformal works", {
                  proj_region("Conformal"),"+proj=stere +lon_0=166 +lat_0=39.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(sf::st_bbox(c(xmin = 168,ymin = 50,xmax = -166,ymax = 62),crs = 4326) |>
                  proj_region("Conformal"),"+proj=lcc +lon_0=-179 +lat_1=52 +lat_2=60 +lat_0=56 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 70,ymin = -78,xmax = 162 ,ymax = -67),crs = 4326),property = "Conformal"),
+               "+proj=stere +lon_0=116 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),property = "Conformal",output_type="WKT"),
+               'PROJCS["ProjWiz_Custom_Stereographic",
+ GEOGCS["GCS_WGS_1984",
+  DATUM["D_WGS_1984",
+   SPHEROID["WGS_1984",6378137.0,298.257223563]],
+  PRIMEM["Greenwich",0.0],
+  UNIT["Degree",0.0174532925199433]],
+ PROJECTION["Stereographic"],
+ PARAMETER["False_Easting",0.0],
+ PARAMETER["False_Northing",0.0],
+ PARAMETER["Central_Meridian",89.5],
+ PARAMETER["Scale_Factor",1.0],
+ PARAMETER["Latitude_Of_Origin",90],
+ UNIT["Meter",1.0]]'
+  )
 })
 
 

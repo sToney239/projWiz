@@ -30,5 +30,15 @@ test_that("proj_equal_area works", {
  PARAMETER["Central_Meridian",89.5],
  PARAMETER["Latitude_Of_Origin",90],
  UNIT["Meter",1.0]]')
+  expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 67,ymin = -82,xmax = 101 ,ymax = -74),crs = 4326)),
+               "+proj=laea +lon_0=84 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_equal_area(c(
+    sf::st_point(c(12801741,-3248974)),
+    sf::st_point(c(12801741,-2391879)),
+    sf::st_point(c(13692297,-3248974)),
+    sf::st_point(c(13692297,-2391879))
+  ) |>
+    sf::st_sfc(crs = 3857)),
+               "+proj=laea +lon_0=118.9999964 +lat_0=-24.5000026 +datum=WGS84 +units=m +no_defs")
 })
 

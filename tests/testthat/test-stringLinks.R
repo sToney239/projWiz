@@ -14,4 +14,12 @@ test_that("multiplication works", {
  PARAMETER["Central_Meridian",126.5],
  PARAMETER["Latitude_Of_Origin",48],
  UNIT["Meter",1.0]]')
+  expect_equal(stringLinks("laea",NA,48,NA,NA,126.5,NA,datum = "ETRS89")[["PROJ"]],
+               "+proj=laea +lon_0=126.5 +lat_0=48 +ellps=GRS80 +units=m +no_defs")
+  expect_equal(stringLinks("laea",NA,48,NA,NA,126.5,NA,datum = "NAD83")[["PROJ"]],
+               "+proj=laea +lon_0=126.5 +lat_0=48 +datum=NAD83 +units=m +no_defs")
+  expect_error(
+    stringLinks("laea",NA,48,NA,NA,126.5,NA,datum = "NA083")[["PROJ"]]
+  )
 })
+

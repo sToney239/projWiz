@@ -36,4 +36,6 @@ test_that("proj_conformal works", {
  PARAMETER["Latitude_Of_Origin",90],
  UNIT["Meter",1.0]]'
   )
+  expect_equal(proj_conformal(sf::st_bbox(c(xmin = 67,ymin = -82,xmax = 101 ,ymax = -74),crs = 4326)),
+               "+proj=stere +lon_0=84 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
 })

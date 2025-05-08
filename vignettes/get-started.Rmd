@@ -1,0 +1,117 @@
+---
+title: "Introduction to projWiz"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to projWiz}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+> Basically this is an R version of the [Projection Wizard](https://projectionwizard.org/), where you can find more illustrative and interactive features on the Projection Wizard website.
+
+```{r setup, message=FALSE,warning=FALSE}
+library(ggplot2)
+library(sf)
+library(projWiz)
+```
+
+## World map
+
+For world map projections, the primary tasks are selecting a projection and setting the central longitude.
+
+About projection selection, the `projWiz` package contains popular world map projections stored in a list object called **`world_proj_list`**. By utilizing the auto-complete feature in RStudio or other mainstream IDEs (by typing `$` after the list name and pressing the `Tab` key), you can easily access these projections.
+
+The categories within `world_proj_list` are divided into two: `equal_area` and `compromise` If you're interested in projections with `Conformal` properties, be sure to check the compromise category as well. After selecting the category using `$` and `Tab`, you will see more detailed projection properties to choose from. It’s advisable to have some basic understanding of these projections, and you can refer to resources like [A Guide to Selecting Map Projections for World and Hemisphere Maps](https://doi.org/10.1007/978-3-319-51835-0_9).
+
+Once you have made your selection, you can use **`proj_world`** to generate your desired world map.
+
+```{r,message=FALSE, warning=FALSE, fig.width=6}
+central_longitude = -60
+selected_world_proj_type = world_proj_list$compromise$round_boudnary$Natural_Earth
+new_world_proj = proj_world(selected_world_proj_type, central_longitude)
+
+rnaturalearth::countries110 |> 
+  st_break_antimeridian(central_longitude) |> 
+  st_transform(new_world_proj) |> 
+  ggplot() + 
+  geom_sf() +
+  geom_vline(xintercept = central_longitude)+
+  theme_minimal()
+
+```
+
+## Hemisphere map
+
+For hemisphere maps, you can use `proj_hemisphere` with the central point's longitude and latitude, or provide an object that allows the function to calculate the centroid.
+
+There are three main types of projections for hemisphere maps in `projWiz`: "Equalarea" (which is Equal area), "Conformal" and "Ortho" as showed below:
+
+```{r, fig.width=7,fig.height=3}
+quick_hemisphere_map = function(proj_type) {
+  the_proj = proj_hemisphere(obj = list(lon = 113, lat = -37), property = proj_type)
+  rnaturalearth::countries110 |> 
+    st_transform(the_proj) |> 
+    ggplot()+
+    geom_sf()+
+    theme_bw()+
+    labs(title = proj_type)+
+    theme(plot.title = element_text(hjust = 0.5))
+}
+
+patchwork::wrap_plots(
+  list(quick_hemisphere_map("Equalarea"),
+       quick_hemisphere_map("Conformal"),
+       quick_hemisphere_map("Ortho"))
+)
+```
+
+
+## Regional map
+
+Acutally the main purpose of `projWiz` is for manually specifying regional map projection. There is a function called `proj_region`, along with simplified versions like `proj_equal_area`, `proj_conformal`, and `proj_equidistant`, which just set the property parameter of the `proj_region` function, corresponding to the map projection properties of preserving area, shape, and distance with varying degrees of accuracy. For some basic knowledge on these properties, you can refer to [wiki](https://en.wikipedia.org/wiki/Map_projection#Metric_properties_of_maps)
+
+As mentioned, `proj_equal_area` is a pre-set parameter version of `proj_region`. For example:
+
+```{r, message=FALSE}
+proj_region(spData::hawaii,"Equalarea")
+proj_equal_area(spData::hawaii)
+```
+They will generate the same result.
+
+If you run these codes on your computer, you will receive a message indicating that "the region is quite small", suggesting that you could use projections like `laea`. You can manually specify the projection with `proj_specify` function, like:
+
+```{r}
+proj_specify(spData::hawaii, "laea")
+```
+Note that the `proj_specify` function is primarily intended for regional data. For hemisphere or world data, you should use `proj_hemisphere` or `proj_world` to specify the projection.
+
+## Message Explaination
+
+When running the `proj_region` or `proj_equal_area` or related functions, there will be some messages on the console, which will tell you why the projection is selected.
+
+The messages typically include the following steps:
+
+- "North-south extent," "East-west extent," and "Square-shaped extent"
+  - For the `Equidistant` projection, no checks are performed.
+  - For the `Equalarea` and `Conformal` projections:
+    - "North-south extent" often results in cylindrical projections, such as the Mercator.
+    - "East-west extent" generally leads to conic projections.
+    - "Square-shaped extent" usually results in azimuthal projections.
+    - However, the shape of the map is not always a good criterion, which I will explain in the final step.
+
+- "Close to poles," "Close to equator," and "Mid-latitude away from pole and equator"
+  - If the region is near the equator or poles, the central latitude is set to the equator or the poles. This approach helps orient the reader to these reference points.
+
+- "XXX passed the conic check" or "failed to pass the conic check."
+  - In rare cases, conic projections can leave the cone near the poles, necessitating a conic check, particularly in extreme east-west distance scenarios.
+
+- Some times, you may see "The map extent is not quite large..."
+  - This suggests that the extent of your map is small enough that many projection types won't generate significant observable errors. Azimuthal projections like the "Lambert azimuthal equal-area projection" (`laea`) or "Stereographic projection" (`stere`) can produce satisfactory results, even if they are not the recommended outcomes. At this point, you could use `proj_specify` to select these projections.
+

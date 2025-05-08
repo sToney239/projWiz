@@ -13,7 +13,7 @@ proj_hemisphere(
 )
 }
 \arguments{
-\item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}}
+\item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}, or named list of longitude and latitude with names of "lon" and "lat"}
 
 \item{property}{Projection property, should be one of "Equalarea", "Conformal" and "ortho", the default value is ortho, for orthographic projection.}
 
@@ -30,5 +30,5 @@ A \code{proj4} or \code{WKT} string
 Projection for hemishpere
 }
 \examples{
-proj_hemisphere(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
+proj_hemisphere(c(lon = 123, lat = 13), "Equalarea")
 }

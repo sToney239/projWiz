@@ -6,13 +6,17 @@
 \title{World Map projection list}
 \format{
 A list with popular world projections:
-\describe{
-\item{equal_area}{Projections to keep the area approximately correct}
-\item{point_polar}{Equal-area world map projections with poles represented as points}
-\item{line_polar}{Equal-area world map projections with poles represented as lines}
-\item{compromise}{Projections compromising shape and area}
-\item{round_boudnary}{Boundary on east and west as curve}
-\item{rectangular}{Boundary as rectange}
+\itemize{
+\item \code{equal_area}: Projections to keep the area property approximately correct
+\itemize{
+\item \code{point_polar}: Equal-area world map projections with poles represented as points
+\item \code{line_polar}: Equal-area world map projections with poles represented as lines
+}
+\item \code{compromise}: Projections compromising shape and area
+\itemize{
+\item \code{round_boudnary}: Boundary on east and west as curve
+\item \code{rectangular}: Boundary as rectange
+}
 }
 }
 \source{

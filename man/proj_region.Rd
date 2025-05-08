@@ -4,7 +4,13 @@
 \alias{proj_region}
 \title{Projection for the area of interest with specified way of projection}
 \usage{
-proj_region(obj, property, output_type = "proj4", datum = "WGS84", unit = "m")
+proj_region(
+  obj,
+  property = "Equalarea",
+  output_type = "proj4",
+  datum = "WGS84",
+  unit = "m"
+)
 }
 \arguments{
 \item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}}

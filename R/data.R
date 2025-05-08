@@ -2,14 +2,13 @@
 #'
 #' @format
 #' A list with popular world projections:
-#' \describe{
-#'   \item{equal_area}{Projections to keep the area approximately correct}
-#'      \item{point_polar}{Equal-area world map projections with poles represented as points}
-#'      \item{line_polar}{Equal-area world map projections with poles represented as lines}
-#'   \item{compromise}{Projections compromising shape and area}
-#'      \item{round_boudnary}{Boundary on east and west as curve}
-#'      \item{rectangular}{Boundary as rectange}
-#' }
+#'    - `equal_area`: Projections to keep the area property approximately correct
+#'        - `point_polar`: Equal-area world map projections with poles represented as points
+#'        - `line_polar`: Equal-area world map projections with poles represented as lines
+#'    - `compromise`: Projections compromising shape and area
+#'        - `round_boudnary`: Boundary on east and west as curve
+#'        - `rectangular`: Boundary as rectange
+#'
 #' @source <https://github.com/ProjectionWizard/projectionwizard.github.io/blob/263b9ff09128e371ee923ab57bfc1ed41bbdc4ba/outputFormat.js#L115>
 world_proj_list <- list(
   "equal_area" = list(

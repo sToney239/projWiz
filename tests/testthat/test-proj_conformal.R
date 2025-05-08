@@ -13,4 +13,6 @@ test_that("proj_conformal works", {
                  "+proj=stere +lon_0=166 +lat_0=39.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_conformal(sf::st_bbox(c(xmin = 168,ymin = 50,xmax = -166,ymax = 62),crs = 4326)),
                  "+proj=lcc +lon_0=-179 +lat_1=52 +lat_2=60 +lat_0=56 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_conformal(sf::st_bbox(c(xmin = -46,ymin = 52,xmax = 171,ymax = 64),crs = 4326)),
+               "+proj=stere +lon_0=62.5 +lat_0=90 +datum=WGS84 +units=m +no_defs")
 })

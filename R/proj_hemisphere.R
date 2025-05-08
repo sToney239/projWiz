@@ -1,6 +1,6 @@
 #' Projection for hemishpere
 #'
-#' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
+#' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()], or named list of longitude and latitude with names of "lon" and "lat"
 #' @param property Projection property, should be one of "Equalarea", "Conformal" and "ortho", the default value is ortho, for orthographic projection.
 #' @param output_type A string for expected output, either "proj4" or "WKT"
 #' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
@@ -9,26 +9,32 @@
 #' @returns A `proj4` or `WKT` string
 #' @export
 #'
-#' @examples proj_hemisphere(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
+#' @examples proj_hemisphere(c(lon = 123, lat = 13), "Equalarea")
 proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "WGS84", unit = "m") {
-  if(!sf::st_is_longlat(obj)) {
-    obj = sf::st_transform(obj, 4326)
-  }
-  new_boundary = sf::st_bbox(obj)
-  lonmax = new_boundary$xmax
-  lonmin = new_boundary$xmin
-  if (lonmin+180 < lonmax) {
-    lonmax = new_boundary$xmin
-    lonmin = new_boundary$xmax
-  }
-  if (lonmax < lonmin) {
-    temp_mid = (lonmax + 360 + lonmin) / 2
-    lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
+  if (identical(names(obj), c("lon", "lat"))) {
+     lon = obj[["lon"]]
+     lat = obj[["lat"]]
   } else {
-    lon = (lonmax + lonmin) / 2
+    if(!sf::st_is_longlat(obj)) {
+      obj = sf::st_transform(obj, 4326)
+    }
+    new_boundary = sf::st_bbox(obj)
+    lonmax = new_boundary$xmax
+    lonmin = new_boundary$xmin
+    if (lonmin+270 < lonmax) {
+      lonmax = new_boundary$xmin
+      lonmin = new_boundary$xmax
+    }
+    if (lonmax < lonmin) {
+      temp_mid = (lonmax + 360 + lonmin) / 2
+      lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
+    } else {
+      lon = (lonmax + lonmin) / 2
+    }
+    # lon = (new_boundary$xmax + new_boundary$xmin)/2
+    lat = (new_boundary$ymax + new_boundary$ymin)/2
   }
-  # lon = (new_boundary$xmax + new_boundary$xmin)/2
-  lat = (new_boundary$ymax + new_boundary$ymin)/2
+
   if (property == 'Equalarea') {
     # "Lambert azimuthal equal area"
     outputTEXT = stringLinks("laea", NaN, lat, NaN, NaN, lon, NaN)
@@ -45,4 +51,5 @@ proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "
     return(outputTEXT$WKT)
   }
 }
+
 

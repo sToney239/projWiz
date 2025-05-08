@@ -19,7 +19,7 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
   lonmin = new_boundary$xmin
   latmax = new_boundary$ymax
   latmin = new_boundary$ymin
-  if (lonmin+180 < lonmax) {
+  if (lonmin+270 < lonmax) {
     lonmax = new_boundary$xmin
     lonmin = new_boundary$xmax
   }

@@ -4,7 +4,7 @@
 \alias{proj_region}
 \title{Projection for the area of interest with specified way of projection}
 \usage{
-proj_region(obj, property, output_type = "proj4")
+proj_region(obj, property, output_type = "proj4", datum = "WGS84", unit = "m")
 }
 \arguments{
 \item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}}
@@ -12,6 +12,10 @@ proj_region(obj, property, output_type = "proj4")
 \item{property}{Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".}
 
 \item{output_type}{A string for expected output, either "proj4" or "WKT"}
+
+\item{datum}{A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)}
+
+\item{unit}{A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)}
 }
 \value{
 A \code{proj4} or \code{WKT} string
@@ -20,5 +24,5 @@ A \code{proj4} or \code{WKT} string
 Auto selecting projections with specified property based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
 }
 \examples{
-proj_conformal(spData::alaska, "Equalarea")
+proj_hemisphere(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
 }

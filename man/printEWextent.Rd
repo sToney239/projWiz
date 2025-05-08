@@ -4,7 +4,7 @@
 \alias{printEWextent}
 \title{Funcion for regional maps with an east-west extent}
 \usage{
-printEWextent(property, center, latmax, latmin, lonmax, lonmin)
+printEWextent(property, center, latmax, latmin, lonmax, lonmin, datum, unit)
 }
 \arguments{
 \item{property}{Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".}
@@ -18,14 +18,15 @@ printEWextent(property, center, latmax, latmin, lonmax, lonmin)
 \item{lonmax}{A numerical value, max longitude of the map extent}
 
 \item{lonmin}{A numerical value, min longitude of the map extent}
+
+\item{datum}{A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)}
+
+\item{unit}{A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)}
 }
 \value{
 A list of strings named with \code{PROJ} & \code{WKT}
 }
 \description{
 Funcion for regional maps with an east-west extent
-}
-\examples{
-printEWextent("Equalarea", center, latmax, latmin)
 }
 \keyword{internal}

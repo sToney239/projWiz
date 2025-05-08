@@ -11,8 +11,6 @@
 #'
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
-#'
-#' @examples printEWextent("Equalarea", center, latmax, latmin)
 printEWextent <- function(property, center, latmax, latmin,lonmax,lonmin, datum, unit) {
   lng <- center$lng
   # case: close to poles

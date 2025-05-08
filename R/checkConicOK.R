@@ -10,8 +10,6 @@
 #'
 #' @returns A integer value from -1/0/1, 1 means passing the test, -1 means failing to pass the test, 0 means the case of Albers when the fan of the selected extent spans less than 180° around a pole
 #' @keywords internal
-#'
-#' @examples checkConicOK(48.5, 140,"Lambert azimuthal equal area",55,42,-132,52)
 checkConicOK = function(lat0, lon0, projectionString,latmax,latmin,lonmax,lonmin) {
   res = 1
   the_type = switch (projectionString,

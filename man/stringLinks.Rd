@@ -4,12 +4,12 @@
 \alias{stringLinks}
 \title{Function to generate proj4 and WKT string}
 \usage{
-stringLinks(prj, x0, lat0, lat1, lat2, lon0, k0)
+stringLinks(prj, x0, lat0, lat1, lat2, lon0, k0, datum = "WGS84", unit = "m")
 }
 \arguments{
-\item{prj}{A string of the shorthand of desired prjection}
+\item{prj}{A string representing the shorthand name of the desired projection}
 
-\item{x0}{A numerical value for offset}
+\item{x0}{A numeric value specifying the longitude offset}
 
 \item{lat0}{A numerical value for centeral latitude}
 
@@ -20,14 +20,15 @@ stringLinks(prj, x0, lat0, lat1, lat2, lon0, k0)
 \item{lon0}{A numerical value for centeral longitude}
 
 \item{k0}{A numerical value for scale factor}
+
+\item{datum}{A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)}
+
+\item{unit}{A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)}
 }
 \value{
 A list of strings named with \code{PROJ} & \code{WKT}
 }
 \description{
 Function to generate proj4 and WKT string
-}
-\examples{
-stringLinks("aeqd", NaN, 90.0, NaN, NaN, 130, NaN)
 }
 \keyword{internal}

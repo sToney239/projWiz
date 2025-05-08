@@ -10,7 +10,7 @@
 #' @returns A `proj4` or `WKT` string
 #' @export
 #'
-#' @examples proj_conformal(spData::alaska, "Equalarea")
+#' @examples proj_hemisphere(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
 proj_region <- function(obj, property,output_type = "proj4",datum = "WGS84", unit = "m") {
   if(!sf::st_is_longlat(obj)) {
     obj = sf::st_transform(obj, 4326)
@@ -20,6 +20,10 @@ proj_region <- function(obj, property,output_type = "proj4",datum = "WGS84", uni
   lonmin = new_boundary$xmin
   latmax = new_boundary$ymax
   latmin = new_boundary$ymin
+  if (lonmin+180 < lonmax) {
+    lonmax = new_boundary$xmin
+    lonmin = new_boundary$xmax
+  }
   # computing longitude extent
   dlon0 <- abs(lonmax - lonmin)
   dlon <- ifelse(dlon0 > 180, 360-dlon0, dlon0)

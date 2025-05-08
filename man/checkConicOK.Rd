@@ -27,7 +27,4 @@ A integer value from -1/0/1, 1 means passing the test, -1 means failing to pass 
 \description{
 Check if Conic projection will have cone at polars
 }
-\examples{
-checkConicOK(48.5, 140,"Lambert azimuthal equal area",55,42,-132,52)
-}
 \keyword{internal}

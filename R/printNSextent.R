@@ -9,8 +9,6 @@
 #'
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
-#'
-#' @examples printNSextent("Equalarea", center, latmax, latmin)
 printNSextent <- function(property, center,latmax,latmin, datum, unit) {
   if (property == "Conformal") {
     # "Transverse Mercator"

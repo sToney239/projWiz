@@ -3,5 +3,7 @@
 export(proj_conformal)
 export(proj_equal_area)
 export(proj_equidstant)
+export(proj_hemisphere)
 export(proj_region)
+export(proj_specify)
 export(proj_world)

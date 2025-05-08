@@ -4,7 +4,7 @@
 \alias{printSquareFormat}
 \title{Funcion for regional maps with an square-shaped extent}
 \usage{
-printSquareFormat(property, center, latmax, latmin)
+printSquareFormat(property, center, latmax, latmin, datum, unit)
 }
 \arguments{
 \item{property}{Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".}
@@ -14,14 +14,15 @@ printSquareFormat(property, center, latmax, latmin)
 \item{latmax}{A numerical value, max latitude of the map extent}
 
 \item{latmin}{A numerical value, min latitude of the map extent}
+
+\item{datum}{A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)}
+
+\item{unit}{A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)}
 }
 \value{
 A list of strings named with \code{PROJ} & \code{WKT}
 }
 \description{
 Funcion for regional maps with an square-shaped extent
-}
-\examples{
-printSquareFormat("Equalarea", center, latmax, latmin)
 }
 \keyword{internal}

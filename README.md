@@ -1,5 +1,5 @@
 
-# projWiz
+# projWiz <a href="https://stoney239.github.io/projWiz/"><img src="man/figures/logo.png" align="right" height="139" alt="projWiz website" /></a>
 
 <!-- badges: start -->
 

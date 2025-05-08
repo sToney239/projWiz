@@ -20,5 +20,5 @@ Depends:
     R (>= 3.5)
 LazyData: true
 VignetteBuilder: knitr
-URL: https://github.com/sToney239/projWiz
+URL: https://github.com/sToney239/projWiz, https://stoney239.github.io/projWiz/
 BugReports: https://github.com/sToney239/projWiz/issues

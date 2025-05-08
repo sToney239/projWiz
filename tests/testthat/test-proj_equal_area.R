@@ -13,5 +13,11 @@ test_that("proj_equal_area works", {
                "+proj=laea +lon_0=178.5 +lat_0=47.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 52,ymin = 42,xmax = -132 ,ymax = 55),crs = 4326)),
                "+proj=laea +lon_0=140 +lat_0=48.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_equal_area(sf::st_bbox(c(xmin = -82,ymin = 70,xmax = -36 ,ymax = 84),crs = 4326)),
+               "+proj=laea +lon_0=-59 +lat_0=90 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_equal_area(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326)),
+               "+proj=laea +lon_0=-79 +lat_0=0 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 70,ymin = -78,xmax = 162 ,ymax = -67),crs = 4326)),
+               "+proj=laea +lon_0=116 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
 })
 

@@ -9,6 +9,10 @@ test_that("proj_hemisphere works", {
     proj_hemisphere(c("lon"=123,"lat"=13), "Equalarea"),
     "+proj=laea +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"
   )
+  expect_equal(
+    proj_hemisphere(c("lon"=123,"lat"=13), "Equidistant"),
+    "+proj=aeqd +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"
+  )
 })
 
 

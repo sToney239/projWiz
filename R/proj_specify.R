@@ -169,10 +169,6 @@ proj_specify <- function(obj, prj, output_type = "proj4", datum = "WGS84",unit =
          "wintri" = {
            PROJstr <- paste0(PROJstr, " +lon_0=", lon0)
            WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"Central_Meridian\\\",', lon0, '],</br>&nbsp;PARAMETER[\\\"Standard_Parallel_1\\\",50.467],')
-         },
-         "tpeqd" = {
-           PROJstr <- paste0(PROJstr, " +lat_1=", lat0, " +lon_1=", lat1, " +lat_2=", lat2, " +lon_2=", lon0)
-           WKTstr <- paste0(WKTstr, '</br>&nbsp;PARAMETER[\\\"Latitude_Of_1st_Point\\\",', lat0, '],</br>&nbsp;PARAMETER[\\\"Latitude_Of_2nd_Point\\\",', lat2, '],</br>&nbsp;PARAMETER[\\\"Longitude_Of_1st_Point\\\",', lat1, '],</br>&nbsp;PARAMETER[\\\"Longitude_Of_2nd_Point\\\",', lon0, '],')
          }
   )
 

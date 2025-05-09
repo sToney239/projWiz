@@ -70,6 +70,14 @@ test_that("proj_region Conformal works", {
  PARAMETER["Latitude_Of_Origin",90],
  UNIT["Meter",1.0]]'
   )
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 80,ymin = 84,xmax = 91 ,ymax = 85),crs = 4326),property = "Conformal"),
+               "+proj=stere +lon_0=85.5 +lat_0=90 +k_0=0.994 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 38,ymin = -83,xmax = 110 ,ymax = -80),crs = 4326),property = "Conformal"),
+               "+proj=stere +lon_0=74 +lat_0=-90 +k_0=0.994 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 106,ymin = 28,xmax = 107 ,ymax = 31),crs = 4326),property = "Conformal"),
+               "+proj=tmerc +x_0=5e+05 +lon_0=106.5 +k_0=0.9999 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 106,ymin = 28,xmax = 110 ,ymax = 30),crs = 4326),property = "Conformal"),
+               "+proj=tmerc +x_0=5e+05 +lon_0=108 +k_0=0.9996 +datum=WGS84 +units=m +no_defs")
 })
 
 

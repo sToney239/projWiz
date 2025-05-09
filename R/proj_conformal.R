@@ -56,12 +56,12 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
     message("## longitude delta<=3, like on 'state plane' coordinate system")
     # case: very large scale, like on "state plane" coord. sys.
     # False easting: 500000.0 & Scale factor: 0.9999
-    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
+    outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
   } else if (dlon <= 6) {
     message("## longitude delta between 3 and 6, like on 'state plane' coordinate system")
     # case: very large scale, like Universal Transverse Mercator
     # False easting: 500000.0 & Scale factor: 0.9996
-    outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
+    outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
   } else {
     # Different map formats
     if (ratio > 1.25) {

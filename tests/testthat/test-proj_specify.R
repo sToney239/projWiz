@@ -23,4 +23,10 @@ test_that("proj_specify works", {
   )
   expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"aeqd",x0 = 300),
                "+proj=aeqd +x_0=300 +lon_0=179.5 +lat_0=28.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"cass"),
+               "+proj=cass +lon_0=179.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"mill"),
+               "+proj=mill +lon_0=179.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"wintri"),
+               "+proj=wintri +lon_0=179.5 +datum=WGS84 +units=m +no_defs")
 })

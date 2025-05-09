@@ -6,12 +6,13 @@
 #' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
 #' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #' @param x0 A numeric value specifying the longitude offset
+#' @param x0 A numeric value specifying the scale parameter
 #'
 #' @returns A `proj4` or `WKT` string as `output_type` specified
 #' @export
 #'
 #' @examples proj_specify(sf::st_bbox(c(xmin = -30,ymin = -25,xmax = 20,ymax = 5),crs = 4326), "lcc")
-proj_specify <- function(obj, prj, output_type = "proj4", datum = "WGS84",unit = "m", x0 = NA_real_) {
+proj_specify <- function(obj, prj, output_type = "proj4", datum = "WGS84",unit = "m", x0 = NA_real_,k0 = NA_real_) {
 
   new_boundary = sf::st_bbox(obj)
   lonmax = new_boundary$xmax
@@ -28,7 +29,6 @@ proj_specify <- function(obj, prj, output_type = "proj4", datum = "WGS84",unit =
   interval <- (latmax - latmin) / 6
   lat1 = latmin + interval
   lat2 = latmax - interval
-  k0 = NA_real_
 
   PROJstr <- "+proj="
   WKTstr <- 'PROJCS[\\\"ProjWiz_Custom_'

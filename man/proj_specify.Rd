@@ -10,7 +10,8 @@ proj_specify(
   output_type = "proj4",
   datum = "WGS84",
   unit = "m",
-  x0 = NA_real_
+  x0 = NA_real_,
+  k0 = NA_real_
 )
 }
 \arguments{
@@ -24,7 +25,7 @@ proj_specify(
 
 \item{unit}{A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)}
 
-\item{x0}{A numeric value specifying the longitude offset}
+\item{x0}{A numeric value specifying the scale parameter}
 }
 \value{
 A \code{proj4} or \code{WKT} string as \code{output_type} specified

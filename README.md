@@ -39,10 +39,10 @@ following code:
 ``` r
 library(projWiz)
 new_proj = proj_equal_area(spData::alaska)
-> ## North-south extent
-> ## Select Transverse cylindrical equal area projection
+># ## North-south extent
+># ## Select Transverse cylindrical equal area projection
 new_proj
-> [1] "+proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs"
+># [1] "+proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs"
 ```
 
 Messages starting with `##` indicate how the final projection is
@@ -52,15 +52,15 @@ follows:
 
 ``` r
 sf::st_transform(spData::alaska, new_proj)
-> Simple feature collection with 1 feature and 6 fields
-> Geometry type: MULTIPOLYGON
-> Dimension:     XY
-> Bounding box:  xmin: -533012.6 ymin: 5697401 xmax: 2784099 ymax: 8226065
-> Projected CRS: +proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs
->   GEOID   NAME REGION           AREA total_pop_10 total_pop_15
-> 1    02 Alaska   West 1718925 [km^2]       691189       733375
->                         geometry
-> 1 MULTIPOLYGON (((31820.36 57...
+># Simple feature collection with 1 feature and 6 fields
+># Geometry type: MULTIPOLYGON
+># Dimension:     XY
+># Bounding box:  xmin: -533012.6 ymin: 5697401 xmax: 2784099 ymax: 8226065
+># Projected CRS: +proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs
+>#   GEOID   NAME REGION           AREA total_pop_10 total_pop_15
+># 1    02 Alaska   West 1718925 [km^2]       691189       733375
+>#                         geometry
+># 1 MULTIPOLYGON (((31820.36 57...
 ```
 
 This is not an ideal example as there’s an official projection for

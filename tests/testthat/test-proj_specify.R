@@ -29,4 +29,13 @@ test_that("proj_specify works", {
                "+proj=mill +lon_0=179.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"wintri"),
                "+proj=wintri +lon_0=179.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"tmerc", k0=0.9999),
+               "+proj=tmerc +lon_0=179.5 +k_0=0.9999 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"cass", unit = "ft"),
+               "+proj=cass +lon_0=179.5 +datum=WGS84 +units=ft +no_defs")
+  expect_error(
+    proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"wintri", unit="mile")
+  )
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 146,ymin = 24,xmax = -174,ymax = 55),crs = 4326),"stere",k0=0.9997),
+               "+proj=stere +lon_0=166 +lat_0=39.5 +k_0=0.9997 +datum=WGS84 +units=m +no_defs")
 })

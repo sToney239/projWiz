@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">projWiz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,21 +81,21 @@
 <p>You can quickly obtain a proper projection for a region using the following code:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(projWiz)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>new_proj <span class="ot">=</span> <span class="fu">proj_equal_area</span>(spData<span class="sc">::</span>alaska)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="sc">&gt;</span> <span class="do">## North-south extent</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="er">&gt;</span> <span class="do">## Select Transverse cylindrical equal area projection</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="sc">&gt;</span><span class="co"># ## North-south extent</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># ## Select Transverse cylindrical equal area projection</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>new_proj</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">1</span>] <span class="st">"+proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs"</span></span></code></pre></div>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="sc">&gt;</span><span class="co"># [1] "+proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs"</span></span></code></pre></div>
 <p>Messages starting with <code>##</code> indicate how the final projection is selected. The output will be a <code>PROJ4</code> or <code>WKT</code> string, which can be used with GIS packages like <code>sf</code>. You can then reproject your data as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_transform</span>(spData<span class="sc">::</span>alaska, new_proj)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="sc">&gt;</span> Simple feature collection with <span class="dv">1</span> feature and <span class="dv">6</span> fields</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="sc">&gt;</span> Geometry type<span class="sc">:</span> MULTIPOLYGON</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="sc">&gt;</span> Dimension<span class="sc">:</span>     XY</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="sc">&gt;</span> Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="sc">-</span><span class="fl">533012.6</span> ymin<span class="sc">:</span> <span class="dv">5697401</span> xmax<span class="sc">:</span> <span class="dv">2784099</span> ymax<span class="sc">:</span> <span class="dv">8226065</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="sc">&gt;</span> Projected CRS<span class="sc">:</span> <span class="sc">+</span>proj<span class="ot">=</span>tcea <span class="sc">+</span>lon_0<span class="ot">=</span><span class="sc">-</span><span class="fl">179.683609</span> <span class="sc">+</span>datum<span class="ot">=</span>WGS84 <span class="sc">+</span>units<span class="ot">=</span>m <span class="sc">+</span>no_defs</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="sc">&gt;</span>   GEOID   NAME REGION           AREA total_pop_10 total_pop_15</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">1</span>    <span class="dv">02</span> Alaska   West <span class="dv">1718925</span> [km<span class="sc">^</span><span class="dv">2</span>]       <span class="dv">691189</span>       <span class="dv">733375</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="sc">&gt;</span>                         geometry</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">1</span> <span class="fu">MULTIPOLYGON</span> (((<span class="fl">31820.36</span> <span class="dv">57</span>...</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="sc">&gt;</span><span class="co"># Simple feature collection with 1 feature and 6 fields</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># Geometry type: MULTIPOLYGON</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># Dimension:     XY</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># Bounding box:  xmin: -533012.6 ymin: 5697401 xmax: 2784099 ymax: 8226065</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># Projected CRS: +proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="er">&gt;</span><span class="co">#   GEOID   NAME REGION           AREA total_pop_10 total_pop_15</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># 1    02 Alaska   West 1718925 [km^2]       691189       733375</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="er">&gt;</span><span class="co">#                         geometry</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="er">&gt;</span><span class="co"># 1 MULTIPOLYGON (((31820.36 57...</span></span></code></pre></div>
 <p>This is not an ideal example as there’s an official projection for Alaska, but you can apply this method to any area of interest.</p>
 <p>Additionally, you can modify the central longitude of the world map using the <code>proj_world</code> function. This function requires a projection shorthand name (you can find in the <code>world_proj_list</code> data within the package), and the central longitude parameter.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">

@@ -13,7 +13,11 @@ proj_region(
 )
 }
 \arguments{
-\item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}, or named list of longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"}
+\item{obj}{Input geo data, should be one of:\cr
+\itemize{
+\item An object can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}} to compute the bounding box\cr
+\item A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
+}}
 
 \item{property}{Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".}
 
@@ -30,5 +34,5 @@ A \code{proj4} or \code{WKT} string
 Auto selecting projections with specified property based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
 }
 \examples{
-proj_hemisphere(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
+proj_region(c(xmax=112,xmin=156,ymin=6,ymax=23), "Equalarea")
 }

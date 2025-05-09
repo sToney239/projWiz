@@ -3,7 +3,7 @@
 #' Auto selecting conformal projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
 #' @param obj Input geo data, should be one of:\cr
 #'  - An object can be accepted by [sf::st_bbox()] to compute the bounding box\cr
-#'  - A named list of named list of longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
+#'  - A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
 #' @param output_type A string for expected output, either "proj4" or "WKT"
 #' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
 #' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
@@ -11,7 +11,7 @@
 #' @returns A `proj4` or `WKT` string
 #' @export
 #'
-#' @examples proj_conformal(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
+#' @examples proj_conformal(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
   if (!(is.vector(obj) & identical(sort(names(obj)), sort(c("xmin", "xmax", "ymin","ymax"))))) {
     if(!sf::st_is_longlat(obj)) {

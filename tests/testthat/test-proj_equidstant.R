@@ -24,4 +24,5 @@ test_that("proj_equidstant works", {
  PARAMETER["Central_Meridian",-7],
  PARAMETER["Latitude_Of_Origin",-90],
  UNIT["Meter",1.0]]')
+  expect_error(proj_equidstant(c(xmin = 2,ymin = -23,xmax = 190 ,ymax = -1)))
 })

@@ -1,7 +1,9 @@
 #' Projection for the area of interest with conformal projection
 #'
 #' Auto selecting conformal projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
-#' @param obj An object to compute the bounding box from, which can be accepted by [sf::st_bbox()]
+#' @param obj Input geo data, should be one of:\cr
+#'  - An object can be accepted by [sf::st_bbox()] to compute the bounding box\cr
+#'  - A named list of named list of longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
 #' @param output_type A string for expected output, either "proj4" or "WKT"
 #' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
 #' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
@@ -11,17 +13,25 @@
 #'
 #' @examples proj_conformal(sf::st_as_sf(quakes,coords = c("long","lat"),crs = 4326))
 proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
-  if(!sf::st_is_longlat(obj)) {
-    obj = sf::st_transform(obj, 4326)
+  if (!(is.vector(obj) & identical(sort(names(obj)), sort(c("xmin", "xmax", "ymin","ymax"))))) {
+    if(!sf::st_is_longlat(obj)) {
+      obj = sf::st_transform(obj, 4326)
+    }
+    obj = sf::st_bbox(obj)
   }
-  new_boundary = sf::st_bbox(obj)
-  lonmax = new_boundary$xmax
-  lonmin = new_boundary$xmin
-  latmax = new_boundary$ymax
-  latmin = new_boundary$ymin
+  lonmax = obj[["xmax"]]
+  lonmin = obj[["xmin"]]
+  latmax = obj[["ymax"]]
+  latmin = obj[["ymin"]]
   if (lonmin+270 < lonmax) {
-    lonmax = new_boundary$xmin
-    lonmin = new_boundary$xmax
+    lonmax = obj[["xmin"]]
+    lonmin = obj[["xmax"]]
+  }
+  if (lonmin > 180 | lonmin < -180 |
+      lonmax > 180 | lonmax < -180 |
+      latmin > 90 | latmin < -90 |
+      latmax > 90 | latmax < -90) {
+    stop("Please input valid extent!")
   }
   # computing longitude extent
   dlon0 <- abs(lonmax - lonmin)

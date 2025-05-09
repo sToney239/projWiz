@@ -42,5 +42,6 @@ test_that("proj_equal_area works", {
                "+proj=laea +lon_0=118.9999964 +lat_0=-24.5000026 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 44,ymin = -80,xmax = 101 ,ymax = -74),crs = 4326)),
                "+proj=laea +lon_0=72.5 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
+  expect_error(proj_equal_area(c(xmin = 2,ymin = -23,xmax = 190 ,ymax = -1)))
 })
 

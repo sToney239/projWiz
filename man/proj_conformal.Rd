@@ -7,7 +7,7 @@
 proj_conformal(obj, output_type = "proj4", datum = "WGS84", unit = "m")
 }
 \arguments{
-\item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}}
+\item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}, or named list of longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"}
 
 \item{output_type}{A string for expected output, either "proj4" or "WKT"}
 

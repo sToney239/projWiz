@@ -13,7 +13,12 @@ proj_hemisphere(
 )
 }
 \arguments{
-\item{obj}{An object to compute the bounding box from, which can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}}, or named list of longitude and latitude with names of "lon" and "lat"}
+\item{obj}{Input data, should be one of:\cr
+\itemize{
+\item An object can be accepted by \code{\link[sf:st_bbox]{sf::st_bbox()}} to compute the bounding box\cr
+\item A named list of longitude and latitude at centroid with names of "x" and "y"\cr
+\item A named list of named list of longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
+}}
 
 \item{property}{Projection property, should be one of "Equalarea", "Conformal" and "ortho", the default value is ortho, for orthographic projection.}
 

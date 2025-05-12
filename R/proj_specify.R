@@ -6,7 +6,7 @@
 #' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
 #' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
 #' @param x0 A numeric value specifying the longitude offset
-#' @param x0 A numeric value specifying the scale parameter
+#' @param k0 A numeric value specifying the scale parameter
 #'
 #' @returns A `proj4` or `WKT` string as `output_type` specified
 #' @export

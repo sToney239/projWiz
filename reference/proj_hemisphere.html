@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">projWiz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +15,8 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/get-started.html">Introduction to projWiz</a></li>
-  </ul></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/projWiz.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/sToney239/projWiz/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -55,7 +52,10 @@
 
 
 <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
-<dd><p>An object to compute the bounding box from, which can be accepted by <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox()</a></code>, or named list of longitude and latitude with names of "lon" and "lat"</p></dd>
+<dd><p>Input geo data, should be one of:<br></p><ul><li><p>An object can be accepted by <code><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">sf::st_bbox()</a></code> to compute the bounding box<br></p></li>
+<li><p>A named list of longitude and latitude at centroid with names of "x" and "y"<br></p></li>
+<li><p>A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"</p></li>
+</ul></dd>
 
 
 <dt id="arg-property">property<a class="anchor" aria-label="anchor" href="#arg-property"></a></dt>
@@ -81,8 +81,12 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>lon <span class="op">=</span> <span class="fl">123</span>, lat <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>, <span class="st">"Equalarea"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">123</span>, y <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>, <span class="st">"Equalarea"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "+proj=laea +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"</span>
+<span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmax<span class="op">=</span><span class="fl">112</span>,xmin<span class="op">=</span><span class="fl">156</span>,ymin<span class="op">=</span><span class="fl">6</span>,ymax<span class="op">=</span><span class="fl">23</span><span class="op">)</span>, <span class="st">"Conformal"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "+proj=ortho +lon_0=-46 +lat_0=14.5 +datum=WGS84 +units=m +no_defs"</span>
+<span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu">spData</span><span class="fu">::</span><span class="va"><a href="https://jakubnowosad.com/spData/reference/alaska.html" class="external-link">alaska</a></span>, <span class="st">"ortho"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "+proj=ortho +lon_0=-179.683609 +lat_0=61.31005 +datum=WGS84 +units=m +no_defs"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -1,6 +1,7 @@
 #' Projection for the area of interest with specified way of projection
 #'
 #' Auto selecting projections with specified property based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
+#' Please note that there's a longitudinal (less than 160) and latitudinal (less than 80) range limit. If area of interest larger than this please use [proj_hemisphere()] or use [proj_specify()].
 #' @param obj Input geo data, should be one of:\cr
 #'  - An object can be accepted by [sf::st_bbox()] to compute the bounding box\cr
 #'  - A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
@@ -11,6 +12,7 @@
 #'
 #' @returns A `proj4` or `WKT` string
 #' @export
+#' @seealso [proj_equal_area()], [proj_conformal()], [proj_equidistant()]
 #'
 #' @examples proj_region(c(xmax=112,xmin=156,ymin=6,ymax=23), "Equalarea")
 proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = "WGS84", unit = "m") {
@@ -64,10 +66,11 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
     if (property == 'Conformal') {
       message("## Select Stereographic projection")
       outputTEXT <- stringLinks("stere", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
-      if (dlon <= 3 & !is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
         message(paste0("## You could also try 3-degree Gauss-Kruger projection",
                        " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-      } else if (dlon <= 6 & !is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+      }
+      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
         message(paste0("## You could also try 6-degree Gauss-Kruger projection",
                        " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
       }
@@ -104,16 +107,24 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
         message("## Select Oblique azimuthal equidistant projection")
         outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
       }
-    } else if ((dlon <= 3) && (property == "Conformal")) {
+    } else if (dlon <= 3) {
       message("## longitude delta<=3, select Mercator family projection")
       outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
       if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
         message(paste0("## You could also try 3-degree Gauss-Kruger projection",
                        " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
       }
-    } else if ((dlon <= 6) && (property == "Conformal")) {
+      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
+                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
+      }
+    } else if (dlon <= 6) {
       message("## longitude delta between 3 and 6, select Mercator family projection")
       outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
+      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
+                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+      }
       if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
         message(paste0("## You could also try 6-degree Gauss-Kruger projection",
                        " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")

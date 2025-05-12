@@ -79,6 +79,14 @@ test_that("proj_region Conformal works", {
   expect_error(proj_region(c(xmin = 2,ymin = -23,xmax = 190 ,ymax = -1),"Equidistant"))
   expect_equal(proj_region(list(xmin = 106,ymin = 28,xmax = 110 ,ymax = 30),property = "Conformal"),
                "+proj=stere +lon_0=108 +lat_0=29 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(c(xmin = 5,ymin = 12,xmax = 7 ,ymax = 13),property = "Conformal"),
+               "+proj=stere +lon_0=6 +lat_0=12.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(c(xmin = 5,ymin = 12,xmax = 7 ,ymax = 13),property = "Conformal"),
+               "+proj=stere +lon_0=6 +lat_0=12.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(c(xmin = 5,ymin = 12,xmax = 7 ,ymax = 30),property = "Conformal"),
+               "+proj=tmerc +x_0=5e+05 +lon_0=6 +k_0=0.9999 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(c(xmin = 7,ymin = 12,xmax = 11 ,ymax = 30),property = "Conformal"),
+               "+proj=tmerc +x_0=5e+05 +lon_0=9 +k_0=0.9996 +datum=WGS84 +units=m +no_defs")
 })
 
 

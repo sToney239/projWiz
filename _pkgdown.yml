@@ -2,3 +2,22 @@ url: https://stoney239.github.io/projWiz/
 template:
   bootstrap: 5
 
+reference:
+- title: Project for region
+  contents:
+  - proj_region
+  - proj_equal_area
+  - proj_conformal
+  - proj_equidistant
+  - proj_specify
+  
+- title: Project for larger extent
+  contents:
+  - proj_hemisphere
+  - proj_world
+  - world_proj_list
+  
+- title: Other functions
+  contents:
+  - check_gauss_kruger_3_deg
+  - check_gauss_kruger_6_deg

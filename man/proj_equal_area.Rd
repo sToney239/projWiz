@@ -23,8 +23,12 @@ proj_equal_area(obj, output_type = "proj4", datum = "WGS84", unit = "m")
 A \code{proj4} or \code{WKT} string
 }
 \description{
-Auto selecting equal-area projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
+Auto selecting equal-area projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.\cr
+Please note that there's a longitudinal (less than 160) and latitudinal (less than 80) range limit. If area of interest larger than this please use \code{\link[=proj_hemisphere]{proj_hemisphere()}} or use \code{\link[=proj_specify]{proj_specify()}}.
 }
 \examples{
 proj_equal_area(c(xmax=112,xmin=156,ymin=6,ymax=23))
+}
+\seealso{
+\code{\link[=proj_region]{proj_region()}}, \code{\link[=proj_conformal]{proj_conformal()}}, \code{\link[=proj_equidistant]{proj_equidistant()}}
 }

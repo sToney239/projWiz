@@ -1,6 +1,7 @@
 #' Projection for the area of interest with equal area projection
 #'
-#' Auto selecting equal-area projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
+#' Auto selecting equal-area projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.\cr
+#' Please note that there's a longitudinal (less than 160) and latitudinal (less than 80) range limit. If area of interest larger than this please use [proj_hemisphere()] or use [proj_specify()].
 #' @param obj Input geo data, should be one of:\cr
 #'  - An object can be accepted by [sf::st_bbox()] to compute the bounding box\cr
 #'  - A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
@@ -10,6 +11,7 @@
 #'
 #' @returns A `proj4` or `WKT` string
 #' @export
+#' @seealso [proj_region()], [proj_conformal()], [proj_equidistant()]
 #'
 #' @examples proj_equal_area(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {

@@ -10,25 +10,15 @@
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
 printSquareFormat <- function(property, center, latmax, latmin, datum, unit) {
-  lng <- center$lng
   # case: close to poles
-  if (center$lat > 75) {
+  if (abs(center$lat) > 75) {
     message("## Close to poles")
     if (property == "Conformal") {
-      message("## Select Stereographic projection with 90N as central latitude")
-      outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
+      message("## Select Stereographic projection with pole as central latitude")
+      outputTEXT <- stringLinks("stere", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (property == 'Equalarea') {
-      message("## Select Lambert azimuthal equal area projection with 90N as central latitude")
-      outputTEXT <- stringLinks("laea", NaN, 90.0, NaN, NaN, center$lng, NaN, datum, unit)
-    }
-  } else if (center$lat < -75) {
-    message("## Close to poles")
-    if (property == "Conformal") {
-      message("## Select Stereographic projection with 90S as central latitude")
-      outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
-    } else if (property == 'Equalarea') {
-      message("## Select Lambert azimuthal equal area projection with 90S as central latitude")
-      outputTEXT <- stringLinks("laea", NaN, -90.0, NaN, NaN, center$lng, NaN, datum, unit)
+      message("## Select Lambert azimuthal equal area projection with pole as central latitude")
+      outputTEXT <- stringLinks("laea", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
     }
   } else if (abs(center$lat) < 15 && (latmax * latmin) <= 0) {
     # case: close to equator and crossing it
@@ -53,4 +43,3 @@ printSquareFormat <- function(property, center, latmax, latmin, datum, unit) {
   }
   return(outputTEXT)
 }
-# printSquareFormat("Equalarea",center, latmax, latmin)

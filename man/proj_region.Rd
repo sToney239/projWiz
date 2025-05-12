@@ -32,7 +32,11 @@ A \code{proj4} or \code{WKT} string
 }
 \description{
 Auto selecting projections with specified property based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
+Please note that there's a longitudinal (less than 160) and latitudinal (less than 80) range limit. If area of interest larger than this please use \code{\link[=proj_hemisphere]{proj_hemisphere()}} or use \code{\link[=proj_specify]{proj_specify()}}.
 }
 \examples{
 proj_region(c(xmax=112,xmin=156,ymin=6,ymax=23), "Equalarea")
+}
+\seealso{
+\code{\link[=proj_equal_area]{proj_equal_area()}}, \code{\link[=proj_conformal]{proj_conformal()}}, \code{\link[=proj_equidistant]{proj_equidistant()}}
 }

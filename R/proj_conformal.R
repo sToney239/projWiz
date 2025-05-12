@@ -1,6 +1,7 @@
 #' Projection for the area of interest with conformal projection
 #'
 #' Auto selecting conformal projections based on the geological shape and projection characteristics. Function will show messages of the basis how the projection is selected.
+#' Please note that there's a longitudinal (less than 160) and latitudinal (less than 80) range limit. If area of interest larger than this please use [proj_hemisphere()] or use [proj_specify()].
 #' @param obj Input geo data, should be one of:\cr
 #'  - An object can be accepted by [sf::st_bbox()] to compute the bounding box\cr
 #'  - A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
@@ -10,6 +11,7 @@
 #'
 #' @returns A `proj4` or `WKT` string
 #' @export
+#' @seealso [proj_region()], [proj_equal_area()], [proj_equidistant()]
 #'
 #' @examples proj_conformal(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
@@ -23,7 +25,7 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
   lonmin = obj[["xmin"]]
   latmax = obj[["ymax"]]
   latmin = obj[["ymin"]]
-  if (lonmin+270 < lonmax) {
+  if (lonmin+180 < lonmax) {
     lonmax = obj[["xmin"]]
     lonmin = obj[["xmax"]]
   }
@@ -33,9 +35,14 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
       latmax > 90 | latmax < -90) {
     stop("Please input valid extent!")
   }
-  # computing longitude extent
   dlon0 <- abs(lonmax - lonmin)
   dlon <- ifelse(dlon0 > 180, 360-dlon0, dlon0)
+
+  # extent check
+  if (dlon >= 160 | (latmax-latmin) >= 80) {
+    stop("Longitude or latitude extent too large, please consider hemisphere or azimuthal projection")
+  }
+
   if (lonmax < lonmin) {
     temp_mid = (lonmax + 360 + lonmin) / 2
     mid_lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
@@ -43,68 +50,66 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
     mid_lon = (lonmax + lonmin) / 2
   }
   center <- list(lng = mid_lon, lat = (latmax + latmin) / 2)
-  # scale <- 720 / dlon / (sin(latmax * pi / 180) - sin(latmin * pi / 180))
 
-  # reading central meridian - Assuming outputLON is defined elsewhere
-  lng <- center$lng
-  # getting the height-to-width ratio
-  ratio <- (latmax - latmin) / dlon
-  if (latmin > 0.0) {
-    ratio <- ratio / cos(latmin * pi / 180)
-  } else if (latmax < 0.0) {
-    ratio <- ratio / cos(latmax * pi / 180)
-  }
-  if (latmin >= 84)  {
-    message("## very large scale, Universal Polar Stereographic")
-    # case: very large scale, Universal Polar Stereographic - North Pole
-    outputTEXT <- stringLinks("stere", NaN, 90.0, NaN, NaN, center$lng, 0.994, datum, unit)
-  } else if (latmax <= -80)  {
-    message("## very large scale, Universal Polar Stereographic")
-    # case: very large scale, Universal Polar Stereographic - South Pole
-    outputTEXT <- stringLinks("stere", NaN, -90.0, NaN, NaN, center$lng, 0.994, datum, unit)
-  } else if (dlon <= 3) {
-    message("## longitude delta<=3, like on 'state plane' coordinate system")
-    # case: very large scale, like on "state plane" coord. sys.
-    # False easting: 500000.0 & Scale factor: 0.9999
-    outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
-  } else if (dlon <= 6) {
-    message("## longitude delta between 3 and 6, like on 'state plane' coordinate system")
-    # case: very large scale, like Universal Transverse Mercator
-    # False easting: 500000.0 & Scale factor: 0.9996
-    outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
+  # distance check
+  lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
+  # ratio check
+  ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
+  # gauss kruger zone number check
+  gauss_kruger_3deg_para = check_gauss_kruger_3_deg(lonmax, lonmin)
+  gauss_kruger_6deg_para = check_gauss_kruger_6_deg(lonmax, lonmin)
+
+  if (max(lonlat_m$dlat_m, lonlat_m$dlon_m)  < 1e6) {
+    message("## The map extent is not quite large")
+    message("## Select Stereographic projection")
+    outputTEXT <- stringLinks("stere", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
+    if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+      message(paste0("## You could also try 3-degree Gauss-Kruger projection",
+                     " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+    }
+    if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+      message(paste0("## You could also try 6-degree Gauss-Kruger projection",
+                     " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
+    }
   } else {
-    # Different map formats
-    if (ratio > 1.25) {
-      # Regional maps with an north-south extent
-      message("## North-south extent")
-      outputTEXT <- printNSextent("Conformal", center,latmax,latmin, datum, unit)
-    } else if (ratio < 0.8) {
-      message("## East-west extent")
-      # Regional maps with an east-west extent
-      outputTEXT <- printEWextent("Conformal", center,latmax,latmin,lonmax,lonmin, datum, unit)
+    message("## The map extent is relatively large, choose projection considering map shape")
+    if (dlon <= 3) {
+      message("## longitude delta<=3, use mercarto family projection")
+      outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
+      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
+                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+      }
+      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
+                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
+      }
+    } else if (dlon <= 6) {
+      message("## longitude delta between 3 and 6, use mercarto family projection")
+      outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
+      # Gauss-Kruger zone number calculation
+      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
+                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+      }
+      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
+                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
+      }
     } else {
-      message("## Square-shaped extent")
-      # Regional maps in square format
-      outputTEXT <- printSquareFormat("Conformal", center,latmax,latmin, datum, unit)
+      if (ratio > 1.25) {
+        message("## North-south extent")
+        outputTEXT <- printNSextent("Conformal", center,latmax,latmin, datum, unit)
+      } else if (ratio < 0.8) {
+        message("## East-west extent")
+        outputTEXT <- printEWextent("Conformal", center,latmax,latmin,dlon, datum, unit)
+      } else {
+        message("## Square-shaped extent")
+        outputTEXT <- printSquareFormat("Conformal", center,latmax,latmin, datum, unit)
+      }
     }
   }
-  # if (scale > 260) {
-  #   # general note for maps showing a smaller area
-  #   message("## For maps at this scale, you can try some official projections.\nMost countries use a conformal projection for their official large-scale maps.\nYou can search for official projections in https://epsg.org/")
-  # }
-  if (requireNamespace("geosphere",quietly = TRUE)) {
-    p1 = matrix(
-      c(lonmin, latmin,lonmin, latmin,lonmax, latmax,lonmax, latmax),
-      ncol = 2, byrow = TRUE
-    )
-    p2 =  matrix(
-      c(lonmax, latmin,lonmin, latmax, lonmin, latmax, lonmax,latmin),
-      ncol = 2, byrow = TRUE
-    )
-    if (max(geosphere::distHaversine(p1,p2)) / 1e6 < 1) {
-      message("## The map extent is not quite large, you could try official projection, as well as other projections like 'laea' or 'stere', which won't produce much error at this scale")
-    }
-  }
+
   if(output_type == "proj4") {
     return(outputTEXT$PROJ)
   } else {

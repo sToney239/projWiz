@@ -1,5 +1,5 @@
 Package: projWiz
-Title: R Implementataion of Projection Wizard
+Title: Auto-select geospatial projection 
 Version: 0.2.1
 Authors@R: 
     person("Zhaoyang", "Shi", , "fumeshroom4@gmail.com", role = c("aut", "cre"))

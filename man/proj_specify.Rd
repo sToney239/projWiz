@@ -25,7 +25,9 @@ proj_specify(
 
 \item{unit}{A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)}
 
-\item{x0}{A numeric value specifying the scale parameter}
+\item{x0}{A numeric value specifying the longitude offset}
+
+\item{k0}{A numeric value specifying the scale parameter}
 }
 \value{
 A \code{proj4} or \code{WKT} string as \code{output_type} specified

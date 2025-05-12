@@ -1,6 +1,8 @@
+# projWiz 0.2.1
+- bug fixes and documentation update
 # projWiz 0.2.0
-- remove dependence on geosphere
-- remove conic check, instead use extent range check
+- remove dependence on `geosphere`
+- remove conic check, use extent range check instead
 - smaller region auto azimuthal projection
 
 # projWiz 0.1.2

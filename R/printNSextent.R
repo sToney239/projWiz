@@ -25,3 +25,5 @@ printNSextent <- function(property, center,latmax,latmin, datum, unit) {
   return(outputTEXT)
 }
 # printNSextent("Equalarea",center)
+
+# dlon > 15 or dlat > 80 , put error

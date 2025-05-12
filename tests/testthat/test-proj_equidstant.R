@@ -5,12 +5,12 @@ test_that("proj_equidstant works", {
                "+proj=cass +lon_0=28 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidstant(sf::st_bbox(c(xmin = 13,ymin = -53,xmax = 80 ,ymax = -25),crs = 4326)),
                "+proj=aeqd +lon_0=46.5 +lat_0=-39 +datum=WGS84 +units=m +no_defs")
-  expect_equal(proj_equidstant(sf::st_bbox(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),crs = 4326) ),
-               "+proj=eqc +lon_0=86 +lat_ts=-12 +datum=WGS84 +units=m +no_defs")
+  expect_error(proj_equidstant(sf::st_bbox(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),crs = 4326) ))
+
   expect_equal(proj_equidstant(sf::st_bbox(c(xmin = -10,ymin = 78,xmax = -4 ,ymax = 80),crs = 4326)),
-               "+proj=aeqd +lon_0=-7 +lat_0=90 +datum=WGS84 +units=m +no_defs")
+               "+proj=aeqd +lon_0=-7 +lat_0=79 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidstant(sf::st_bbox(c(xmin = -10,ymin = 78,xmax = -4 ,ymax = 80),crs = 4326)),
-               "+proj=aeqd +lon_0=-7 +lat_0=90 +datum=WGS84 +units=m +no_defs")
+               "+proj=aeqd +lon_0=-7 +lat_0=79 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidstant(sf::st_bbox(c(xmin = -10,ymin = -80,xmax = -4 ,ymax = -78),crs = 4326), output_type="WKT"),
                'PROJCS["ProjWiz_Custom_Azimuthal_Equidistant",
  GEOGCS["GCS_WGS_1984",
@@ -22,7 +22,7 @@ test_that("proj_equidstant works", {
  PARAMETER["False_Easting",0.0],
  PARAMETER["False_Northing",0.0],
  PARAMETER["Central_Meridian",-7],
- PARAMETER["Latitude_Of_Origin",-90],
+ PARAMETER["Latitude_Of_Origin",-79],
  UNIT["Meter",1.0]]')
   expect_error(proj_equidstant(c(xmin = 2,ymin = -23,xmax = 190 ,ymax = -1)))
 })

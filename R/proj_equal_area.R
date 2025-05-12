@@ -36,6 +36,12 @@ proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m
   # computing longitude extent
   dlon0 <- abs(lonmax - lonmin)
   dlon <- ifelse(dlon0 > 180, 360-dlon0, dlon0)
+
+  # extent check
+  if (dlon >= 160 | (latmax-latmin) >= 80) {
+    stop("Longitude or latitude extent too large, please consider hemisphere or azimuthal projection")
+  }
+
   if (lonmax < lonmin) {
     temp_mid = (lonmax + 360 + lonmin) / 2
     mid_lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
@@ -43,52 +49,30 @@ proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m
     mid_lon = (lonmax + lonmin) / 2
   }
   center <- list(lng = mid_lon, lat = (latmax + latmin) / 2)
-  # scale <- 720 / dlon / (sin(latmax * pi / 180) - sin(latmin * pi / 180))
 
+  # distance check
+  lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
 
-  # reading central meridian - Assuming outputLON is defined elsewhere
-  lng <- center$lng
-  # getting the height-to-width ratio
-  ratio <- (latmax - latmin) / dlon
-  if (latmin > 0.0) {
-    ratio <- ratio / cos(latmin * pi / 180)
-  } else if (latmax < 0.0) {
-    ratio <- ratio / cos(latmax * pi / 180)
-  }
-
-  # Different map formats
-  if (ratio > 1.25) {
-    # Regional maps with an north-south extent
-    message("## North-south extent")
-    outputTEXT <- printNSextent("Equalarea", center,latmax,latmin, datum, unit)
-  } else if (ratio < 0.8) {
-    message("## East-west extent")
-    # Regional maps with an east-west extent
-    outputTEXT <- printEWextent("Equalarea", center,latmax,latmin,lonmax,lonmin, datum, unit)
+  if (max(lonlat_m$dlat_m, lonlat_m$dlon_m)  < 1e6) {
+    message("## The map extent is not quite large")
+    message("## Select Lambert azimuthal equal area projection")
+    outputTEXT <- stringLinks("laea", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
   } else {
-    message("## Square-shaped extent")
-    # Regional maps in square format
-    outputTEXT <- printSquareFormat("Equalarea", center,latmax,latmin, datum, unit)
-  }
-
-  # if (scale > 260) {
-  #   # general note for maps showing a smaller area
-  #   message("## For maps at this scale, you can try some official projections.\nMost countries use a conformal projection for their official large-scale maps.\nYou can search for official projections in https://epsg.org/")
-  # }
-  if (requireNamespace("geosphere",quietly = TRUE)) {
-    p1 = matrix(
-      c(lonmin, latmin,lonmin, latmin,lonmax, latmax,lonmax, latmax),
-      ncol = 2, byrow = TRUE
-    )
-    p2 =  matrix(
-      c(lonmax, latmin,lonmin, latmax, lonmin, latmax, lonmax,latmin),
-      ncol = 2, byrow = TRUE
-    )
-    if (max(geosphere::distHaversine(p1,p2)) / 1e6 < 1) {
-      message("## The map extent is not quite large, you could try official projection, as well as other projections like 'laea' or 'stere', which won't produce much error at this scale")
+    message("## The map extent is relatively large, choose projection considering map shape")
+    # ratio check
+    ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
+    if (ratio > 1.25) {
+      message("## North-south extent")
+      outputTEXT <- printNSextent("Equalarea", center,latmax,latmin, datum, unit)
+    } else if (ratio < 0.8) {
+      message("## East-west extent")
+      outputTEXT <- printEWextent("Equalarea", center,latmax,latmin,dlon, datum, unit)
+    } else {
+      message("## Square-shaped extent")
+      outputTEXT <- printSquareFormat("Equalarea", center,latmax,latmin, datum, unit)
     }
-
   }
+
   if(output_type == "proj4") {
     return(outputTEXT$PROJ)
   } else {
@@ -96,5 +80,7 @@ proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m
   }
 
 }
+
+
 
 

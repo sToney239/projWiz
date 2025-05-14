@@ -56,9 +56,11 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
   # distance check
   lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
 
-  # gauss kruger zone number check
+  # zone number check
   gauss_kruger_3deg_para = check_gauss_kruger_3_deg(lonmax, lonmin)
   gauss_kruger_6deg_para = check_gauss_kruger_6_deg(lonmax, lonmin)
+  utm_zone_para = check_utm_zone(list(xmin = lonmin, xmax = lonmax, ymin = latmin, ymax = latmax))
+  # ratio check
   ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
 
   if (max(lonlat_m$dlat_m, lonlat_m$dlon_m)  < 1e6) {
@@ -66,14 +68,6 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
     if (property == 'Conformal') {
       message("## Select Stereographic projection")
       outputTEXT <- stringLinks("stere", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
-      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-      }
-      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
-      }
     } else if(property == "Equalarea") {
       message("## Select Lambert azimuthal equal area projection")
       outputTEXT <- stringLinks("laea", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
@@ -110,25 +104,9 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
     } else if (dlon <= 3) {
       message("## longitude delta<=3, select Mercator family projection")
       outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
-      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-      }
-      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
-      }
     } else if (dlon <= 6) {
       message("## longitude delta between 3 and 6, select Mercator family projection")
       outputTEXT <- stringLinks("tmerc", 500000.0, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
-      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-      }
-      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
-      }
     } else {
       # Different map formats
       if (ratio > 1.25) {
@@ -146,7 +124,20 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
       }
     }
   }
-
+  if (property == 'Conformal') {
+    if (!is.na(utm_zone_para[["utm_zone_num"]])) {
+      hemisphrere = ifelse(utm_zone_para[["hemisphere"]] == "N", "norhtern", "southern")
+      message(paste0("## You could also try UTM projection",
+                     " of zone ", utm_zone_para[["utm_zone_num"]], " in ",hemisphrere, " hemisphere"),".")
+    }
+    if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+      message(paste0("## You could also try 3-degree Gauss-Kruger projection",
+                     " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+    } else if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+      message(paste0("## You could also try 6-degree Gauss-Kruger projection",
+                     " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
+    }
+  }
   if(output_type == "proj4") {
     return(outputTEXT$PROJ)
   } else {

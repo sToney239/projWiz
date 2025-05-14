@@ -103,4 +103,8 @@ test_that("proj_region Equidistant works", {
 
   expect_equal(proj_region(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"Equidistant"),
                "+proj=aeqd +lon_0=179.5 +lat_0=28.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = -10,ymin = 70,xmax = 34 ,ymax = 86),crs = 4326),"Equidistant"),
+               "+proj=aeqd +lon_0=12 +lat_0=90 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 70,ymin = -26,xmax =  90,ymax = -2),crs = 4326),"Equidistant"),
+               "+proj=eqc +lon_0=80 +lat_ts=-14 +datum=WGS84 +units=m +no_defs")
 })

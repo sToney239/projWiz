@@ -5,6 +5,8 @@
 \alias{world_proj_list}
 \title{World Map projection list}
 \format{
+\subsection{"world_proj_list"}{
+
 A list with popular world projections:
 \itemize{
 \item \code{equal_area}: Projections to keep the area property approximately correct
@@ -16,6 +18,7 @@ A list with popular world projections:
 \itemize{
 \item \code{round_boudnary}: Boundary on east and west as curve
 \item \code{rectangular}: Boundary as rectange
+}
 }
 }
 }

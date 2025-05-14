@@ -55,47 +55,23 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
   lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
   # ratio check
   ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
-  # gauss kruger zone number check
+  # zone number check
   gauss_kruger_3deg_para = check_gauss_kruger_3_deg(lonmax, lonmin)
   gauss_kruger_6deg_para = check_gauss_kruger_6_deg(lonmax, lonmin)
+  utm_zone_para = check_utm_zone(c(xmin = lonmin, xmax = lonmax, ymin = latmin, ymax = latmax))
 
   if (max(lonlat_m$dlat_m, lonlat_m$dlon_m)  < 1e6) {
     message("## The map extent is not quite large")
     message("## Select Stereographic projection")
     outputTEXT <- stringLinks("stere", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
-    if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
-      message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                     " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-    }
-    if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
-      message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                     " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
-    }
   } else {
     message("## The map extent is relatively large, choose projection considering map shape")
     if (dlon <= 3) {
       message("## longitude delta<=3, use mercarto family projection")
       outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
-      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-      }
-      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
-      }
     } else if (dlon <= 6) {
       message("## longitude delta between 3 and 6, use mercarto family projection")
       outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
-      # Gauss-Kruger zone number calculation
-      if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
-      }
-      if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
-        message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                       " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
-      }
     } else {
       if (ratio > 1.25) {
         message("## North-south extent")
@@ -108,6 +84,18 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
         outputTEXT <- printSquareFormat("Conformal", center,latmax,latmin, datum, unit)
       }
     }
+  }
+  if (!is.na(utm_zone_para[["utm_zone_num"]])) {
+    hemisphrere = ifelse(utm_zone_para[["hemisphere"]] == "N", "norhtern", "southern")
+    message(paste0("## You could also try UTM projection",
+                   " of zone ", utm_zone_para[["utm_zone_num"]], " in ",hemisphrere, " hemisphere"),".")
+  }
+  if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
+    message(paste0("## You could also try 3-degree Gauss-Kruger projection",
+                   " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+  } else if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
+    message(paste0("## You could also try 6-degree Gauss-Kruger projection",
+                   " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
   }
 
   if(output_type == "proj4") {

@@ -2,6 +2,7 @@
 
 export(check_gauss_kruger_3_deg)
 export(check_gauss_kruger_6_deg)
+export(check_utm_zone)
 export(proj_conformal)
 export(proj_equal_area)
 export(proj_equidistant)

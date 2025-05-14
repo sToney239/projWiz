@@ -21,5 +21,11 @@ test_that("multiplication works", {
   expect_error(
     stringLinks("laea",NA,48,NA,NA,126.5,NA,datum = "NA083")[["PROJ"]]
   )
+  expect_error(
+    stringLinks("laea",NA,48,NA,NA,126.5,NA,datum = NA)
+  )
+  expect_error(
+    stringLinks("laea",NA,48,NA,NA,126.5,NA,unit = "fm")
+  )
 })
 

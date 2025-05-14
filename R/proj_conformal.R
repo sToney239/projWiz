@@ -40,7 +40,7 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
 
   # extent check
   if (dlon >= 160 | (latmax-latmin) >= 80) {
-    stop("Longitude or latitude extent too large, please consider hemisphere or azimuthal projection")
+    stop("Longitude or latitude range exceeds limits, please consider hemisphere or azimuthal projection")
   }
 
   if (lonmax < lonmin) {

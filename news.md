@@ -1,5 +1,9 @@
+# projWiz 0.2.2
+- add UTM zone number calculation
+
 # projWiz 0.2.1
 - bug fixes and documentation update
+
 # projWiz 0.2.0
 - remove dependence on `geosphere`
 - remove conic check, use extent range check instead

@@ -75,6 +75,7 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
     if (property == 'Equidistant') {
       if (abs(center$lat) > 70) {
         message("## Close to poles")
+        message("## Select Azimuthal Equidistant projections")
         # case: close to poles
         outputTEXT <- stringLinks("aeqd", NaN,sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
       } else if (ratio > 1.25) {

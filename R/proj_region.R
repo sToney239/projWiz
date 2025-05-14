@@ -56,10 +56,6 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
   # distance check
   lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
 
-  # zone number check
-  gauss_kruger_3deg_para = check_gauss_kruger_3_deg(lonmax, lonmin)
-  gauss_kruger_6deg_para = check_gauss_kruger_6_deg(lonmax, lonmin)
-  utm_zone_para = check_utm_zone(list(xmin = lonmin, xmax = lonmax, ymin = latmin, ymax = latmax))
   # ratio check
   ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
 
@@ -125,6 +121,10 @@ proj_region <- function(obj, property="Equalarea",output_type = "proj4",datum = 
     }
   }
   if (property == 'Conformal') {
+    # zone number check
+    gauss_kruger_3deg_para = check_gauss_kruger_3_deg(lonmax, lonmin)
+    gauss_kruger_6deg_para = check_gauss_kruger_6_deg(lonmax, lonmin)
+    utm_zone_para = check_utm_zone(list(xmin = lonmin, xmax = lonmax, ymin = latmin, ymax = latmax))
     if (!is.na(utm_zone_para[["utm_zone_num"]])) {
       hemisphrere = ifelse(utm_zone_para[["hemisphere"]] == "N", "norhtern", "southern")
       message(paste0("## You could also try UTM projection",

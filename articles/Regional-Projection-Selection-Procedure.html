@@ -88,11 +88,12 @@ and 80°, respectively. This choice is not based on rigid criteria but
 rather stems from considerations regarding certain conic projections.
 Since projecting over such large extents is uncommon, I set these
 thresholds.</p>
-<div class="float">
-<img src="images/conicFlaw.jpg" alt="Illustration of the extreme conditions that can lead to errors when the longitude spans too widely. The green area is the area of interest (Note the flaw in the top center of the map)"><div class="figcaption">Illustration of the extreme conditions that can
-lead to errors when the longitude spans too widely. The green area is
-the area of interest (Note the flaw in the top center of the map)</div>
-</div>
+<p><img src="images/conicFlaw.jpg"></p>
+<blockquote>
+<p>Illustration of the extreme conditions that can lead to errors when
+the longitude spans too widely. The green area is the area of interest
+(Note the flaw in the top center of the map)</p>
+</blockquote>
 <blockquote>
 <p>This flaw may arise from conic projection. Imagine a conic hat placed
 on the Earth; if the tangent line has to cover a wide area at higher
@@ -122,11 +123,11 @@ efficient and accurate.</li>
 Lambert Azimuthal Equal Area Projection is not over thousands of
 kilometers.</li>
 </ul>
-<div class="float">
-<img src="images/azimuthalProj.jpg" alt="Hey, how could I be wrong, if I’m so flexible to set the center point, the neighborhood area must have little distortion (https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)"><div class="figcaption">Hey, how could I be wrong, if I’m so flexible to
-set the center point, the neighborhood area must have little distortion
-(<a href="https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm" class="external-link uri">https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm</a>)</div>
-</div>
+<p><img src="images/azimuthalProj.jpg"></p>
+<blockquote>
+<p>Hey, how could I be wrong, if I could set the center point so
+flexibly, the neighborhood area must have little distortion (<a href="https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm" class="external-link uri">https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm</a>)</p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="step-2-check-for-map-shape">Step 2: Check for Map Shape<a class="anchor" aria-label="anchor" href="#step-2-check-for-map-shape"></a>
@@ -149,10 +150,11 @@ Thus, for lower or higher latitudes, azimuthal projections may be more
 appropriate. Similarly for cylindrical projections, in higher latitudes
 azimuthal projections would be selected even if it’s north-south
 direction.</p>
-<div class="float">
-<img src="images/conicProj.jpg" alt="Help you to imagine a conical hat on the earth(https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)"><div class="figcaption">Help you to imagine a conical hat on the
-earth(<a href="https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm" class="external-link uri">https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm</a>)</div>
-</div>
+<p><img src="images/conicProj.jpg"></p>
+<blockquote>
+<p>Help you to imagine a conical hat on the earth (<a href="https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm" class="external-link uri">https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm</a>)</p>
+</blockquote>
+<hr>
 <p>I want to recommend two conic projections: “<strong>Albers Equal
 Area</strong>” (LAEA) and “<strong>Lambert Conformal Conic</strong>”
 (LCC). Other projections were not mentioned just because:</p>
@@ -186,9 +188,10 @@ dividing by 3 or 6 and applying some offsets.</p>
 zones, possibly in certain European peninsulas. To address this, I added
 a shapefile of the UTM zones and used <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_within()</a></code> to
 check if the input object is entirely within a UTM zone.</p>
-<div class="float">
-<img src="images/irregularGrid.jpg" alt="Irregular grid of UTM Zone"><div class="figcaption">Irregular grid of UTM Zone</div>
-</div>
+<p><img src="images/irregularGrid.jpg"></p>
+<blockquote>
+<p>Irregular grid of UTM Zone</p>
+</blockquote>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

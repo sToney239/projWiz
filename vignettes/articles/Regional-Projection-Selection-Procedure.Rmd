@@ -76,7 +76,7 @@ About these two conic projections, specifying them usually requires two latitude
 ## Step 3: Other Projection Suggestions
 
 
-Actually, this step was not in my plan when starting this package, but I found it relatively easy to implement (but met problems of the irregular grid of the UTM zones :rage:). It's about calculating the zone number for UTM or Gauss-Kruger projections. It would is a good point of reference since these projections are often with something like EPSG codes and easy to share.
+Actually, this step was not in my plan when starting this package, but I found it relatively easy to implement (but met problems of the irregular grid of the UTM zones 😫). It's about calculating the zone number for UTM or Gauss-Kruger projections. It would is a good point of reference since these projections are often with something like EPSG codes and easy to share.
 
 For the Gauss-Kruger projection, determining the zone is as simple as dividing by 3 or 6 and applying some offsets.
 

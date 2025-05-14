@@ -14,7 +14,7 @@ check_utm_zone(obj)
 }}
 }
 \value{
-A list with "utm_zone_num", "hemisphere" and "proj4", if the boundary you input doensn't fall in any of the utm zone, all these values would be NULL
+A list with "utm_zone_num", "hemisphere" and "proj4", if the boundary you input doensn't fall in any of the utm zone, all these values would be NA
 }
 \description{
 Calculate the UTM zone number and the proj4 string

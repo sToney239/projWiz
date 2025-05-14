@@ -5,7 +5,7 @@
 \alias{utm_zone}
 \title{UTM zone geometry data}
 \format{
-\subsection{\code{utm_zone}}{
+\subsection{"utm_zone"}{
 
 A Simple feature collection with 120 rows and 3 columns:
 \describe{
@@ -24,4 +24,4 @@ utm_zone
 \description{
 UTM zone geometry data
 }
-\keyword{datasets}
+\keyword{internal}

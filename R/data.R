@@ -16,13 +16,14 @@
 
 #' UTM zone geometry data
 #'
-#' @format ## `utm_zone`
+#' @format ## "utm_zone"
 #' A Simple feature collection with 120 rows and 3 columns:
 #' \describe{
 #'   \item{zone}{UTM zone number}
 #'   \item{hemisphere}{"N" for northern hemisphere, "S" for southern hemisphere}
 #'   \item{geometry}{UTM zone geometries}
 #' }
+#' @keywords internal
 #'
 #' @source <https://hub.arcgis.com/datasets/esri::world-utm-grid>
 "utm_zone"

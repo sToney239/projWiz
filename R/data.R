@@ -23,7 +23,6 @@
 #'   \item{hemisphere}{"N" for northern hemisphere, "S" for southern hemisphere}
 #'   \item{geometry}{UTM zone geometries}
 #' }
-#' @keywords internal
 #'
 #' @source <https://hub.arcgis.com/datasets/esri::world-utm-grid>
 "utm_zone"

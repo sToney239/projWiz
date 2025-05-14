@@ -138,5 +138,5 @@ The messages typically include the following steps:
   - If the region is near the equator or poles, the central latitude is set to the equator or the poles. This approach helps orient the reader to these reference points.
 
 - For conformal projections, some time you may see the zone number recommendation of UTM or Gauss-Kruger projection, you could look it in websites like [epsg.io](https://epsg.io/) with the parameter in the message.
-  - If you just want to check the zone number of you area of interest, you could use functions like `utm_zone_num()`, `check_gauss_kruger_3_deg()` or `check_gauss_kruger_6_deg()`
+  - If you just want to check the zone number of you area of interest, you could use functions like `check_utm_zone()`, `check_gauss_kruger_3_deg()` or `check_gauss_kruger_6_deg()`
 

@@ -24,4 +24,4 @@ utm_zone
 \description{
 UTM zone geometry data
 }
-\keyword{internal}
+\keyword{datasets}

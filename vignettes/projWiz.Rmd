@@ -129,7 +129,7 @@ The messages typically include the following steps:
   - If the longest edge exceeds 1000 km, the function will proceed to the following checks.
 
 - "North-south extent," "East-west extent," and "Square-shaped extent"
-  - "North-south extent" often results in cylindrical projections, such as the Mercator.
+  - "North-south extent" often results in cylindrical projections.
   - "East-west extent" generally leads to conic projections.
   - "Square-shaped extent" usually results in azimuthal projections.
 

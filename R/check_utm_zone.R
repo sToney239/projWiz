@@ -26,11 +26,11 @@ check_utm_zone <- function(obj) {
     obj = sf::st_union(obj)
   }
 
-  utm_zone_row_num = sf::st_within(obj, utm_zone)[[1]]
+  utm_zone_row_num = sf::st_within(obj, projWiz::utm_zone)[[1]]
 
   if (length(utm_zone_row_num) != 0) {
-    utm_zone_num = utm_zone[[utm_zone_row_num,"zone"]]
-    utm_zone_hemi = utm_zone[[utm_zone_row_num,"hemisphere"]]
+    utm_zone_num = projWiz::utm_zone[[utm_zone_row_num,"zone"]]
+    utm_zone_hemi = projWiz::utm_zone[[utm_zone_row_num,"hemisphere"]]
     epsg_south = ifelse(utm_zone_hemi == 'S', " +south", "")
     utm_proj = paste0("+proj=utm +zone=", utm_zone_num,epsg_south, " +datum=WGS84 +units=m +no_defs +type=crs")
   } else {

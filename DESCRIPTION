@@ -1,5 +1,5 @@
 Package: projWiz
-Title: Auto-select geospatial projection 
+Title: Auto-select map projection 
 Version: 0.2.2
 Authors@R: 
     person("Zhaoyang", "Shi", , "fumeshroom4@gmail.com", role = c("aut", "cre"))

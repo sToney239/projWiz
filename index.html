@@ -117,9 +117,8 @@
 <h2 id="what-this-package-is-doing">What this package is doing<a class="anchor" aria-label="anchor" href="#what-this-package-is-doing"></a>
 </h2>
 <p>This package is not doing complex calculation, instead just try to modify <a href="https://proj.org/en/stable/index.html" class="external-link">PROJ string</a> or <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry" class="external-link">WKT string</a> to specify projections. These formats allow users to customize parameters and generate user-defined projections. Because WKT strings can be lengthy and complex, I will use PROJ strings as an example.</p>
-<figure><img src="pics/fig1.jpg" alt="Illustration of how PROJ string consist"><figcaption aria-hidden="true">
-Illustration of how PROJ string consist
-</figcaption></figure><p>As shown in the picture, a PROJ string consists of several parameters, each beginning with a <code>+</code>, followed by parameter specifications after the <code>=</code>. Here’s a breakdown of each part:</p>
+<p><img src="pics/fig1.jpg"></p>
+<p>As shown in the picture, a PROJ string consists of several parameters, each beginning with a <code>+</code>, followed by parameter specifications after the <code>=</code>. Here’s a breakdown of each part:</p>
 <ul>
 <li><p><strong>Projection Name</strong>: The first part specifies the shorthand name of the projection to be used. This is recommended by the code when you run functions like <code><a href="reference/proj_region.html">proj_region()</a></code> or other regional projection functions. If you know which projection you want, you can use <code><a href="reference/proj_specify.html">proj_specify()</a></code>.</p></li>
 <li><p><strong>Longitude &amp; Latitude Parameters</strong>: You don’t need to worry about these parameters, as the code automatically calculates the necessary values. Typically, this includes the central longitude or latitude, and may also involve parameters like “standard parallel” depending on the projection’s requirements. This automation is the primary reason for creating this package, as manual calculations can be tedious.</p></li>

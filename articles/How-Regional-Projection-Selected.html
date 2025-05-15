@@ -72,10 +72,10 @@
 <p>This article explains the procedure for selecting projections
 specifically for <code><a href="../reference/proj_region.html">proj_region()</a></code> and other projection
 functions used in regional mapping.</p>
-<p>A rough overview has already been provided in the “Get started”; this
-article offers a more detailed explanation, particularly focusing on
-some problems I met while exploring how to quickly specify a map
-projection.</p>
+<p>A rough overview has already been provided in the <a href="https://stoney239.github.io/projWiz/articles/projWiz.html">Get
+started</a>; this article offers a more detailed explanation,
+particularly focusing on some problems I met while exploring how to
+quickly specify a map projection.</p>
 <div class="section level2">
 <h2 id="step-0-check-for-exceeding-extent-limits">Step 0: Check for Exceeding Extent Limits<a class="anchor" aria-label="anchor" href="#step-0-check-for-exceeding-extent-limits"></a>
 </h2>
@@ -185,26 +185,27 @@ the por distance from other points to the center proportionally equal,
 doesn’t seem cool.)</li>
 </ul>
 <blockquote>
-<p>About these two conic projections, specifying them usually requires
-two latitude parameters (apart from the longitude parameter of the
-central longitude), usually called as “standard parallels.” The trick is
-to set these parallels at <a href="https://api.semanticscholar.org/CorpusID:203636100" class="external-link">1/6 and
+<p>About <strong>conic projections</strong>, specifying them usually
+requires two latitude parameters (apart from the longitude parameter of
+the central longitude), usually called as <em>standard parallels</em>.
+The trick is to set these parallels at <a href="https://api.semanticscholar.org/CorpusID:203636100" class="external-link">1/6 and
 5/6</a> of the latitudinal extent.</p>
 </blockquote>
 <blockquote>
-<p>Regarding cylindrical projections, they typically only require the
-central longitude as the longitudinal parameter and do not need a
-latitudinal parameter (If it’s not an oblique cylindrical projection,
-which I’m not quite familiar with😔).</p>
+<p>As for <strong>cylindrical projections</strong>, they typically only
+require the central longitude as the longitudinal parameter and do not
+need a latitudinal parameter (If it’s not an oblique cylindrical
+projection, which I’m not quite familiar with😔).</p>
 </blockquote>
 <blockquote>
 <p>About this step, I have some concerns: if conic projections require
 two latitude parameters, it suggests that they attempt to find a plane
-that intersects the surface of the sphere. This might mean the totla
-distortion would be less than that of azimuthal projections, which are
-based solely on a tangent point. Would it be better to prioritize conic
-projections for maps with a large extent? I’m unsure how sensible this
-thinking is, so I didn’t include it in the package.</p>
+that intersects the surface of the sphere. This might mean the
+<strong>total distortion</strong> would be less than that of azimuthal
+projections, which are based solely on a tangent point. Would it be
+better to prioritize conic projections for maps with a large extent? I’m
+unsure how sensible this thinking is, so I didn’t include it in the
+package.</p>
 </blockquote>
 </div>
 <div class="section level2">
@@ -212,16 +213,19 @@ thinking is, so I didn’t include it in the package.</p>
 </h2>
 <p>Actually, this step was not in my plan when starting this package,
 but I found it relatively easy to implement (but met problems of the
-irregular grid of the UTM zones 😫). It’s about calculating the zone
-number for UTM or Gauss-Kruger projections. It would is a good point of
-reference since these projections are often with something like EPSG
-codes and easy to share.</p>
+irregular grid of the UTM zones 😫).</p>
+<p>This step is about calculating the zone number for UTM or
+Gauss-Kruger projections. (Please note that these are all conformal
+projections.) It would be a good point as suggestions since these
+projections are often with something like <a href="https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset" class="external-link">EPSG
+codes</a> and easy to share.</p>
 <p>For the Gauss-Kruger projection, determining the zone is as simple as
 dividing by 3 or 6 and applying some offsets.</p>
-<p>But about the UTM zone, I was unaware that UTM has some irregular
-zones, possibly in certain European peninsulas. To address this, I added
-a shapefile of the UTM zones and used <code><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_within()</a></code> to
-check if the input object is entirely within a UTM zone.</p>
+<p>But about the UTM zone, I wasn’t aware that UTM has some irregular
+zones at first, possibly in certain European peninsulas. To address
+this, I added a shapefile of the UTM zones and used
+<code><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html" class="external-link">sf::st_within()</a></code> to check if the input object is entirely
+within a UTM zone.</p>
 <p><img src="images/irregularGrid.jpg"></p>
 <blockquote>
 <p>Irregular grid of UTM Zone</p>

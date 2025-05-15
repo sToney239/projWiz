@@ -1,5 +1,5 @@
 ---
-title: "Regional Projection Selection Procedure"
+title: "How Regional Projection Selected"
 editor_options: 
   markdown: 
     wrap: 72
@@ -38,14 +38,21 @@ This step is to check the boundary edge lengths in longitudinal and latitudinal 
   - Conformal: Stereographic Projection
   - Equidistant: Oblique Azimuthal Equidistant Projection
 
-This is because: 
+
+This step (selecting azimuthal projections) is because: 
 
   - I believe if the map extent is not too large, using an azimuthal projection with the central point as the point of tangency would be efficient and accurate. 
   - Additionally, I found someone saying that the recommended extent for Lambert Azimuthal Equal Area Projection is not over thousands of kilometers.
 
 ![ ](images/azimuthalProj.jpg)
 
-> Hey, how could I be wrong, if I could set the center point so flexibly, the neighborhood area must have little distortion (https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)
+> Hey, how could I be wrong, if I could set the center point so flexibly, the neighborhood area must have little distortion (pic source: https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)
+
+---
+
+> For these azimuthal projections, the longitudinal and latitudinal parameters (please check [What this package is doing](https://stoney239.github.io/projWiz/index.html#what-this-package-is-doing)) are simply the central longitude and latitude (That's the point of tangency).
+
+> (You don't have to consider this in the package actually, it's just let you have an idea. There will also be explanations for conic and cylindrical projections for the same purpose in the following part, if you're not interested, just skip them.)
 
 ## Step 2: Check for Map Shape
 
@@ -62,7 +69,7 @@ However, these are not strict rules. For conic projections, still imagine placin
 
 ![ ](images/conicProj.jpg)
 
-> Help you to imagine a conical hat on the earth (https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)
+> Help you to imagine a conical hat on the earth (pic source: https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)
 
 ---
 
@@ -71,12 +78,16 @@ I want to recommend two conic projections: "**Albers Equal Area**" (LAEA) and "*
   - Azimuthal projections were mentioned in Step 1, and I rarely use cylindrical projections. When I do use cylindrical projections, typically specific zones of UTM or Gauss-Kruger rather than user-specified projections would be used.
   - Equal area and conformal properties are my primary favorates; I'm not sure the utility of the equidistant property. (After all, keeping the por distance from other points to the center proportionally equal, doesn't seem cool.)
   
-About these two conic projections, specifying them usually requires two latitude parameters, usually called as "standard parallels." The trick is to set these parallels at [1/6 and 5/6](https://api.semanticscholar.org/CorpusID:203636100) of the latitudinal extent.
+> About these two conic projections, specifying them usually requires two latitude parameters (apart from the longitude parameter of the central longitude), usually called as "standard parallels." The trick is to set these parallels at [1/6 and 5/6](https://api.semanticscholar.org/CorpusID:203636100) of the latitudinal extent.
+
+> Regarding cylindrical projections, they typically only require the central longitude as the longitudinal parameter and do not need a latitudinal parameter (If it’s not an oblique cylindrical projection, which I'm not quite familiar with😔).
+
+> About this step, I have some concerns: if conic projections require two latitude parameters, it suggests that they attempt to find a plane that intersects the surface of the sphere. This might mean the totla distortion would be less than that of azimuthal projections, which are based solely on a tangent point. Would it be better to prioritize conic projections for maps with a large extent? I'm unsure how sensible this thinking is, so I didn't include it in the package.
 
 ## Step 3: Other Projection Suggestions
 
 
-Actually, this step was not in my plan when starting this package, but I found it relatively easy to implement (but met problems of the irregular grid of the UTM zones :rage:). It's about calculating the zone number for UTM or Gauss-Kruger projections. It would is a good point of reference since these projections are often with something like EPSG codes and easy to share.
+Actually, this step was not in my plan when starting this package, but I found it relatively easy to implement (but met problems of the irregular grid of the UTM zones 😫). It's about calculating the zone number for UTM or Gauss-Kruger projections. It would is a good point of reference since these projections are often with something like EPSG codes and easy to share.
 
 For the Gauss-Kruger projection, determining the zone is as simple as dividing by 3 or 6 and applying some offsets.
 

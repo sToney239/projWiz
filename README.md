@@ -86,3 +86,43 @@ rnaturalearth::countries110 |>
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+## What this package is doing
+
+This package is not doing complex calculation, instead just try to
+modify [PROJ string](https://proj.org/en/stable/index.html) or [WKT
+string](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
+to specify projections. These formats allow users to customize
+parameters and generate user-defined projections. Because WKT strings
+can be lengthy and complex, I will use PROJ strings as an example.
+
+<figure>
+<img src="pics/fig1.jpg"
+alt="Illustration of how PROJ string consist" />
+<figcaption aria-hidden="true">Illustration of how PROJ string
+consist</figcaption>
+</figure>
+
+As shown in the picture, a PROJ string consists of several parameters,
+each beginning with a `+`, followed by parameter specifications after
+the `=`. Here’s a breakdown of each part:
+
+- **Projection Name**: The first part specifies the shorthand name of
+  the projection to be used. This is recommended by the code when you
+  run functions like `proj_region()` or other regional projection
+  functions. If you know which projection you want, you can use
+  `proj_specify()`.
+
+- **Longitude & Latitude Parameters**: You don’t need to worry about
+  these parameters, as the code automatically calculates the necessary
+  values. Typically, this includes the central longitude or latitude,
+  and may also involve parameters like “standard parallel” depending on
+  the projection’s requirements. This automation is the primary reason
+  for creating this package, as manual calculations can be tedious.
+
+- **Ellipsoid and Units**: The default settings are `WGS84` for the
+  ellipsoid and `m` for meters. You can adjust these as needed.
+
+- The last part wouldn’t be changed by the functions within the package.
+  It helps prevent unexpected issues arising from conflicts between
+  default and user-specified settings.

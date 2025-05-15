@@ -46,7 +46,7 @@ This step (selecting azimuthal projections) is because:
 
 ![ ](images/azimuthalProj.jpg)
 
-> Hey, how could I be wrong, if I could set the center point so flexibly, the neighborhood area must have little distortion (pic source: https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)
+> Hey, how could I be wrong, if I could set the center point so flexibly, the neighborhood area must have little distortion (pic source: [ArcMap Documentation](https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm))
 
 ---
 
@@ -69,7 +69,7 @@ However, these are not strict rules. For conic projections, still imagine placin
 
 ![ ](images/conicProj.jpg)
 
-> Help you to imagine a conical hat on the earth (pic source: https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm)
+> Help you to imagine a conical hat on the earth (pic source: [ArcMap Documentation](https://desktop.arcgis.com/en/arcmap/latest/map/projections/projection-types.htm))
 
 ---
 

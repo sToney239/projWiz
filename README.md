@@ -96,12 +96,7 @@ to specify projections. These formats allow users to customize
 parameters and generate user-defined projections. Because WKT strings
 can be lengthy and complex, I will use PROJ strings as an example.
 
-<figure>
-<img src="pics/fig1.jpg"
-alt="Illustration of how PROJ string consist" />
-<figcaption aria-hidden="true">Illustration of how PROJ string
-consist</figcaption>
-</figure>
+![](pics/fig1.jpg)
 
 As shown in the picture, a PROJ string consists of several parameters,
 each beginning with a `+`, followed by parameter specifications after

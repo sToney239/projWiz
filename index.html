@@ -42,7 +42,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/Regional-Projection-Selection-Procedure.html">Regional Projection Selection Procedure</a></li>
+<li><a class="dropdown-item" href="articles/How-Regional-Projection-Selected.html">How Regional Projection Selected</a></li>
   </ul>
 </li>
       </ul>
@@ -112,6 +112,20 @@
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">central_longitude</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="what-this-package-is-doing">What this package is doing<a class="anchor" aria-label="anchor" href="#what-this-package-is-doing"></a>
+</h2>
+<p>This package is not doing complex calculation, instead just try to modify <a href="https://proj.org/en/stable/index.html" class="external-link">PROJ string</a> or <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry" class="external-link">WKT string</a> to specify projections. These formats allow users to customize parameters and generate user-defined projections. Because WKT strings can be lengthy and complex, I will use PROJ strings as an example.</p>
+<figure><img src="pics/fig1.jpg" alt="Illustration of how PROJ string consist"><figcaption aria-hidden="true">
+Illustration of how PROJ string consist
+</figcaption></figure><p>As shown in the picture, a PROJ string consists of several parameters, each beginning with a <code>+</code>, followed by parameter specifications after the <code>=</code>. Here’s a breakdown of each part:</p>
+<ul>
+<li><p><strong>Projection Name</strong>: The first part specifies the shorthand name of the projection to be used. This is recommended by the code when you run functions like <code><a href="reference/proj_region.html">proj_region()</a></code> or other regional projection functions. If you know which projection you want, you can use <code><a href="reference/proj_specify.html">proj_specify()</a></code>.</p></li>
+<li><p><strong>Longitude &amp; Latitude Parameters</strong>: You don’t need to worry about these parameters, as the code automatically calculates the necessary values. Typically, this includes the central longitude or latitude, and may also involve parameters like “standard parallel” depending on the projection’s requirements. This automation is the primary reason for creating this package, as manual calculations can be tedious.</p></li>
+<li><p><strong>Ellipsoid and Units</strong>: The default settings are <code>WGS84</code> for the ellipsoid and <code>m</code> for meters. You can adjust these as needed.</p></li>
+<li><p>The last part wouldn’t be changed by the functions within the package. It helps prevent unexpected issues arising from conflicts between default and user-specified settings.</p></li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

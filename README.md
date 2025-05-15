@@ -90,13 +90,13 @@ rnaturalearth::countries110 |>
 ## What this package is doing
 
 This package is not doing complex calculation, instead just try to
-modify [PROJ string](https://proj.org/en/stable/index.html) or [WKT
-string](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
-to specify projections. These formats allow users to customize
+modify [PROJ](https://proj.org/en/stable/index.html) or
+[WKT](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
+string to specify projections. These formats allow users to customize
 parameters and generate user-defined projections. Because WKT strings
 can be lengthy and complex, I will use PROJ strings as an example.
 
-![](pics/fig1.jpg)
+![](https://github.com/sToney239/projWiz/raw/master/pics/fig1.jpg)
 
 As shown in the picture, a PROJ string consists of several parameters,
 each beginning with a `+`, followed by parameter specifications after

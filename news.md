@@ -1,3 +1,7 @@
+# projWiz 0.2.3
+
+- simplify redundant codes in `proj_region`
+
 # projWiz 0.2.2
 - add UTM zone number calculation
 

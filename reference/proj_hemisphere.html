@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">projWiz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
 
 
 <dt id="arg-property">property<a class="anchor" aria-label="anchor" href="#arg-property"></a></dt>
-<dd><p>Projection property, should be one of "Equalarea", "Conformal" and "ortho", the default value is ortho, for orthographic projection.</p></dd>
+<dd><p>Projection property, should be one of "Equal area", "Conformal" and "ortho", the default value is ortho, for orthographic projection.</p></dd>
 
 
 <dt id="arg-output-type">output_type<a class="anchor" aria-label="anchor" href="#arg-output-type"></a></dt>
@@ -85,7 +85,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">123</span>, y <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>, <span class="st">"Equalarea"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">123</span>, y <span class="op">=</span> <span class="fl">13</span><span class="op">)</span>, <span class="st">"Equal area"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "+proj=laea +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"</span>
 <span class="r-in"><span><span class="fu">proj_hemisphere</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmax<span class="op">=</span><span class="fl">112</span>,xmin<span class="op">=</span><span class="fl">156</span>,ymin<span class="op">=</span><span class="fl">6</span>,ymax<span class="op">=</span><span class="fl">23</span><span class="op">)</span>, <span class="st">"Conformal"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "+proj=ortho +lon_0=-46 +lat_0=14.5 +datum=WGS84 +units=m +no_defs"</span>

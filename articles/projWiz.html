@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">projWiz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@ projection wiki</a></p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">quick_proj_region_map</span><span class="op">(</span><span class="st">"Equalarea"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">quick_proj_region_map</span><span class="op">(</span><span class="st">"Equal area"</span><span class="op">)</span>,</span>
 <span>       <span class="fu">quick_proj_region_map</span><span class="op">(</span><span class="st">"Conformal"</span><span class="op">)</span>,</span>
 <span>       <span class="fu">quick_proj_region_map</span><span class="op">(</span><span class="st">"Equidistant"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -113,7 +113,7 @@ with similar optimized parameters have little difference.</p>
 <p>As mentioned, <code><a href="../reference/proj_equal_area.html">proj_equal_area()</a></code> is a pre-set parameter
 version of <code><a href="../reference/proj_region.html">proj_region()</a></code>. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/proj_region.html">proj_region</a></span><span class="op">(</span><span class="fu">spData</span><span class="fu">::</span><span class="va"><a href="https://jakubnowosad.com/spData/reference/hawaii.html" class="external-link">hawaii</a></span>,<span class="st">"Equalarea"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/proj_region.html">proj_region</a></span><span class="op">(</span><span class="fu">spData</span><span class="fu">::</span><span class="va"><a href="https://jakubnowosad.com/spData/reference/hawaii.html" class="external-link">hawaii</a></span>,<span class="st">"Equal area"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "+proj=laea +lon_0=-157.6784675 +lat_0=20.5786295 +datum=WGS84 +units=m +no_defs"</span></span>
 <span><span class="fu"><a href="../reference/proj_equal_area.html">proj_equal_area</a></span><span class="op">(</span><span class="fu">spData</span><span class="fu">::</span><span class="va"><a href="https://jakubnowosad.com/spData/reference/hawaii.html" class="external-link">hawaii</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "+proj=laea +lon_0=-157.6784675 +lat_0=20.5786295 +datum=WGS84 +units=m +no_defs"</span></span></code></pre></div>
@@ -139,8 +139,8 @@ the projection.</p>
 the central point’s longitude and latitude, or provide an object that
 allows the function to calculate the centroid.</p>
 <p>There are three main types of projections for hemisphere maps in
-<code>projWiz</code>: “Equalarea” (which is Equal area), “Conformal” and
-“Ortho” as showed below:</p>
+<code>projWiz</code>: “Equal area” (which is Equal area), “Conformal”
+and “Ortho” as showed below:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">quick_hemisphere_map</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">proj_type</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">the_proj</span> <span class="op">=</span> <span class="fu"><a href="../reference/proj_hemisphere.html">proj_hemisphere</a></span><span class="op">(</span>obj <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">113</span>, y <span class="op">=</span> <span class="op">-</span><span class="fl">37</span><span class="op">)</span>, property <span class="op">=</span> <span class="va">proj_type</span><span class="op">)</span></span>
@@ -153,7 +153,7 @@ allows the function to calculate the centroid.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">quick_hemisphere_map</span><span class="op">(</span><span class="st">"Equalarea"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">quick_hemisphere_map</span><span class="op">(</span><span class="st">"Equal area"</span><span class="op">)</span>,</span>
 <span>       <span class="fu">quick_hemisphere_map</span><span class="op">(</span><span class="st">"Conformal"</span><span class="op">)</span>,</span>
 <span>       <span class="fu">quick_hemisphere_map</span><span class="op">(</span><span class="st">"Ortho"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>

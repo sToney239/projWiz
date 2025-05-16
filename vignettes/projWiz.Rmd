@@ -9,38 +9,41 @@ vignette: >
   
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-collapse = TRUE,
-comment = "#>"
-)
+  collapse = TRUE,
+  comment = "#>"
+  )
 ```
-
+  
 > This is a package inspired by [Projection Wizard](https://projectionwizard.org/), aiming to help automatically decide projective coordinate system based on R geospatial objects.
-
+  
 ```{r setup, message=FALSE,warning=FALSE}
-library(ggplot2)
 library(sf)
+library(terra)
 library(projWiz)
 ```
+
+
 ## Regional map
 
 The main purpose of `projWiz` is for manually specifying regional map projection. There is a function called `proj_region()`, along with simplified versions like `proj_equal_area()`, `proj_conformal()`, and `proj_equidistant()`, corresponding to the map projection properties of preserving **area**, **shape**, and **distance**. For some basic knowledge on these properties, you can refer check [map projection wiki](https://en.wikipedia.org/wiki/Map_projection#Metric_properties_of_maps)
 
-```{r,message=FALSE,fig.width=7,fig.height=3}
+```{r,message=FALSE,fig.width=10, fig.height=3, dpi = 300}
+# `example_country` is internal data from this package, it's from Natural Earth 1:110m Cultural Vectors
+spain = example_country$Spain |> 
+  list() |> 
+  st_polygon() |> 
+  st_sfc(crs = 4326)
+the_proj = proj_region(spain, property = "Equal area")
 quick_proj_region_map = function(proj_type) {
-  the_proj = proj_region(spData::us_states, property = proj_type)
-  spData::us_states |> 
-    st_transform(the_proj) |> 
-    ggplot()+
-    geom_sf()+
-    theme_bw()+
-    labs(title = proj_type)+
-    theme(plot.title = element_text(hjust = 0.5))
+  projected = st_transform(spain, the_proj)
+  g = st_graticule(projected)
+  plot(projected, graticule = g, key.pos = NULL, 
+       axes = FALSE,main = proj_type)
 }
-patchwork::wrap_plots(
-  list(quick_proj_region_map("Equal area"),
-       quick_proj_region_map("Conformal"),
-       quick_proj_region_map("Equidistant"))
-)
+par(mfrow=c(1,3))
+quick_proj_region_map("Equal area")
+quick_proj_region_map("Conformal")
+quick_proj_region_map("Equidistant")
 ```
 
 It's hard to find any difference, right? Haha, that's basically what I found when making this package -- in not quite large scale, projections with similar optimized parameters have little difference.
@@ -48,8 +51,15 @@ It's hard to find any difference, right? Haha, that's basically what I found whe
 As mentioned, `proj_equal_area()` is a pre-set parameter version of `proj_region()`. For example:
 
 ```{r, message=FALSE}
-proj_region(spData::hawaii,"Equal area")
-proj_equal_area(spData::hawaii)
+example_area = matrix(
+  c(10,3, 14, 3, 14,5, 10,5, 10,3),
+  byrow = TRUE, ncol = 2
+) |> 
+  list() |> 
+  st_polygon() |> 
+  st_sfc(crs = 4326) 
+proj_region(example_area,"Equal area")
+proj_equal_area(example_area)
 ```
 They will generate the same result.
 
@@ -57,7 +67,7 @@ If you run these codes on your computer, you will receive a message indicating t
 
 
 ```{r}
-proj_specify(spData::hawaii, "laea")
+proj_specify(example_area, "laea")
 ```
 Note that the `proj_specify()` function is primarily intended for regional data. For hemisphere or world data, you should use `proj_hemisphere()` or `proj_world()` to specify the projection.
 
@@ -71,21 +81,26 @@ For hemisphere maps, you can use `proj_hemisphere()` with the central point's lo
 There are three main types of projections for hemisphere maps in `projWiz`: "Equal area" (which is Equal area), "Conformal" and "Ortho" as showed below:
 
 ```{r, fig.width=7,fig.height=3}
+# Please note that this step is only loading internal data for illustration.
+world_lonlat = rast(world_shaded_relief)
+ext(world_lonlat) <- c(-180,180,-90,90)
+crs(world_lonlat) <- "epsg:4326"
+world_lonlat[1:360,c(1,1:12 * 60),1:3] <- 0
+world_lonlat[c(1,1:6 * 60),1:720,1:3] <- 0
+world_lonlat = crop(world_lonlat, ext(-180, 180, -86, 86))
+
+# This step is for definining new projection and plot.
 quick_hemisphere_map = function(proj_type) {
   the_proj = proj_hemisphere(obj = list(x = 113, y = -37), property = proj_type)
-  rnaturalearth::countries110 |> 
-    st_transform(the_proj) |> 
-    ggplot()+
-    geom_sf()+
-    theme_bw()+
-    labs(title = proj_type)+
-    theme(plot.title = element_text(hjust = 0.5))
+  world_lonlat |> 
+    project(the_proj) |> 
+    plotRGB(main=proj_type)
 }
-patchwork::wrap_plots(
-  list(quick_hemisphere_map("Equal area"),
-       quick_hemisphere_map("Conformal"),
-       quick_hemisphere_map("Ortho"))
-)
+
+par(mfrow=c(1,3))
+quick_hemisphere_map("Equal area")
+quick_hemisphere_map("Conformal")
+quick_hemisphere_map("Ortho")
 ```
 
 ## World map
@@ -99,17 +114,13 @@ The categories within `world_proj_list` are divided into two: `equal_area` and `
 Once you have made your selection, you can use `proj_world()` to generate your desired world map.
 
 ```{r,message=FALSE, warning=FALSE, fig.width=6}
-central_longitude = -60
-selected_world_proj_type = world_proj_list$compromise$round_boudnary$Natural_Earth
+central_longitude = -120
+selected_world_proj_type = world_proj_list$compromise$round_boudnary$Robinson
+
+
 new_world_proj = proj_world(selected_world_proj_type, central_longitude)
 
-rnaturalearth::countries110 |> 
-  st_break_antimeridian(central_longitude) |> 
-  st_transform(new_world_proj) |> 
-  ggplot() + 
-  geom_sf() +
-  geom_vline(xintercept = central_longitude)+
-  theme_minimal()
+plotRGB(project(world_lonlat, new_world_proj), colNA="transparent")
 ```
 
 
@@ -120,22 +131,22 @@ When running the `proj_region()` or `proj_equal_area()` or related functions, th
 The messages typically include the following steps:
 
 - "Longitude or latitude range exceeds limits"
-  - This error message appears if the longitude exceeds 160 degrees or the latitude exceeds 80 degrees. 
-  - There is no strong reason for these limits; they were set to avoid projecting maps of areas larger than a hemisphere, which may lead to errors. Additionally, projecting regions over such a wide range would be abnormal; if you insist doing so, you could use `proj_hemisphere()`.
-  - The reason for not using 180 degree and 90 degree is just to leave some space and reduce the risk of errors. 
+- This error message appears if the longitude exceeds 160 degrees or the latitude exceeds 80 degrees. 
+- There is no strong reason for these limits; they were set to avoid projecting maps of areas larger than a hemisphere, which may lead to errors. Additionally, projecting regions over such a wide range would be abnormal; if you insist doing so, you could use `proj_hemisphere()`.
+- The reason for not using 180 degree and 90 degree is just to leave some space and reduce the risk of errors. 
 
 - "The map extent is not/too quite large"
-  - If the longest edge of the extent is less than 1000 km, the function will always select an azimuthal projection. 
-  - If the longest edge exceeds 1000 km, the function will proceed to the following checks.
+- If the longest edge of the extent is less than 1000 km, the function will always select an azimuthal projection. 
+- If the longest edge exceeds 1000 km, the function will proceed to the following checks.
 
 - "North-south extent," "East-west extent," and "Square-shaped extent"
-  - "North-south extent" often results in cylindrical projections.
-  - "East-west extent" generally leads to conic projections.
-  - "Square-shaped extent" usually results in azimuthal projections.
+- "North-south extent" often results in cylindrical projections.
+- "East-west extent" generally leads to conic projections.
+- "Square-shaped extent" usually results in azimuthal projections.
 
 - "Close to poles," "Close to equator," and "Mid-latitude away from pole and equator"
-  - If the region is near the equator or poles, the central latitude is set to the equator or the poles. This approach helps orient the reader to these reference points in large extent maps.
+- If the region is near the equator or poles, the central latitude is set to the equator or the poles. This approach helps orient the reader to these reference points in large extent maps.
 
 - For conformal projections, some time you may see the zone number recommendation of **UTM** or **Gauss-Kruger** projection, you could look it in websites like [epsg.io](https://epsg.io/) with the parameter in the message.
-  - If you just want to check the zone number of you area of interest, you could use functions like `check_utm_zone()`, `check_gauss_kruger_3_deg()` or `check_gauss_kruger_6_deg()`
+- If you just want to check the zone number of you area of interest, you could use functions like `check_utm_zone()`, `check_gauss_kruger_3_deg()` or `check_gauss_kruger_6_deg()`
 

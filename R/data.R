@@ -27,3 +27,27 @@
 #'
 #' @source <https://hub.arcgis.com/datasets/esri::world-utm-grid>
 "utm_zone"
+
+
+#' Downsampled Natural Earth 1:50 Shaded Relief World Map
+#'
+#' @format ## "world_shaded_relief"
+#' A array of dimention of 360, 720, 3 for 3 layer for R, G, B band with 0.5 degree on lon and lat direction, please use `terra::rast()` when using
+#'
+#' @keywords internal
+#' @examples
+#' world_base_map = terra::rast(projWiz::world_shaded_relief)
+#' terra::ext(world_base_map) <- c(-180,180,-90,90)
+#'
+#' @source <https://www.naturalearthdata.com/downloads/50m-raster-data/50m-cross-blend-hypso/>
+"world_shaded_relief"
+
+#' 1:110m Spain & Bolivia map
+#'
+#' @format ## "example_country"
+#' A list with Spain and Bolivia 110m map from Natural Earth 1:110m Cultural Vectors
+#'
+#' @keywords internal
+#'
+#' @source <https://www.naturalearthdata.com/downloads/110m-cultural-vectors/>
+"example_country"

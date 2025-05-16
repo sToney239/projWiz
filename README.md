@@ -72,17 +72,24 @@ shorthand name (you can find in the `world_proj_list` data within the
 package), and the central longitude parameter.
 
 ``` r
+library(terra)
+library(projWiz)
+# Please note that this step is only loading internal data for illustration.
+world_lonlat = rast(world_shaded_relief)
+ext(world_lonlat) <- c(-180,180,-90,90)
+crs(world_lonlat) <- "epsg:4326"
+world_lonlat[1:360,c(1,1:12 * 60),1:3] <- 0
+world_lonlat[c(1,1:6 * 60),1:720,1:3] <- 0
+world_lonlat = crop(world_lonlat, ext(-180, 180, -86, 86))
+
+# This step is for reprojecting to generating new world map projection and re-project
 central_longitude = -60
-selected_world_proj_type = world_proj_list$compromise$round_boudnary$Natural_Earth
+selected_world_proj_type = world_proj_list$compromise$round_boudnary$Robinson
+
+
 new_world_proj = proj_world(selected_world_proj_type, central_longitude)
 
-rnaturalearth::countries110 |> 
-  sf::st_break_antimeridian(central_longitude) |> 
-  sf::st_transform(new_world_proj) |> 
-  ggplot2::ggplot() + 
-  ggplot2::geom_sf() +
-  ggplot2::geom_vline(xintercept = central_longitude)+
-  ggplot2::theme_minimal()
+plotRGB(project(world_lonlat, new_world_proj), colNA="transparent")
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
@@ -96,7 +103,7 @@ string to specify projections. These formats allow users to customize
 parameters and generate user-defined projections. Because WKT strings
 can be lengthy and complex, I will use PROJ strings as an example.
 
-![](https://github.com/sToney239/projWiz/raw/master/pics/fig1.jpg)
+![](man/figures/fig1.jpg)
 
 As shown in the picture, a PROJ string consists of several parameters,
 each beginning with a `+`, followed by parameter specifications after

@@ -14,7 +14,6 @@
 #'
 #' @examples proj_hemisphere(c(x = 123, y = 13), "Equal area")
 #' @examples proj_hemisphere(c(xmax=112,xmin=156,ymin=6,ymax=23), "Conformal")
-#' @examples proj_hemisphere(spData::alaska, "ortho")
 proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "WGS84", unit = "m") {
   if (identical(sort(names(obj)), c("x", "y"))) {
      lon = obj[["x"]]

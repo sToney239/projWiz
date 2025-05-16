@@ -37,5 +37,4 @@ Projection for hemishpere
 \examples{
 proj_hemisphere(c(x = 123, y = 13), "Equal area")
 proj_hemisphere(c(xmax=112,xmin=156,ymin=6,ymax=23), "Conformal")
-proj_hemisphere(spData::alaska, "ortho")
 }

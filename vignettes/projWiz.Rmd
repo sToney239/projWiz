@@ -37,7 +37,7 @@ quick_proj_region_map = function(proj_type) {
     theme(plot.title = element_text(hjust = 0.5))
 }
 patchwork::wrap_plots(
-  list(quick_proj_region_map("Equalarea"),
+  list(quick_proj_region_map("Equal area"),
        quick_proj_region_map("Conformal"),
        quick_proj_region_map("Equidistant"))
 )
@@ -48,7 +48,7 @@ It's hard to find any difference, right? Haha, that's basically what I found whe
 As mentioned, `proj_equal_area()` is a pre-set parameter version of `proj_region()`. For example:
 
 ```{r, message=FALSE}
-proj_region(spData::hawaii,"Equalarea")
+proj_region(spData::hawaii,"Equal area")
 proj_equal_area(spData::hawaii)
 ```
 They will generate the same result.
@@ -68,7 +68,7 @@ Note that the `proj_specify()` function is primarily intended for regional data.
 
 For hemisphere maps, you can use `proj_hemisphere()` with the central point's longitude and latitude, or provide an object that allows the function to calculate the centroid.
 
-There are three main types of projections for hemisphere maps in `projWiz`: "Equalarea" (which is Equal area), "Conformal" and "Ortho" as showed below:
+There are three main types of projections for hemisphere maps in `projWiz`: "Equal area" (which is Equal area), "Conformal" and "Ortho" as showed below:
 
 ```{r, fig.width=7,fig.height=3}
 quick_hemisphere_map = function(proj_type) {
@@ -82,7 +82,7 @@ quick_hemisphere_map = function(proj_type) {
     theme(plot.title = element_text(hjust = 0.5))
 }
 patchwork::wrap_plots(
-  list(quick_hemisphere_map("Equalarea"),
+  list(quick_hemisphere_map("Equal area"),
        quick_hemisphere_map("Conformal"),
        quick_hemisphere_map("Ortho"))
 )

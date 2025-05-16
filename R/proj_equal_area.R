@@ -65,13 +65,13 @@ proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m
     ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
     if (ratio > 1.25) {
       message("## North-south extent")
-      outputTEXT <- printNSextent("Equalarea", center,latmax,latmin, datum, unit)
+      outputTEXT <- printNSextent("Equal area", center,latmax,latmin, datum, unit)
     } else if (ratio < 0.8) {
       message("## East-west extent")
-      outputTEXT <- printEWextent("Equalarea", center,latmax,latmin,dlon, datum, unit)
+      outputTEXT <- printEWextent("Equal area", center,latmax,latmin,dlon, datum, unit)
     } else {
       message("## Square-shaped extent")
-      outputTEXT <- printSquareFormat("Equalarea", center,latmax,latmin, datum, unit)
+      outputTEXT <- printSquareFormat("Equal area", center,latmax,latmin, datum, unit)
     }
   }
 

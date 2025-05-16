@@ -6,7 +6,7 @@
 \usage{
 proj_region(
   obj,
-  property = "Equalarea",
+  property = "Equal area",
   output_type = "proj4",
   datum = "WGS84",
   unit = "m"
@@ -19,7 +19,7 @@ proj_region(
 \item A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
 }}
 
-\item{property}{Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".}
+\item{property}{Projection property, should be one of "Equal area", "Conformal" and "Equidistant".}
 
 \item{output_type}{A string for expected output, either "proj4" or "WKT"}
 
@@ -35,7 +35,7 @@ Auto selecting projections with specified property based on the geological shape
 Please note that there's a longitudinal (less than 160) and latitudinal (less than 80) range limit. If area of interest larger than this please use \code{\link[=proj_hemisphere]{proj_hemisphere()}} or use \code{\link[=proj_specify]{proj_specify()}}.
 }
 \examples{
-proj_region(c(xmax=112,xmin=156,ymin=6,ymax=23), "Equalarea")
+proj_region(c(xmax=112,xmin=156,ymin=6,ymax=23), "Equal area")
 }
 \seealso{
 \code{\link[=proj_equal_area]{proj_equal_area()}}, \code{\link[=proj_conformal]{proj_conformal()}}, \code{\link[=proj_equidistant]{proj_equidistant()}}

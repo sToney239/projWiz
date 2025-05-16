@@ -2,9 +2,9 @@ test_that("proj_equidistant works", {
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = -30,ymin = -25,xmax = 20,ymax = 5),crs = 4326)),
                "+proj=eqc +lon_0=-5 +lat_ts=12.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = 13,ymin = -25,xmax = 43 ,ymax = 35),crs = 4326)),
-               "+proj=cass +lon_0=28 +datum=WGS84 +units=m +no_defs")
+               "+proj=eqc +lon_0=28 +lat_ts=17.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = 13,ymin = -53,xmax = 80 ,ymax = -25),crs = 4326)),
-               "+proj=aeqd +lon_0=46.5 +lat_0=-39 +datum=WGS84 +units=m +no_defs")
+               "+proj=eqdc +lon_0=46.5 +lat_1=-48.3333333 +lat_2=-29.6666667 +lat_0=-39 +datum=WGS84 +units=m +no_defs")
   expect_error(proj_equidistant(sf::st_bbox(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),crs = 4326) ))
 
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = -10,ymin = 78,xmax = -4 ,ymax = 80),crs = 4326)),

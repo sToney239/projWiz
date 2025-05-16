@@ -20,7 +20,7 @@ proj_hemisphere(
 \item A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
 }}
 
-\item{property}{Projection property, should be one of "Equalarea", "Conformal" and "ortho", the default value is ortho, for orthographic projection.}
+\item{property}{Projection property, should be one of "Equal area", "Conformal" and "ortho", the default value is ortho, for orthographic projection.}
 
 \item{output_type}{A string for expected output, either "proj4" or "WKT"}
 
@@ -35,7 +35,7 @@ A \code{proj4} or \code{WKT} string
 Projection for hemishpere
 }
 \examples{
-proj_hemisphere(c(x = 123, y = 13), "Equalarea")
+proj_hemisphere(c(x = 123, y = 13), "Equal area")
 proj_hemisphere(c(xmax=112,xmin=156,ymin=6,ymax=23), "Conformal")
 proj_hemisphere(spData::alaska, "ortho")
 }

@@ -7,7 +7,7 @@
 printEWextent(property, center, latmax, latmin, dlon, datum, unit)
 }
 \arguments{
-\item{property}{Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".}
+\item{property}{Projection property, should be one of "Equal area", "Conformal" and "Equidistant".}
 
 \item{center}{A list with with numerical values named with \code{lng} & \code{lat} element, which are the median longitude and latitude values}
 

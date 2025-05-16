@@ -63,15 +63,9 @@ proj_equidistant <- function(obj,output_type = "proj4",datum = "WGS84", unit = "
     message("## The map extent is relatively large, choose projection considering map shape")
     if (abs(center$lat) > 70) {
       message("## Close to poles")
-      # case: close to poles
       outputTEXT <- stringLinks("aeqd", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
-    }  else if (ratio > 1.25) {
-      message("## North-south extent")
-      # case: with an north-south extent
-      outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN, datum, unit)
     } else if (abs(center$lat) < 15) {
       message("## Close to equator")
-      # case: close to equator
       if ((latmax * latmin) <= 0 ) {
         message("## Extent is touching or crossing equator")
         latS = max(abs(latmax), abs(latmin)) / 2
@@ -82,19 +76,22 @@ proj_equidistant <- function(obj,output_type = "proj4",datum = "WGS84", unit = "
       outputTEXT <- stringLinks("eqc", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
     } else {
       message("## Mid-Latitude away from pole and equator")
-      # case: between pole and equator
-      # computing standard paralles
-      # interval <- (latmax - latmin) / 6
-      # Oblique azimuthal equidistant
-      message("## Select Oblique azimuthal equidistant projection")
-      outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
-      # outputTEXT <- list(
-      #   "Equidistant conic" = stringLinks("eqdc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN),
-      #   "Oblique azimuthal equidistant" = stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN)
-      # )
+      if (ratio > 1.25) {
+        message("## North-south extent")
+        message("## Select Cassini projection")
+        outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN, datum, unit)
+      } else if (ratio < 0.8) {
+        message("## East-west extent")
+        message("## Select Equidistant conic projection")
+        interval <- (latmax - latmin) / 6
+        outputTEXT <- stringLinks("eqdc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN)
+      } else {
+        message("## Square-shaped extent")
+        message("## Select Oblique azimuthal equidistant projection")
+        outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN)
+      }
     }
   }
-
 
   if(output_type == "proj4") {
     return(outputTEXT$PROJ)

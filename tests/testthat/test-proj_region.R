@@ -1,18 +1,18 @@
-test_that("proj_region Equalarea works", {
+test_that("proj_region Equal area works", {
   expect_equal(sf::st_bbox(c(xmin = 68,ymin = 8,xmax = 97,ymax = 35),crs = 4326) |>
-                 proj_region("Equalarea"), "+proj=laea +lon_0=82.5 +lat_0=21.5 +datum=WGS84 +units=m +no_defs")
+                 proj_region("Equal area"), "+proj=laea +lon_0=82.5 +lat_0=21.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(sf::st_bbox(c(xmin = -30,ymin = -25,xmax = 20,ymax = 5),crs = 4326) |>
-                 proj_region("Equalarea"),"+proj=cea +lon_0=-5 +lat_ts=12.5 +datum=WGS84 +units=m +no_defs")
+                 proj_region("Equal area"),"+proj=cea +lon_0=-5 +lat_ts=12.5 +datum=WGS84 +units=m +no_defs")
   expect_equal(sf::st_bbox(c(xmin = 13,ymin = -25,xmax = 43 ,ymax = 35),crs = 4326) |>
-                 proj_region("Equalarea"),"+proj=tcea +lon_0=28 +datum=WGS84 +units=m +no_defs")
+                 proj_region("Equal area"),"+proj=tcea +lon_0=28 +datum=WGS84 +units=m +no_defs")
   expect_equal(sf::st_bbox(c(xmin = 13,ymin = -53,xmax = 80 ,ymax = -25),crs = 4326) |>
-                 proj_region("Equalarea"),"+proj=aea +lon_0=46.5 +lat_1=-48.3333333 +lat_2=-29.6666667 +lat_0=-39 +datum=WGS84 +units=m +no_defs")
-  expect_error(proj_region(sf::st_bbox(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),crs = 4326) ,"Equalarea"))
+                 proj_region("Equal area"),"+proj=aea +lon_0=46.5 +lat_1=-48.3333333 +lat_2=-29.6666667 +lat_0=-39 +datum=WGS84 +units=m +no_defs")
+  expect_error(proj_region(sf::st_bbox(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),crs = 4326) ,"Equal area"))
   expect_equal(sf::st_bbox(c(xmin = 168,ymin = 40,xmax = -171 ,ymax = 55),crs = 4326) |>
-                 proj_region("Equalarea"),"+proj=laea +lon_0=178.5 +lat_0=47.5 +datum=WGS84 +units=m +no_defs")
-  expect_equal(proj_region(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326),property = "Equalarea"),
+                 proj_region("Equal area"),"+proj=laea +lon_0=178.5 +lat_0=47.5 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_region(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326),property = "Equal area"),
                "+proj=laea +lon_0=-79 +lat_0=0 +datum=WGS84 +units=m +no_defs")
-  expect_equal(proj_region(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),property = "Equalarea",output_type="WKT"),
+  expect_equal(proj_region(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),property = "Equal area",output_type="WKT"),
                'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
@@ -32,7 +32,7 @@ test_that("proj_region Equalarea works", {
     sf::st_point(c(13692297,-3248974)),
     sf::st_point(c(13692297,-2391879))
   ) |>
-    sf::st_sfc(crs = 3857), "Equalarea"),
+    sf::st_sfc(crs = 3857), "Equal area"),
   "+proj=laea +lon_0=118.9999964 +lat_0=-24.5000026 +datum=WGS84 +units=m +no_defs")
 })
 
@@ -92,19 +92,22 @@ test_that("proj_region Conformal works", {
 
 test_that("proj_region Equidistant works", {
   expect_equal(proj_region(sf::st_bbox(c(xmin = -30,ymin = -25,xmax = 20,ymax = 5),crs = 4326) ,"Equidistant"),
-                 "+proj=eqc +lon_0=-5 +lat_ts=12.5 +datum=WGS84 +units=m +no_defs")
+               proj_equidistant(sf::st_bbox(c(xmin = -30,ymin = -25,xmax = 20,ymax = 5),crs = 4326) ))
   expect_equal(proj_region(sf::st_bbox(c(xmin = 13,ymin = -25,xmax = 43 ,ymax = 35),crs = 4326),"Equidistant"),
-                 "+proj=cass +lon_0=28 +datum=WGS84 +units=m +no_defs")
+               proj_equidistant(sf::st_bbox(c(xmin = 13,ymin = -25,xmax = 43 ,ymax = 35),crs = 4326)))
   expect_equal(proj_region(sf::st_bbox(c(xmin = 13,ymin = -53,xmax = 80 ,ymax = -25),crs = 4326),"Equidistant"),
-                 "+proj=aeqd +lon_0=46.5 +lat_0=-39 +datum=WGS84 +units=m +no_defs")
+               proj_equidistant(sf::st_bbox(c(xmin = 13,ymin = -53,xmax = 80 ,ymax = -25),crs = 4326)))
   expect_error(proj_region(sf::st_bbox(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),crs = 4326),"Equidistant"))
 
   expect_error(proj_region(c(xmin = 2,ymin = -23,xmax = 170 ,ymax = -1),"Equidistant"))
 
   expect_equal(proj_region(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"Equidistant"),
-               "+proj=aeqd +lon_0=179.5 +lat_0=28.5 +datum=WGS84 +units=m +no_defs")
+               proj_equidistant(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326)))
+
   expect_equal(proj_region(sf::st_bbox(c(xmin = -10,ymin = 70,xmax = 34 ,ymax = 86),crs = 4326),"Equidistant"),
-               "+proj=aeqd +lon_0=12 +lat_0=90 +datum=WGS84 +units=m +no_defs")
+               proj_equidistant(sf::st_bbox(c(xmin = -10,ymin = 70,xmax = 34 ,ymax = 86),crs = 4326)))
+
   expect_equal(proj_region(sf::st_bbox(c(xmin = 70,ymin = -26,xmax =  90,ymax = -2),crs = 4326),"Equidistant"),
-               "+proj=eqc +lon_0=80 +lat_ts=-14 +datum=WGS84 +units=m +no_defs")
+               proj_equidistant(sf::st_bbox(c(xmin = 70,ymin = -26,xmax =  90,ymax = -2),crs = 4326)))
+
 })

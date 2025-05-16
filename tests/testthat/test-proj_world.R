@@ -1,7 +1,8 @@
 test_that("proj_world works", {
   expect_equal(proj_world(world_proj_list$compromise$round_boudnary$Natural_Earth, 150),
                "+proj=natearth +lon_0=150 +datum=WGS84 +units=m +no_defs")
-
+  expect_equal(proj_world(world_proj_list$compromise$round_boudnary$Winkel_Tripel, 150),
+               "+proj=wintri +lon_0=150 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_world(projWiz::world_proj_list$equal_area$point_polar$Mollweide,0,output_type = "WKT"),
                'PROJCS["ProjWiz_Custom_Mollweide",
  GEOGCS["GCS_WGS_1984",

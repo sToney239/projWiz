@@ -6,11 +6,11 @@ test_that("proj_hemisphere works", {
     "+proj=ortho +lon_0=82.5 +lat_0=21.5 +datum=WGS84 +units=m +no_defs"
   )
   expect_equal(
-    proj_hemisphere(c("x"=123,"y"=13), "Equalarea"),
+    proj_hemisphere(c("x"=123,"y"=13), "Equal area"),
     "+proj=laea +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"
   )
   expect_equal(
-    proj_hemisphere(list("xmin"=120,"xmax"=126,"ymin"=10,"ymax"=16), "Equalarea"),
+    proj_hemisphere(list("xmin"=120,"xmax"=126,"ymin"=10,"ymax"=16), "Equal area"),
     "+proj=laea +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"
   )
   expect_equal(
@@ -18,7 +18,7 @@ test_that("proj_hemisphere works", {
     "+proj=aeqd +lon_0=123 +lat_0=13 +datum=WGS84 +units=m +no_defs"
   )
   expect_equal(
-    proj_hemisphere(c("x"=123,"y"=13), "Equalarea",output_type = "WKT"),
+    proj_hemisphere(c("x"=123,"y"=13), "Equal area",output_type = "WKT"),
     'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
@@ -38,10 +38,10 @@ test_that("proj_hemisphere works", {
     sf::st_point(c(13692297,-3248974)),
     sf::st_point(c(13692297,-2391879))
   ) |>
-    sf::st_sfc(crs = 3857), "Equalarea"),
+    sf::st_sfc(crs = 3857), "Equal area"),
   "+proj=laea +lon_0=118.9999964 +lat_0=-24.5000026 +datum=WGS84 +units=m +no_defs")
-  expect_error(proj_hemisphere(c(xmin = 2,ymin = -23,xmax = 190 ,ymax = -1), "Equalarea"))
-  expect_error(proj_hemisphere(c(x=3,y = 190), "Equalarea"))
+  expect_error(proj_hemisphere(c(xmin = 2,ymin = -23,xmax = 190 ,ymax = -1), "Equal area"))
+  expect_error(proj_hemisphere(c(x=3,y = 190), "Equal area"))
 })
 
 

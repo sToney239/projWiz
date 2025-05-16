@@ -1,6 +1,6 @@
 #' Funcion for regional maps with an square-shaped extent
 #'
-#' @param property Projection property, should be one of "Equalarea", "Conformal" and "Equidistant".
+#' @param property Projection property, should be one of "Equal area", "Conformal" and "Equidistant".
 #' @param center A list with with numerical values named with `lng` & `lat` element, which are the median longitude and latitude values
 #' @param latmax A numerical value, max latitude of the map extent
 #' @param latmin A numerical value, min latitude of the map extent
@@ -10,33 +10,30 @@
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
 printSquareFormat <- function(property, center, latmax, latmin, datum, unit) {
-  # case: close to poles
   if (abs(center$lat) > 75) {
     message("## Close to poles")
     if (property == "Conformal") {
       message("## Select Stereographic projection with pole as central latitude")
       outputTEXT <- stringLinks("stere", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
-    } else if (property == 'Equalarea') {
+    } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection with pole as central latitude")
       outputTEXT <- stringLinks("laea", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
     }
   } else if (abs(center$lat) < 15 && (latmax * latmin) <= 0) {
-    # case: close to equator and crossing it
-    message("## Close to equator and crossing it")
+    message("## Extent is touching or crossing equator")
     if (property == "Conformal") {
       message("## Select Stereographic projection with 0 as central latitude")
       outputTEXT <- stringLinks("stere", NaN, 0.0, NaN, NaN, center$lng, NaN, datum, unit)
-    } else if (property == 'Equalarea') {
+    } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection with 0 as central latitude")
       outputTEXT <- stringLinks("laea", NaN, 0.0, NaN, NaN, center$lng, NaN, datum, unit)
     }
   } else {
-    # case: between pole and equator
     message("## Mid-Latitude away from pole and equator")
     if (property == "Conformal") {
       message("## Select Stereographic projection")
       outputTEXT <- stringLinks("stere", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
-    } else if (property == 'Equalarea') {
+    } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection")
       outputTEXT <- stringLinks("laea", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
     }

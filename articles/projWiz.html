@@ -218,41 +218,54 @@ messages on the console, which will tell you why the projection is
 selected.</p>
 <p>The messages typically include the following steps:</p>
 <ul>
-<li><p>“Longitude or latitude range exceeds limits”</p></li>
-<li><p>This error message appears if the longitude exceeds 160 degrees
-or the latitude exceeds 80 degrees.</p></li>
-<li><p>There is no strong reason for these limits; they were set to
-avoid projecting maps of areas larger than a hemisphere, which may lead
-to errors. Additionally, projecting regions over such a wide range would
-be abnormal; if you insist doing so, you could use
-<code><a href="../reference/proj_hemisphere.html">proj_hemisphere()</a></code>.</p></li>
-<li><p>The reason for not using 180 degree and 90 degree is just to
-leave some space and reduce the risk of errors.</p></li>
-<li><p>“The map extent is not/too quite large”</p></li>
-<li><p>If the longest edge of the extent is less than 1000 km, the
-function will always select an azimuthal projection.</p></li>
-<li><p>If the longest edge exceeds 1000 km, the function will proceed to
-the following checks.</p></li>
-<li><p>“North-south extent,” “East-west extent,” and “Square-shaped
-extent”</p></li>
-<li><p>“North-south extent” often results in cylindrical
-projections.</p></li>
-<li><p>“East-west extent” generally leads to conic projections.</p></li>
-<li><p>“Square-shaped extent” usually results in azimuthal
-projections.</p></li>
-<li><p>“Close to poles,” “Close to equator,” and “Mid-latitude away from
-pole and equator”</p></li>
-<li><p>If the region is near the equator or poles, the central latitude
-is set to the equator or the poles. This approach helps orient the
-reader to these reference points in large extent maps.</p></li>
-<li><p>For conformal projections, some time you may see the zone number
+<li>“Longitude or latitude range exceeds limits”
+<ul>
+<li>This error message appears if the longitude exceeds 160 degrees or
+the latitude exceeds 80 degrees.</li>
+<li>There is no strong reason for these limits; they were set to avoid
+projecting maps of areas larger than a hemisphere, which may lead to
+errors. Additionally, projecting regions over such a wide range would be
+abnormal; if you insist doing so, you could use
+<code><a href="../reference/proj_hemisphere.html">proj_hemisphere()</a></code>.</li>
+<li>The reason for not using 180 degree and 90 degree is just to leave
+some space and reduce the risk of errors.</li>
+</ul>
+</li>
+<li>“The map extent is not/too quite large”
+<ul>
+<li>If the longest edge of the extent is less than 1000 km, the function
+will always select an azimuthal projection.</li>
+<li>If the longest edge exceeds 1000 km, the function will proceed to
+the following checks.</li>
+</ul>
+</li>
+<li>“North-south extent,” “East-west extent,” and “Square-shaped extent”
+<ul>
+<li>“North-south extent” often results in cylindrical projections.</li>
+<li>“East-west extent” generally leads to conic projections.</li>
+<li>“Square-shaped extent” usually results in azimuthal
+projections.</li>
+</ul>
+</li>
+<li>“Close to poles,” “Close to equator,” and “Mid-latitude away from
+pole and equator”
+<ul>
+<li>If the region is near the equator or poles, the central latitude is
+set to the equator or the poles. This approach helps orient the reader
+to these reference points in large extent maps.</li>
+</ul>
+</li>
+<li>For conformal projections, some time you may see the zone number
 recommendation of <strong>UTM</strong> or <strong>Gauss-Kruger</strong>
-projection, you could look it in websites like <a href="https://epsg.io/" class="external-link">epsg.io</a> with the parameter in the
-message.</p></li>
-<li><p>If you just want to check the zone number of you area of
-interest, you could use functions like <code><a href="../reference/check_utm_zone.html">check_utm_zone()</a></code>,
+projection, you could look it in websites like <a href="https://epsg.io/" class="external-link">epsg.io</a> with the parameter in the message.
+<ul>
+<li>If you just want to check the zone number of you area of interest,
+you could use functions like <code><a href="../reference/check_utm_zone.html">check_utm_zone()</a></code>,
 <code><a href="../reference/check_gauss_kruger_3_deg.html">check_gauss_kruger_3_deg()</a></code> or
-<code><a href="../reference/check_gauss_kruger_6_deg.html">check_gauss_kruger_6_deg()</a></code></p></li>
+<code><a href="../reference/check_gauss_kruger_6_deg.html">check_gauss_kruger_6_deg()</a></code>
+</li>
+</ul>
+</li>
 </ul>
 <blockquote>
 <p>For more detailed explanations of the selection procedure, you could

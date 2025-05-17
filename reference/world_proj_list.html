@@ -20,6 +20,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/How-Regional-Projection-Selected.html">How Regional Projection Selected</a></li>
+    <li><a class="dropdown-item" href="../articles/world-proj-illustration.html">Which World projection to Select</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -52,11 +53,12 @@
 <h3 id="-world-proj-list-">"world_proj_list"<a class="anchor" aria-label="anchor" href="#-world-proj-list-"></a></h3>
 
 
-<p>A list with popular world projections:</p><ul><li><p><code>equal_area</code>: Projections to keep the area property approximately correct</p><ul><li><p><code>point_polar</code>: Equal-area world map projections with poles represented as points</p></li>
-<li><p><code>line_polar</code>: Equal-area world map projections with poles represented as lines</p></li>
+<p>A list with popular world projections:</p><ul><li><p><code>equal_area</code>: Projections to keep the area property approximately correct</p><ul><li><p><code>barrel_shape</code>: Equal-area world map projections with poles represented as lines</p></li>
+<li><p><code>ellipse</code>: Equal-area world map projections with poles represented as points</p></li>
+<li><p><code>rectangular</code>: cylindrical projection with world map shape like rectangular</p></li>
 </ul></li>
-<li><p><code>compromise</code>: Projections compromising shape and area</p><ul><li><p><code>round_boudnary</code>: Boundary on east and west as curve</p></li>
-<li><p><code>rectangular</code>: Boundary as rectange</p></li>
+<li><p><code>compromise</code>: Projections compromising shape and area</p><ul><li><p><code>barrel_shape</code>: pseudocylindrical projection with parallel straight lines at the north and south edges and nearly elliptical lines on the east and west sides</p></li>
+<li><p><code>rectangular</code>: cylindrical projection with world map shape like rectangular</p></li>
 </ul></li>
 </ul></div>
 

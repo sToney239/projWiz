@@ -1,5 +1,5 @@
 ---
-title: "world-proj-illustration"
+title: "Which World projection to Select"
 ---
 
 ```{r, include = FALSE}
@@ -9,54 +9,127 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(projWiz)
-library(ggplot2)
-library(terra)
+This page provides a general overview of the world projections included in this package. It is not a comprehensive introduction; the information here is drawn from Chapter 9.3 of [Choosing a Map Projection](https://doi.org/10.1007/978-3-319-51835-0) and various online sources. If you don't have specific requirements, feel free to choose a projection based on your preferences of the map by appearance. However, if you do have particular needs, please seek more detailed information elsewhere.
 
+```{r setup, message=FALSE,warning=FALSE}
+library(sf)
+library(terra)
+library(projWiz)
+
+# load world data, set extent
 world_lonlat = terra::rast(world_shaded_relief)
 ext(world_lonlat) <- c(-180,180,-90,90)
 crs(world_lonlat) <- "epsg:4326"
-
+# draw the graticule by hand
 world_lonlat[1:360,c(1,1:12 * 60),1:3] <- 0
 world_lonlat[c(1,1:6 * 60),1:720,1:3] <- 0
-
+# plot function
 quick_proj_world_map <- function(proj_type, title, crop=FALSE) {
   # sometimes in polar araes will generate error, need to crop
-  if (crop) {
-    world_lonlat = crop(world_lonlat, ext(-180, 180, -86, 86))
-  }
-  world_lonlat |> 
-    terra::project(proj_world(proj_type,0), mask=TRUE,method="average") |> 
-    plotRGB(main=title)
+  if (crop) world_lonlat = crop(world_lonlat, ext(-180, 180, -86, 86))
+  
+  new_proj = proj_world(proj_type)
+  # note that this function use the parameter of `mask=TRUE`, sometimes you may need to turn it to FALSE
+  projected_map = terra::project(world_lonlat, new_proj,
+                               mask=TRUE,method="average")
+  
+  raster::plotRGB(projected_map, main=title,mar=c(0,2,0,0))
 }
 ```
 
+## Compromise
+
+I would like to introduce the compromise projection family first because I believe this type will be more acceptable to most people. After all, its name—“compromise”—suggests that it sacrifices certain aspects, what else could it possibly have other than just looking more acceptable by most people?
+
+### Barrel-shaped 
+
+This barrel-shaped map family is derived from pseudocylindrical map projections, and I believe it's a popular choice for world maps because it looks quite familiar to me.
+
+```{r, fig.width=15, fig.height=5, dpi = 300}
+par(mfrow=c(1,3))
+quick_proj_world_map(world_proj_list$compromise$barrel_shape$Robinson,"Robinson")
+quick_proj_world_map(world_proj_list$compromise$barrel_shape$Winkel_Tripel,"Winkel Tripel",TRUE)
+quick_proj_world_map(world_proj_list$compromise$barrel_shape$Natural_Earth,"Natural Earth",TRUE)
+```
+
+ - The **Robinson projection** offers visually appealing representations of the entire world, but the distortion close to the poles is severe. The National Geographic Society adopted this projection for general-purpose world maps in **1988**.
+
+ - The **Winkel Tripel projection** addresses some of the distortions in polar areas. It replaced the Robinson projection as the standard for world maps in **1998**.
+ 
+ - The **Natural Earth projection** was designed to combine functionality with a familiar appearance, and it was introduced in **2008**.
+
+(It's quite intersting that each projection comes to their important time approximately ten years apart from the previous one.)
+
+---
+
+> I have tries setting different central longitudes for raster data. Except for Robinson projection, the other two projections produced unexpected results. Therefore, if you're reprojecting a raster world map for this family of projections, I recommend the following:
+>
+>  - If using 0° as central longitude, the **Natural Earth projection** looks better.
+>
+>  - If using a different central longitude, the **Robinson projection** is just OK.
+>
+> This is only for raster data reprojection, for vector data there are no such problems, but you may need to use `sf::st_break_antimeridian()` first before `sf::st_transform()`.
+
+### Rectangular-shaped
+
+This rectangular-shaped map family is derived from cylindrical map projections, and it's not recommended by some people because the large distortion and misleading effects But the straight meridians could be advantageous for maps showing time zones. And maybe in certain cases, a rectangular boundary is simply necessary. So here are some rectangular-shaped projections.
+
+```{r, fig.width=10, fig.height=7, dpi = 300, warning=FALSE}
+par(mfrow=c(2, 2))
+quick_proj_world_map(world_proj_list$compromise$rectangular$Miller_cylindrical_I, "Miller cylindrical I",TRUE)
+quick_proj_world_map(world_proj_list$compromise$rectangular$Patterson, "Patterson")
+quick_proj_world_map(world_proj_list$compromise$rectangular$Plate_Carree, "Plate Carrée")
+raster::plotRGB(world_lonlat, main="Lon Lat", mar=c(0,2,0,0))
+```
+
+ - The **Miller cylindrical projection** is a modified version of the Mercator projection, having less exaggeration of continents compared to the original Mercator.
+ 
+ - The **Patterson projection** exaggerates high-latitude areas less than the Miller cylindrical projection. **(Looks most acceptable for me)**
+ 
+ - The **Plate Carrée projections** (also known as the equidistant cylindrical or geographic) : (from my understanding) It's just like taking the long/lat coordinate system, applying some linear multiplication operations, replacing its name and saying "hey this is the projected coordinate system I'm using". So it's easy for data sharing because it requires minimal transformation or calculation. 
+    - (Please don't mix it up with longitude & latitude coordinate system, though they appear similar. The former one basically projects by assuming the Lon and Lat lines are equidistant, parallel lines, but the latter one doesn't, it is an unprojected geographic coordinate system. If you asks some GIS softwares to do some calculations, no preprocessing is needed for the former, but the latter may require spherical transformations or projection process.)
+
+## Equal Area 
+
+Equal-area world maps projections are required for area comparisons, such as with choropleth and dasymetric maps, or when the number of features per area unit is estimated.
+
+### Barrel-shaped
+
+```{r, fig.width=15, fig.height=5, dpi = 600}
+par(mfrow=c(1,3))
+quick_proj_world_map(world_proj_list$equal_area$barrel_shape$Eckert_IV,"Eckert IV")
+quick_proj_world_map(world_proj_list$equal_area$barrel_shape$Wagner_IV,"Wagner IV")
+quick_proj_world_map(world_proj_list$equal_area$barrel_shape$Equal_Earth,"Equal Earth")
+```
+
+  - **Eckert IV projection** & **Wagner IV projection**: similar projections with low distortion
+  - **Equal Earth projection**: newer equal area projection, simple to implement and fast to evaluate
+
+---
+
+> Please note that the **Equal Earth projection** have the same problem as its cousin **Natural Earth projection** of some unexpected outcomes for raster data reprojection with non 0° central longitdue.
+
+### Elliptical-shaped
 
 ```{r, fig.width=10, fig.height=5, dpi = 300}
 par(mfrow=c(1,2))
-quick_proj_world_map(world_proj_list$equal_area$point_polar$Mollweide,"Mollweide")
-quick_proj_world_map(world_proj_list$equal_area$point_polar$Hammer_Aitoff,"Hammer Aitoff")
+quick_proj_world_map(world_proj_list$equal_area$ellipse$Mollweide,"Mollweide")
+quick_proj_world_map(world_proj_list$equal_area$ellipse$Hammer_Aitoff,"Hammer Aitoff")
 ```
 
-remove `world_proj_list$equal_area$line_polar$Wagner_VII`
-```{r, fig.width=15, fig.height=5, dpi = 600}
-par(mfrow=c(1,3))
-quick_proj_world_map(world_proj_list$equal_area$line_polar$Equal_Earth,"Equal Earth")
-quick_proj_world_map(world_proj_list$equal_area$line_polar$Eckert_IV,"Eckert IV")
-quick_proj_world_map(world_proj_list$equal_area$line_polar$Wagner_IV,"Wagner IV")
-```
 
-```{r, fig.width=15, fig.height=5, dpi = 300}
-par(mfrow=c(1,3))
-quick_proj_world_map(world_proj_list$compromise$round_boudnary$Robinson,"Robinson")
-quick_proj_world_map(world_proj_list$compromise$round_boudnary$Winkel_Tripel,"Winkel Tripel",TRUE)
-quick_proj_world_map(world_proj_list$compromise$round_boudnary$Natural_Earth,"Natural Earth",TRUE)
-```
-```{r, fig.width=15, fig.height=5, dpi = 300}
-par(mfrow=c(1,3))
-quick_proj_world_map(world_proj_list$compromise$rectangular$Miller_cylindrical_I,"Miller cylindrical I",TRUE)
-quick_proj_world_map(world_proj_list$compromise$rectangular$Patterson,"Patterson")
-quick_proj_world_map(world_proj_list$compromise$rectangular$Plate_Carrée,"Plate Carrée")
+The Mollweide projection is very popular for atlases (Canters and Decleir 1989) and is more aesthetically pleasing to many cartographers than other projections due to its
+elliptical shape
+
+The Hammer projection represents the
+entire world in an ellipse with curved parallels and unequally distributed meridians 
+
+
+### Rectangular-shaped
+
+```{r, fig.width=10, fig.height=5, dpi = 300}
+par(mfrow=c(1,2))
+quick_proj_world_map(world_proj_list$equal_area$rectangular$Gall_Peters,"Gall-Peters")
+quick_proj_world_map(world_proj_list$equal_area$rectangular$Behrmann,"Behrmann")
 ```
 

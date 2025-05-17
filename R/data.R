@@ -35,7 +35,6 @@
 #' @format ## "world_shaded_relief"
 #' A array of dimention of 360, 720, 3 for 3 layer for R, G, B band with 0.5 degree on lon and lat direction, please use `terra::rast()` when using
 #'
-#' @keywords internal
 #' @examples
 #' world_base_map = terra::rast(projWiz::world_shaded_relief)
 #' terra::ext(world_base_map) <- c(-180,180,-90,90)
@@ -49,7 +48,6 @@
 #' @format ## "example_country"
 #' A list with Spain and Bolivia 110m map from Natural Earth 1:110m Cultural Vectors
 #'
-#' @keywords internal
 #' @examples
 #' spain_polygon = sf::st_polygon(list(projWiz::example_country$Spain))
 #' plot(sf::st_sfc(spain_polygon, crs = 4326), graticule = TRUE, key.pos = NULL, axes = TRUE)

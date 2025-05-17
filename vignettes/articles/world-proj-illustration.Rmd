@@ -33,8 +33,7 @@ quick_proj_world_map <- function(proj_type, title, crop=FALSE) {
   
   new_proj = proj_world(proj_type)
   # note that this function use the parameter of `mask=TRUE`, sometimes you may need to turn it to FALSE
-  projected_map = terra::project(world_lonlat, new_proj,
-                               mask=TRUE,method="average")
+  projected_map = terra::project(world_lonlat, new_proj, mask=TRUE,method="average")
   
   terra::plotRGB(projected_map, main=title,mar=c(0,2,0,0))
 }
@@ -138,7 +137,7 @@ quick_proj_world_map(world_proj_list$equal_area$rectangular$Behrmann,"Behrmann")
 
 These are older projections that are basically the same projection just with different standard latitudes. If you need to use an equal-area world projection, the **Behrmann projection** is generally considered to be slightly better than the **Gall-Peters projection**. However, I believe it would be better just give these rectangular-shaped equal-area projections up.
 
----
+## Others
 
 I'm not going to list properties like "Conformal". You can simply use the PROJ string "+proj=merc" to specify the Mercator projection, but does anyone still use this projection today?
 

@@ -123,6 +123,7 @@ new_world_proj = proj_world(selected_world_proj_type, central_longitude)
 plotRGB(project(world_lonlat, new_world_proj), colNA="transparent")
 ```
 
+> For more suggestions or references on selecting a world map projection, you can check [here](https://stoney239.github.io/projWiz/articles/world-proj-illustration.html).
 
 ## Message Explaination of `proj_region()`
 
@@ -150,3 +151,4 @@ The messages typically include the following steps:
 - For conformal projections, some time you may see the zone number recommendation of **UTM** or **Gauss-Kruger** projection, you could look it in websites like [epsg.io](https://epsg.io/) with the parameter in the message.
 - If you just want to check the zone number of you area of interest, you could use functions like `check_utm_zone()`, `check_gauss_kruger_3_deg()` or `check_gauss_kruger_6_deg()`
 
+> For more detailed explanations of the selection procedure, you could check [here](https://stoney239.github.io/projWiz/articles/How-Regional-Projection-Selected.html).

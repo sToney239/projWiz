@@ -4,7 +4,7 @@
 \alias{proj_world}
 \title{Specify a world map projection}
 \usage{
-proj_world(world_proj, lng, output_type = "proj4")
+proj_world(world_proj, lng = 0, output_type = "proj4")
 }
 \arguments{
 \item{world_proj}{A string of proj shorthand, could be extracted from \code{world_proj_list}}
@@ -20,5 +20,5 @@ A \code{proj4} or \code{WKT} string
 Specify a world map projection
 }
 \examples{
-proj_world(world_proj_list$compromise$round_boudnary$Natural_Earth, 150)
+proj_world(world_proj_list$compromise$barrel_shape$Natural_Earth, 150)
 }

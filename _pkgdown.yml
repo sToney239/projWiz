@@ -22,3 +22,8 @@ reference:
   - check_utm_zone
   - check_gauss_kruger_3_deg
   - check_gauss_kruger_6_deg
+
+- title: Example data
+  contents:
+  - world_shaded_relief
+  - example_country

@@ -3,11 +3,12 @@
 #' @format ## "world_proj_list"
 #' A list with popular world projections:
 #'    - `equal_area`: Projections to keep the area property approximately correct
-#'        - `point_polar`: Equal-area world map projections with poles represented as points
-#'        - `line_polar`: Equal-area world map projections with poles represented as lines
+#'        - `barrel_shape`: Equal-area world map projections with poles represented as lines
+#'        - `ellipse`: Equal-area world map projections with poles represented as points
+#'        - `rectangular`: cylindrical projection with world map shape like rectangular
 #'    - `compromise`: Projections compromising shape and area
-#'        - `round_boudnary`: Boundary on east and west as curve
-#'        - `rectangular`: Boundary as rectange
+#'        - `barrel_shape`: pseudocylindrical projection with parallel straight lines at the north and south edges and nearly elliptical lines on the east and west sides
+#'        - `rectangular`: cylindrical projection with world map shape like rectangular
 #'
 #' @source <https://github.com/ProjectionWizard/projectionwizard.github.io/blob/263b9ff09128e371ee923ab57bfc1ed41bbdc4ba/outputFormat.js#L115>
 "world_proj_list"
@@ -38,6 +39,7 @@
 #' @examples
 #' world_base_map = terra::rast(projWiz::world_shaded_relief)
 #' terra::ext(world_base_map) <- c(-180,180,-90,90)
+#' terra::crs(world_base_map) <- "epsg:4326"
 #'
 #' @source <https://www.naturalearthdata.com/downloads/50m-raster-data/50m-cross-blend-hypso/>
 "world_shaded_relief"
@@ -48,6 +50,9 @@
 #' A list with Spain and Bolivia 110m map from Natural Earth 1:110m Cultural Vectors
 #'
 #' @keywords internal
+#' @examples
+#' spain_polygon = sf::st_polygon(list(projWiz::example_country$Spain))
+#' plot(sf::st_sfc(spain_polygon, crs = 4326), graticule = TRUE, key.pos = NULL, axes = TRUE)
 #'
 #' @source <https://www.naturalearthdata.com/downloads/110m-cultural-vectors/>
 "example_country"

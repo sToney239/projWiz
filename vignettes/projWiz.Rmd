@@ -115,7 +115,7 @@ Once you have made your selection, you can use `proj_world()` to generate your d
 
 ```{r,message=FALSE, warning=FALSE, fig.width=6}
 central_longitude = -120
-selected_world_proj_type = world_proj_list$compromise$round_boudnary$Robinson
+selected_world_proj_type = world_proj_list$compromise$barrel_shape$Robinson
 
 
 new_world_proj = proj_world(selected_world_proj_type, central_longitude)

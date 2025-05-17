@@ -84,7 +84,7 @@ world_lonlat = crop(world_lonlat, ext(-180, 180, -86, 86))
 
 # This step is for reprojecting to generating new world map projection and re-project
 central_longitude = -60
-selected_world_proj_type = world_proj_list$compromise$round_boudnary$Robinson
+selected_world_proj_type = world_proj_list$compromise$barrel_shape$Robinson
 
 
 new_world_proj = proj_world(selected_world_proj_type, central_longitude)

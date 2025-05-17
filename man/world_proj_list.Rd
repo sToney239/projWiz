@@ -11,13 +11,14 @@ A list with popular world projections:
 \itemize{
 \item \code{equal_area}: Projections to keep the area property approximately correct
 \itemize{
-\item \code{point_polar}: Equal-area world map projections with poles represented as points
-\item \code{line_polar}: Equal-area world map projections with poles represented as lines
+\item \code{barrel_shape}: Equal-area world map projections with poles represented as lines
+\item \code{ellipse}: Equal-area world map projections with poles represented as points
+\item \code{rectangular}: cylindrical projection with world map shape like rectangular
 }
 \item \code{compromise}: Projections compromising shape and area
 \itemize{
-\item \code{round_boudnary}: Boundary on east and west as curve
-\item \code{rectangular}: Boundary as rectange
+\item \code{barrel_shape}: pseudocylindrical projection with parallel straight lines at the north and south edges and nearly elliptical lines on the east and west sides
+\item \code{rectangular}: cylindrical projection with world map shape like rectangular
 }
 }
 }

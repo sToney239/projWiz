@@ -4,7 +4,7 @@
 #'  - An object can be accepted by [sf::st_bbox()] to compute the bounding box\cr
 #'  - A named list of longitude and latitude at centroid with names of "x" and "y"\cr
 #'  - A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
-#' @param property Projection property, should be one of "Equal area", "Conformal" and "ortho", the default value is ortho, for orthographic projection.
+#' @param property Projection property, should be one of "Equal area", "Conformal", "Equidistant" and "ortho", the default value is ortho, for orthographic projection.
 #' @param output_type A string for expected output, either "proj4" or "WKT"
 #' @param datum A string for the datum used with the coordinates (currently only 'WGS84', 'ETRS89' and 'NAD83' supported)
 #' @param unit A string for horizontal coordinate system units (currently only 'm' and 'ft' supported)
@@ -16,12 +16,12 @@
 #' @examples proj_hemisphere(c(xmax=112,xmin=156,ymin=6,ymax=23), "Conformal")
 proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "WGS84", unit = "m") {
   if (identical(sort(names(obj)), c("x", "y"))) {
-     lon = obj[["x"]]
-     lat = obj[["y"]]
-     if (lon > 180 | lon < -180 |
-         lat > 90 | lat < -90) {
-       stop("Please input valid x y value!")
-     }
+    lon = obj[["x"]]
+    lat = obj[["y"]]
+    if (lon > 180 | lon < -180 |
+        lat > 90 | lat < -90) {
+      stop("Please input valid x y value!")
+    }
   } else {
     if (!(is.vector(obj) & identical(sort(names(obj)), sort(c("xmin", "xmax", "ymin","ymax"))))) {
       if(!sf::st_is_longlat(obj)) {
@@ -54,13 +54,12 @@ proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "
   }
 
   if (property == 'Equal area') {
-    # "Lambert azimuthal equal area"
     outputTEXT = stringLinks("laea", NaN, lat, NaN, NaN, lon, NaN)
-  } else if (property == "Equidistant") {
-    # "Azimuthal equidistant"
+  } else if (property == "Conformal") {
+    outputTEXT = stringLinks("stere", NaN, lat, NaN, NaN, lon, NaN)
+  }else if (property == "Equidistant") {
     outputTEXT = stringLinks("aeqd", NaN, lat, NaN, NaN, lon, NaN)
   } else {
-    # orthographic projection shows the globe as seen from space at an infinite distance
     outputTEXT = stringLinks("ortho", NaN, lat, NaN, NaN, lon, NaN)
   }
   if(output_type == "proj4") {

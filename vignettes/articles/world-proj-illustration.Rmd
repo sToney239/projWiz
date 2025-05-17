@@ -1,5 +1,8 @@
 ---
 title: "Which World projection to Select"
+output:
+  html_document:
+    code_folding: hide
 ---
 
 ```{r, include = FALSE}
@@ -33,7 +36,7 @@ quick_proj_world_map <- function(proj_type, title, crop=FALSE) {
   projected_map = terra::project(world_lonlat, new_proj,
                                mask=TRUE,method="average")
   
-  raster::plotRGB(projected_map, main=title,mar=c(0,2,0,0))
+  terra::plotRGB(projected_map, main=title,mar=c(0,2,0,0))
 }
 ```
 
@@ -79,7 +82,7 @@ par(mfrow=c(2, 2))
 quick_proj_world_map(world_proj_list$compromise$rectangular$Miller_cylindrical_I, "Miller cylindrical I",TRUE)
 quick_proj_world_map(world_proj_list$compromise$rectangular$Patterson, "Patterson")
 quick_proj_world_map(world_proj_list$compromise$rectangular$Plate_Carree, "Plate Carrée")
-raster::plotRGB(world_lonlat, main="Lon Lat", mar=c(0,2,0,0))
+terra::plotRGB(world_lonlat, main="Lon Lat", mar=c(0,2,0,0))
 ```
 
  - The **Miller cylindrical projection** is a modified version of the Mercator projection, having less exaggeration of continents compared to the original Mercator.
@@ -91,9 +94,11 @@ raster::plotRGB(world_lonlat, main="Lon Lat", mar=c(0,2,0,0))
 
 ## Equal Area 
 
-Equal-area world maps projections are required for area comparisons, such as with choropleth and dasymetric maps, or when the number of features per area unit is estimated.
+Equal-area world map projections could be useful for area comparisons, such as in choropleth maps, or when estimating the number of features per unit area.
 
 ### Barrel-shaped
+
+Still these barrel-shaped world map projections look better, so I list them first.
 
 ```{r, fig.width=15, fig.height=5, dpi = 600}
 par(mfrow=c(1,3))
@@ -107,7 +112,7 @@ quick_proj_world_map(world_proj_list$equal_area$barrel_shape$Equal_Earth,"Equal 
 
 ---
 
-> Please note that the **Equal Earth projection** have the same problem as its cousin **Natural Earth projection** of some unexpected outcomes for raster data reprojection with non 0° central longitdue.
+> Please note that the **Equal Earth projection** hares the same issue as its cousin **Natural Earth projection**, regarding unexpected outcomes when reprojection of raster data occurs with a non 0° central longitude.
 
 ### Elliptical-shaped
 
@@ -117,13 +122,11 @@ quick_proj_world_map(world_proj_list$equal_area$ellipse$Mollweide,"Mollweide")
 quick_proj_world_map(world_proj_list$equal_area$ellipse$Hammer_Aitoff,"Hammer Aitoff")
 ```
 
+ - **Mollweide projection** and **Hammer Aitoff projection** are both good choices, just the former features straight parallels, while the latter has curved parallels.
 
-The Mollweide projection is very popular for atlases (Canters and Decleir 1989) and is more aesthetically pleasing to many cartographers than other projections due to its
-elliptical shape
+---
 
-The Hammer projection represents the
-entire world in an ellipse with curved parallels and unequally distributed meridians 
-
+> The **Hammer Aitoff projection** could produce problems for raster projections with non 0° central longitude.
 
 ### Rectangular-shaped
 
@@ -132,4 +135,15 @@ par(mfrow=c(1,2))
 quick_proj_world_map(world_proj_list$equal_area$rectangular$Gall_Peters,"Gall-Peters")
 quick_proj_world_map(world_proj_list$equal_area$rectangular$Behrmann,"Behrmann")
 ```
+
+These are older projections that are basically the same projection just with different standard latitudes. If you need to use an equal-area world projection, the **Behrmann projection** is generally considered to be slightly better than the **Gall-Peters projection**. However, I believe it would be better just give these rectangular-shaped equal-area projections up.
+
+---
+
+I'm not going to list properties like "Conformal". You can simply use the PROJ string "+proj=merc" to specify the Mercator projection, but does anyone still use this projection today?
+
+And If you're looking for an equidistant world map:
+  - For equidistant property centered it on arbitrary point, please use `proj_hemisphere()` with `property="Equidistant"`
+  - For equidistant property relative to two
+points, please look for Two-point equidistant projection
 

@@ -19,4 +19,9 @@ example_country
 \description{
 1:110m Spain & Bolivia map
 }
+\examples{
+spain_polygon = sf::st_polygon(list(projWiz::example_country$Spain))
+plot(sf::st_sfc(spain_polygon, crs = 4326), graticule = TRUE, key.pos = NULL, axes = TRUE)
+
+}
 \keyword{internal}

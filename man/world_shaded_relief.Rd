@@ -22,6 +22,7 @@ Downsampled Natural Earth 1:50 Shaded Relief World Map
 \examples{
 world_base_map = terra::rast(projWiz::world_shaded_relief)
 terra::ext(world_base_map) <- c(-180,180,-90,90)
+terra::crs(world_base_map) <- "epsg:4326"
 
 }
 \keyword{internal}

@@ -25,4 +25,4 @@ terra::ext(world_base_map) <- c(-180,180,-90,90)
 terra::crs(world_base_map) <- "epsg:4326"
 
 }
-\keyword{internal}
+\keyword{datasets}

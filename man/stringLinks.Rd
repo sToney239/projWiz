@@ -4,7 +4,17 @@
 \alias{stringLinks}
 \title{Function to generate proj4 and WKT string}
 \usage{
-stringLinks(prj, x0, lat0, lat1, lat2, lon0, k0, datum = "WGS84", unit = "m")
+stringLinks(
+  prj,
+  x0 = NA_real_,
+  lat0 = NA_real_,
+  lat1 = NA_real_,
+  lat2 = NA_real_,
+  lon0 = NA_real_,
+  k0 = NA_real_,
+  datum = "WGS84",
+  unit = "m"
+)
 }
 \arguments{
 \item{prj}{A string representing the shorthand name of the desired projection}

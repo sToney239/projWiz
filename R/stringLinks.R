@@ -12,7 +12,7 @@
 #'
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
-stringLinks <- function(prj, x0, lat0, lat1, lat2, lon0, k0,datum = "WGS84", unit = "m") {
+stringLinks <- function(prj, x0=NA_real_, lat0=NA_real_, lat1=NA_real_, lat2=NA_real_, lon0=NA_real_, k0=NA_real_,datum = "WGS84", unit = "m") {
   PROJstr <- "+proj="
   WKTstr <- 'PROJCS["ProjWiz_Custom_'
 

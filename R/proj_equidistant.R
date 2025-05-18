@@ -14,89 +14,60 @@
 #' @seealso [proj_region()], [proj_equal_area()], [proj_conformal()]
 #'
 #' @examples proj_equidistant(c(xmax=112,xmin=156,ymin=6,ymax=23))
-proj_equidistant <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
-  if (!(is.vector(obj) & identical(sort(names(obj)), sort(c("xmin", "xmax", "ymin","ymax"))))) {
-    if(!sf::st_is_longlat(obj)) {
-      obj = sf::st_transform(obj, 4326)
-    }
-    obj = sf::st_bbox(obj)
-  }
-  lonmax = obj[["xmax"]]
-  lonmin = obj[["xmin"]]
-  latmax = obj[["ymax"]]
-  latmin = obj[["ymin"]]
-  if (lonmin+270 < lonmax) {
-    lonmax = obj[["xmin"]]
-    lonmin = obj[["xmax"]]
-  }
-  if (lonmin > 180 | lonmin < -180 |
-      lonmax > 180 | lonmax < -180 |
-      latmin > 90 | latmin < -90 |
-      latmax > 90 | latmax < -90) {
-    stop("Please input valid extent!")
-  }
-  # computing longitude extent
-  dlon0 <- abs(lonmax - lonmin)
-  dlon <- ifelse(dlon0 > 180, 360-dlon0, dlon0)
+proj_equidistant <- function(obj, output_type = "proj4", datum = "WGS84", unit = "m") {
+  input_ext = calc_extent(obj)
 
-  # extent check
-  if (dlon >= 160 | (latmax-latmin) >= 80) {
-    stop("Longitude or latitude range exceeds limits, please consider hemisphere or azimuthal projection")
-  }
+  center = with(input_ext, calc_center(lonmin, lonmax, latmin, latmax))
+  dlon = with(input_ext, calc_dlon(lonmin, lonmax, latmin, latmax))
 
-  if (lonmax < lonmin) {
-    temp_mid = (lonmax + 360 + lonmin) / 2
-    mid_lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
-  } else {
-    mid_lon = (lonmax + lonmin) / 2
-  }
-  center <- list(lng = mid_lon, lat = (latmax + latmin) / 2)
-
+  latmax = input_ext[["latmax"]]
+  latmin = input_ext[["latmin"]]
   # distance check
   lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
-  ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
-  if (max(lonlat_m$dlat_m, lonlat_m$dlon_m)  < 1e6) {
+
+  ratio <- lonlat_m[["dlat_m"]] / lonlat_m[["dlon_m"]]
+  if (max(lonlat_m)  < 1e6) {
     message("## The map extent is not quite large")
     message("## Select Oblique azimuthal equidistant projection")
-    outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
+    outputTEXT <- stringLinks("aeqd", lat0 = center[["lat"]], lon0 = center[["lng"]], datum = datum, unit =unit)
   } else {
     message("## The map extent is relatively large, choose projection considering map shape")
-    if (abs(center$lat) > 70) {
+    if (abs(center[["lat"]]) > 70) {
       message("## Close to poles")
-      outputTEXT <- stringLinks("aeqd", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
-    } else if (abs(center$lat) < 15) {
+      outputTEXT <- stringLinks("aeqd", lat0 = sign(center[["lat"]]) * 90.0, lon0 = center[["lng"]], datum = datum, unit =unit)
+    } else if (abs(center[["lat"]]) < 15) {
       message("## Close to equator")
       if ((latmax * latmin) <= 0 ) {
         message("## Extent is touching or crossing equator")
         latS = max(abs(latmax), abs(latmin)) / 2
       } else{
         message("## Extent is not crossing equator")
-        latS = center$lat
+        latS = center[["lat"]]
       }
-      outputTEXT <- stringLinks("eqc", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
+      outputTEXT <- stringLinks("eqc", lat1 = latS, lon0 = center[["lng"]], datum = datum, unit =unit)
     } else {
       message("## Mid-Latitude away from pole and equator")
       if (ratio > 1.25) {
         message("## North-south extent")
         message("## Select Cassini projection")
-        outputTEXT <- stringLinks("cass", NaN, NaN, NaN, NaN, center$lng, NaN, datum, unit)
+        outputTEXT <- stringLinks("cass", lon0 = center[["lng"]], datum = datum, unit =unit)
       } else if (ratio < 0.8) {
         message("## East-west extent")
         message("## Select Equidistant conic projection")
         interval <- (latmax - latmin) / 6
-        outputTEXT <- stringLinks("eqdc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN)
+        outputTEXT <- stringLinks("eqdc", lat0 = center[["lat"]], lat1 = latmin + interval, lat2 = latmax - interval, lon0 = center[["lng"]], datum = datum, unit =unit)
       } else {
         message("## Square-shaped extent")
         message("## Select Oblique azimuthal equidistant projection")
-        outputTEXT <- stringLinks("aeqd", NaN, center$lat, NaN, NaN, center$lng, NaN)
+        outputTEXT <- stringLinks("aeqd", lat0 = center[["lat"]], lon0 = center[["lng"]], datum = datum, unit =unit)
       }
     }
   }
 
   if(output_type == "proj4") {
-    return(outputTEXT$PROJ)
+    return(outputTEXT[["PROJ"]])
   } else {
-    return(outputTEXT$WKT)
+    return(outputTEXT[["WKT"]])
   }
 
 }

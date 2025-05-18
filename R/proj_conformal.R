@@ -15,63 +15,37 @@
 #'
 #' @examples proj_conformal(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
-  if (!(is.vector(obj) & identical(sort(names(obj)), sort(c("xmin", "xmax", "ymin","ymax"))))) {
-    if(!sf::st_is_longlat(obj)) {
-      obj = sf::st_transform(obj, 4326)
-    }
-    obj = sf::st_bbox(obj)
-  }
-  lonmax = obj[["xmax"]]
-  lonmin = obj[["xmin"]]
-  latmax = obj[["ymax"]]
-  latmin = obj[["ymin"]]
-  if (lonmin+180 < lonmax) {
-    lonmax = obj[["xmin"]]
-    lonmin = obj[["xmax"]]
-  }
-  if (lonmin > 180 | lonmin < -180 |
-      lonmax > 180 | lonmax < -180 |
-      latmin > 90 | latmin < -90 |
-      latmax > 90 | latmax < -90) {
-    stop("Please input valid extent!")
-  }
-  dlon0 <- abs(lonmax - lonmin)
-  dlon <- ifelse(dlon0 > 180, 360-dlon0, dlon0)
+  input_ext = calc_extent(obj)
 
-  # extent check
-  if (dlon >= 160 | (latmax-latmin) >= 80) {
-    stop("Longitude or latitude range exceeds limits, please consider hemisphere or azimuthal projection")
-  }
+  latmax = input_ext[["latmax"]]
+  latmin = input_ext[["latmin"]]
+  lonmin = input_ext[["lonmin"]]
+  lonmax = input_ext[["lonmax"]]
 
-  if (lonmax < lonmin) {
-    temp_mid = (lonmax + 360 + lonmin) / 2
-    mid_lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
-  } else {
-    mid_lon = (lonmax + lonmin) / 2
-  }
-  center <- list(lng = mid_lon, lat = (latmax + latmin) / 2)
+  center = calc_center(lonmin, lonmax, latmin, latmax)
+  dlon = calc_dlon(lonmin, lonmax, latmin, latmax)
 
   # distance check
   lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
   # ratio check
-  ratio <- lonlat_m$dlat_m / lonlat_m$dlon_m
+  ratio <- lonlat_m[["dlat_m"]] / lonlat_m[["dlon_m"]]
   # zone number check
   gauss_kruger_3deg_para = check_gauss_kruger_3_deg(lonmax, lonmin)
   gauss_kruger_6deg_para = check_gauss_kruger_6_deg(lonmax, lonmin)
   utm_zone_para = check_utm_zone(c(xmin = lonmin, xmax = lonmax, ymin = latmin, ymax = latmax))
 
-  if (max(lonlat_m$dlat_m, lonlat_m$dlon_m)  < 1e6) {
+  if (max(lonlat_m)  < 1e6) {
     message("## The map extent is not quite large")
     message("## Select Stereographic projection")
-    outputTEXT <- stringLinks("stere", NaN, center$lat, NaN, NaN, center$lng, NaN, datum, unit)
+    outputTEXT <- stringLinks("stere", lat0 = center[["lat"]], lon0 = center[["lng"]], datum=datum, unit=unit)
   } else {
     message("## The map extent is relatively large, choose projection considering map shape")
     if (dlon <= 3) {
       message("## longitude delta<=3, use mercarto family projection")
-      outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9999, datum, unit)
+      outputTEXT <- stringLinks("tmerc", x0 = 500000, lon0 = center[["lng"]], k0 = 0.9999, datum = datum, unit = unit)
     } else if (dlon <= 6) {
       message("## longitude delta between 3 and 6, use mercarto family projection")
-      outputTEXT <- stringLinks("tmerc", 500000, NaN, NaN, NaN, center$lng, 0.9996, datum, unit)
+      outputTEXT <- stringLinks("tmerc", x0 = 500000, lon0 = center[["lng"]], k0 = 0.9996, datum = datum, unit = unit)
     } else {
       if (ratio > 1.25) {
         message("## North-south extent")
@@ -92,16 +66,16 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
   }
   if (!is.na(gauss_kruger_3deg_para[["zone_num"]])) {
     message(paste0("## You could also try 3-degree Gauss-Kruger projection",
-                   " of zone ", gauss_kruger_3deg_para$zone_num, " with central longitdue of ",gauss_kruger_3deg_para$mid_lon),".")
+                   " of zone ", gauss_kruger_3deg_para[["zone_num"]], " with central longitdue of ",gauss_kruger_3deg_para[["mid_lon"]]),".")
   } else if (!is.na(gauss_kruger_6deg_para[["zone_num"]])) {
     message(paste0("## You could also try 6-degree Gauss-Kruger projection",
-                   " of zone ", gauss_kruger_6deg_para$zone_num, " with central longitdue of ",gauss_kruger_6deg_para$mid_lon),".")
+                   " of zone ", gauss_kruger_6deg_para[["zone_num"]], " with central longitdue of ",gauss_kruger_6deg_para[["mid_lon"]]),".")
   }
 
   if(output_type == "proj4") {
-    return(outputTEXT$PROJ)
+    return(outputTEXT[["PROJ"]])
   } else {
-    return(outputTEXT$WKT)
+    return(outputTEXT[["WKT"]])
   }
 }
 

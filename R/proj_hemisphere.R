@@ -23,34 +23,10 @@ proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "
       stop("Please input valid x y value!")
     }
   } else {
-    if (!(is.vector(obj) & identical(sort(names(obj)), sort(c("xmin", "xmax", "ymin","ymax"))))) {
-      if(!sf::st_is_longlat(obj)) {
-        obj = sf::st_transform(obj, 4326)
-      }
-      obj = sf::st_bbox(obj)
-    }
-    lonmax = obj[["xmax"]]
-    lonmin = obj[["xmin"]]
-    latmax = obj[["ymax"]]
-    latmin = obj[["ymin"]]
-    if (lonmin+270 < lonmax) {
-      lonmax = obj[["xmin"]]
-      lonmin = obj[["xmax"]]
-    }
-    if (lonmin > 180 | lonmin < -180 |
-        lonmax > 180 | lonmax < -180 |
-        latmin > 90 | latmin < -90 |
-        latmax > 90 | latmax < -90) {
-      stop("Please input valid xy extent!")
-    }
-
-    if (lonmax < lonmin) {
-      temp_mid = (lonmax + 360 + lonmin) / 2
-      lon = ifelse(temp_mid < 180, temp_mid, temp_mid-360)
-    } else {
-      lon = (lonmax + lonmin) / 2
-    }
-    lat = (latmax + latmin)/2
+    input_ext = calc_extent(obj)
+    center = with(input_ext, calc_center(lonmin, lonmax, latmin, latmax))
+    lon = center[["lng"]]
+    lat = center[["lat"]]
   }
 
   if (property == 'Equal area') {

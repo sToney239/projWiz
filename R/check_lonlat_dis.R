@@ -3,7 +3,7 @@ check_lonlat_dis = function(latmin, latmax, dlon) {
   dlat <- latmax - latmin
   dlat_m <- dlat * (pi / 180) * earth_radius
   dlon_m <- max(haversine_lon_dist(c(latmin,latmax), dlon), na.rm = TRUE)
-  return(list(dlon_m = dlon_m, dlat_m = dlat_m))
+  return(c("dlon_m" = dlon_m, "dlat_m" = dlat_m))
 }
 
 

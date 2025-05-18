@@ -16,11 +16,7 @@
 #' @examples proj_conformal(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
   input_ext = calc_extent(obj)
-
-  latmax = input_ext[["latmax"]]
-  latmin = input_ext[["latmin"]]
-  lonmin = input_ext[["lonmin"]]
-  lonmax = input_ext[["lonmax"]]
+  attach(input_ext)
 
   center = calc_center(lonmin, lonmax, latmin, latmax)
   dlon = calc_dlon(lonmin, lonmax, latmin, latmax)
@@ -71,7 +67,7 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
     message(paste0("## You could also try 6-degree Gauss-Kruger projection",
                    " of zone ", gauss_kruger_6deg_para[["zone_num"]], " with central longitdue of ",gauss_kruger_6deg_para[["mid_lon"]]),".")
   }
-
+  detach(input_ext)
   if(output_type == "proj4") {
     return(outputTEXT[["PROJ"]])
   } else {

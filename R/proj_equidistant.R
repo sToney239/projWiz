@@ -16,12 +16,11 @@
 #' @examples proj_equidistant(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_equidistant <- function(obj, output_type = "proj4", datum = "WGS84", unit = "m") {
   input_ext = calc_extent(obj)
+  attach(input_ext)
 
-  center = with(input_ext, calc_center(lonmin, lonmax, latmin, latmax))
-  dlon = with(input_ext, calc_dlon(lonmin, lonmax, latmin, latmax))
+  center = calc_center(lonmin, lonmax, latmin, latmax)
+  dlon = calc_dlon(lonmin, lonmax, latmin, latmax)
 
-  latmax = input_ext[["latmax"]]
-  latmin = input_ext[["latmin"]]
   # distance check
   lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
 
@@ -64,6 +63,7 @@ proj_equidistant <- function(obj, output_type = "proj4", datum = "WGS84", unit =
     }
   }
 
+  detach(input_ext)
   if(output_type == "proj4") {
     return(outputTEXT[["PROJ"]])
   } else {

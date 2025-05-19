@@ -113,9 +113,8 @@
 <span></span>
 <span><span class="co"># This step is for reprojecting to generating new world map projection and re-project</span></span>
 <span><span class="va">central_longitude</span> <span class="op">=</span> <span class="op">-</span><span class="fl">60</span></span>
-<span><span class="va">new_world_proj</span> <span class="op">=</span> <span class="fu"><a href="reference/proj_world.html">proj_world</a></span><span class="op">(</span><span class="va">world_proj_list</span><span class="op">$</span><span class="va">compromise</span><span class="op">$</span><span class="va">barrel_shape</span><span class="op">$</span><span class="va">Robinson</span>, </span>
-<span>                            <span class="va">central_longitude</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">world_lonlat</span>, <span class="va">new_world_proj</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">new_world_proj</span> <span class="op">=</span> <span class="fu"><a href="reference/proj_world.html">proj_world</a></span><span class="op">(</span><span class="va">world_proj_list</span><span class="op">$</span><span class="va">compromise</span><span class="op">$</span><span class="va">barrel_shape</span><span class="op">$</span><span class="va">Robinson</span>, <span class="va">central_longitude</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plotRGB.html" class="external-link">plotRGB</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">world_lonlat</span>, <span class="va">new_world_proj</span><span class="op">)</span>, bgalpha<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
 </div>
 <div class="section level2">

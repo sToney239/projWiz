@@ -100,7 +100,7 @@ quick_hemisphere_map = function(proj_type) {
 par(mfrow=c(1,2))
 # Conformal and Equidistant take too much time for raster data
 quick_hemisphere_map("Equal area")
-quick_hemisphere_map("ortho")
+quick_hemisphere_map("Ortho")
 ```
 
 ## World map

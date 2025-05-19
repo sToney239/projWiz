@@ -28,16 +28,13 @@ proj_hemisphere = function(obj, property="ortho",output_type = "proj4",datum = "
     lon = center[["lng"]]
     lat = center[["lat"]]
   }
+  outputTEXT <- switch (property,
+                        'Equal area' = stringLinks("laea", lat0 = lat, lon0 = lon),
+                        "Conformal" = stringLinks("stere", lat0 = lat, lon0 = lon),
+                        "Equidistant" = stringLinks("aeqd", lat0 = lat, lon0 = lon),
+                        "ortho" = stringLinks("ortho", lat0 = lat, lon0 = lon)
+  )
 
-  if (property == 'Equal area') {
-    outputTEXT = stringLinks("laea", NaN, lat, NaN, NaN, lon, NaN)
-  } else if (property == "Conformal") {
-    outputTEXT = stringLinks("stere", NaN, lat, NaN, NaN, lon, NaN)
-  }else if (property == "Equidistant") {
-    outputTEXT = stringLinks("aeqd", NaN, lat, NaN, NaN, lon, NaN)
-  } else {
-    outputTEXT = stringLinks("ortho", NaN, lat, NaN, NaN, lon, NaN)
-  }
   if(output_type == "proj4") {
     return(outputTEXT$PROJ)
   } else {

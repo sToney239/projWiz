@@ -19,4 +19,19 @@ test_that("check_utm_zone works", {
     )
   ),
   list(utm_zone_num = NA_real_, hemisphere = NA_character_, proj4 = NA_character_))
+
+  expect_equal(
+    check_utm_zone(
+      sf::st_transform(
+        sf::st_sfc(
+          sf::st_polygon(
+            list(
+              matrix(
+                c(-160,51, -158, 51, -158,71, -160,71, -160,51),
+                byrow = TRUE, ncol = 2
+              )
+            )
+          ), crs = 4326), 3857)
+    ),
+    list(utm_zone_num = 4, hemisphere = "N", proj4 = "+proj=utm +zone=4 +datum=WGS84 +units=m +no_defs +type=crs"))
 })

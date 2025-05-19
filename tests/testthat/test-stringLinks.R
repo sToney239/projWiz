@@ -27,5 +27,11 @@ test_that("multiplication works", {
   expect_error(
     stringLinks("laea",NA,48,NA,NA,126.5,NA,unit = "fm")
   )
+  expect_equal(
+    stringLinks("latlong",NA,48,NA,NA,126.5,NA)[["PROJ"]],
+    "+proj=eqc +lon_0=126.5 +datum=WGS84 +units=m +no_defs"
+  )
+  expect_equal(stringLinks("stere",NA,48,NA,NA,126.5,0.9997)[["PROJ"]],
+               "+proj=stere +lon_0=126.5 +lat_0=48 +k_0=0.9997 +datum=WGS84 +units=m +no_defs")
 })
 

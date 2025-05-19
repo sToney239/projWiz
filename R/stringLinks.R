@@ -155,10 +155,6 @@ stringLinks <- function(prj, x0=NA_real_, lat0=NA_real_, lat1=NA_real_, lat2=NA_
          "wintri" = {
            PROJstr <- paste0(PROJstr, " +lon_0=", lon0)
            WKTstr <- paste0(WKTstr, '\n PARAMETER["Central_Meridian",', lon0, '],\n PARAMETER["Standard_Parallel_1",50.467],')
-         },
-         "tpeqd" = {
-           PROJstr <- paste0(PROJstr, " +lat_1=", lat0, " +lon_1=", lat1, " +lat_2=", lat2, " +lon_2=", lon0)
-           WKTstr <- paste0(WKTstr, '\n PARAMETER["Latitude_Of_1st_Point",', lat0, '],\n PARAMETER["Latitude_Of_2nd_Point",', lat2, '],\n PARAMETER["Longitude_Of_1st_Point",', lat1, '],\n PARAMETER["Longitude_Of_2nd_Point",', lon0, '],')
          }
   )
 

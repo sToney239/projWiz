@@ -10,41 +10,41 @@
 #'
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
-printEWextent <- function(property, center, latmax, latmin,dlon, datum, unit) {
-  if (abs(center$lat) > 70) {
+printEWextent <- function(property, center, latmax, latmin,dlon, datum = datum, unit = unit) {
+  if (abs(center[["lat"]]) > 70) {
     message("## Close to poles")
     if (property == "Conformal") {
       message("## Select Stereographic projection")
-      outputTEXT <- stringLinks("stere", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
+      outputTEXT <- stringLinks("stere", lat0 = sign(center[["lat"]]) * 90.0, lon0 = center[["lng"]], datum = datum , unit = unit)
     } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection")
-      outputTEXT <- stringLinks("laea", NaN, sign(center$lat) * 90.0, NaN, NaN, center$lng, NaN, datum, unit)
+      outputTEXT <- stringLinks("laea", lat0 = sign(center[["lat"]]) * 90.0, lon0 = center[["lng"]], datum = datum, unit = unit)
     }
-  } else if (abs(center$lat) < 15) {
+  } else if (abs(center[["lat"]]) < 15) {
     message("## Close to equator")
     if ((latmax * latmin) <= 0 ) {
       message("## Extent is touching or crossing equator")
       latS <- max(abs(latmax), abs(latmin)) / 2
     } else {
       message("## Extent is not crossing equator")
-      latS <- center$lat
+      latS <- center[["lat"]]
     }
     if (property == "Conformal") {
       message("## Select Mercator projection")
-      outputTEXT <- stringLinks("merc", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
+      outputTEXT <- stringLinks("merc", lat1 = latS, lon0 = center[["lng"]], datum = datum, unit = unit)
     } else if (property == 'Equal area') {
       message("## Select Cylindrical equal area projection")
-      outputTEXT <- stringLinks("cea", NaN, NaN, latS, NaN, center$lng, NaN, datum, unit)
+      outputTEXT <- stringLinks("cea", lat1 = latS, lon0 = center[["lng"]], datum = datum, unit = unit)
     }
   } else {
     message("## Mid-Latitude away from pole and equator")
     interval = (latmax - latmin)/6
     if (property == "Conformal") {
       message("## Select Lambert conformal conic projection")
-      outputTEXT <-stringLinks("lcc", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN, datum, unit)
+      outputTEXT <-stringLinks("lcc", lat0 = center[["lat"]], lat1= latmin + interval, lat2= latmax - interval, lon0 = center[["lng"]], datum = datum, unit = unit)
     } else if (property == 'Equal area') {
       message("## Select Albers equal area conic projection")
-      outputTEXT <- stringLinks("aea", NaN, center$lat, latmin + interval, latmax - interval, center$lng, NaN, datum, unit)
+      outputTEXT <- stringLinks("aea", lat0 = center[["lat"]], lat1= latmin + interval, lat2= latmax - interval, lon0 = center[["lng"]], datum = datum, unit = unit)
     }
 
   }

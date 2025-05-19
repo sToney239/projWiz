@@ -58,18 +58,15 @@ library(projWiz)
 world_lonlat = rast(world_shaded_relief)
 ext(world_lonlat) <- c(-180,180,-90,90)
 crs(world_lonlat) <- "epsg:4326"
+# Draw the graticule by hand
 world_lonlat[1:360,c(1,1:12 * 60),1:3] <- 0
 world_lonlat[c(1,1:6 * 60),1:720,1:3] <- 0
-world_lonlat = crop(world_lonlat, ext(-180, 180, -86, 86))
 
 # This step is for reprojecting to generating new world map projection and re-project
 central_longitude = -60
-selected_world_proj_type = world_proj_list$compromise$barrel_shape$Robinson
-
-
-new_world_proj = proj_world(selected_world_proj_type, central_longitude)
-
-plotRGB(project(world_lonlat, new_world_proj), colNA="transparent")
+new_world_proj = proj_world(world_proj_list$compromise$barrel_shape$Robinson, 
+                            central_longitude)
+plotRGB(project(world_lonlat, new_world_proj))
 ```
 
 ## What this package is doing

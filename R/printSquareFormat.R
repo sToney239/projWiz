@@ -10,32 +10,32 @@
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
 printSquareFormat <- function(property, center, latmax, latmin, datum = datum, unit = unit) {
-  if (abs(center$lat) > 75) {
+  if (abs(center[["lat"]]) > 75) {
     message("## Close to poles")
     if (property == "Conformal") {
       message("## Select Stereographic projection with pole as central latitude")
-      outputTEXT <- stringLinks("stere", lat0 = sign(center$lat) * 90.0, lon0 = center$lng, datum = datum, unit = unit)
+      outputTEXT <- stringLinks("stere", lat0 = sign(center[["lat"]]) * 90.0, lon0 = center[["lng"]], datum = datum, unit = unit)
     } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection with pole as central latitude")
-      outputTEXT <- stringLinks("laea", lat0 = sign(center$lat) * 90.0, lon0 = center$lng, datum = datum, unit = unit)
+      outputTEXT <- stringLinks("laea", lat0 = sign(center[["lat"]]) * 90.0, lon0 = center[["lng"]], datum = datum, unit = unit)
     }
-  } else if (abs(center$lat) < 15 && (latmax * latmin) <= 0) {
+  } else if (abs(center[["lat"]]) < 15 && (latmax * latmin) <= 0) {
     message("## Extent is touching or crossing equator")
     if (property == "Conformal") {
       message("## Select Stereographic projection with 0 as central latitude")
-      outputTEXT <- stringLinks("stere", lat0 = 0.0, lon0 = center$lng, datum = datum, unit = unit)
+      outputTEXT <- stringLinks("stere", lat0 = 0.0, lon0 = center[["lng"]], datum = datum, unit = unit)
     } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection with 0 as central latitude")
-      outputTEXT <- stringLinks("laea", lat0 = 0.0, lon0 = center$lng, datum = datum, unit = unit)
+      outputTEXT <- stringLinks("laea", lat0 = 0.0, lon0 = center[["lng"]], datum = datum, unit = unit)
     }
   } else {
     message("## Mid-Latitude away from pole and equator")
     if (property == "Conformal") {
       message("## Select Stereographic projection")
-      outputTEXT <- stringLinks("stere", lat0 = center$lat, lon0 = center$lng, datum = datum, unit = unit)
+      outputTEXT <- stringLinks("stere", lat0 = center[["lat"]], lon0 = center[["lng"]], datum = datum, unit = unit)
     } else if (property == 'Equal area') {
       message("## Select Lambert azimuthal equal area projection")
-      outputTEXT <- stringLinks("laea", lat0 = center$lat, lon0 = center$lng, datum = datum, unit = unit)
+      outputTEXT <- stringLinks("laea", lat0 = center[["lat"]], lon0 = center[["lng"]], datum = datum, unit = unit)
     }
   }
   return(outputTEXT)

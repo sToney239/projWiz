@@ -1,3 +1,7 @@
+# projWiz 0.2.4
+
+- test coverage to 100%
+
 # projWiz 0.2.3
 
 - simplify redundant codes in `proj_region`

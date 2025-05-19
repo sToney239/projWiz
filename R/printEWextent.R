@@ -10,7 +10,7 @@
 #'
 #' @returns A list of strings named with `PROJ` & `WKT`
 #' @keywords internal
-printEWextent <- function(property, center, latmax, latmin,dlon, datum = datum, unit = unit) {
+printEWextent <- function(property, center, latmax, latmin, dlon, datum = datum, unit = unit) {
   if (abs(center[["lat"]]) > 70) {
     message("## Close to poles")
     if (property == "Conformal") {
@@ -46,7 +46,6 @@ printEWextent <- function(property, center, latmax, latmin,dlon, datum = datum, 
       message("## Select Albers equal area conic projection")
       outputTEXT <- stringLinks("aea", lat0 = center[["lat"]], lat1= latmin + interval, lat2= latmax - interval, lon0 = center[["lng"]], datum = datum, unit = unit)
     }
-
   }
 
   return(outputTEXT)

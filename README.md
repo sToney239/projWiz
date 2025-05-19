@@ -38,8 +38,10 @@ following code:
 
 ``` r
 library(projWiz)
+# load internal data and convert to sf object
 spain = list(example_country$Spain) |> 
   sf::st_polygon() |> sf::st_sfc(crs = 4326)
+# create new specified projection string
 (new_proj = proj_region(spain, property = "Equal area"))
 ># ## The map extent is relatively large, choose projection considering map shape
 ># ## East-west extent
@@ -55,14 +57,16 @@ follows:
 
 ``` r
 par(mfrow=c(1,2), mar=c(2, 2, 2, 1), oma=c(0, 0, 0, 0), bg="transparent")
+# this is the original CRS
 plot(spain, graticule = TRUE, bg = "white", main = "WGS84", col.main = "#0099FF")
+# this is the CRS calculated by `projWiz`
 plot(sf::st_transform(spain, new_proj), graticule = TRUE, bg = "white", main="New CRS",col.main = "#0099FF")
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 This is not an ideal example as there’s an official projection for
-Alaska, but you can apply this method to any area of interest.
+Spain, but you can apply this method to any area of interest.
 
 Additionally, you can modify the central longitude of the world map
 using the `proj_world` function. This function requires a projection

@@ -56,7 +56,7 @@ If you run these codes on your computer, you will receive a message indicating t
 
 
 ```{r}
-proj_specify(example_area, "laea")
+proj_specify(spain, "laea")
 ```
 Note that the `proj_specify()` function is primarily intended for regional data. For hemisphere or world data, you should use `proj_hemisphere()` or `proj_world()` to specify the projection.
 

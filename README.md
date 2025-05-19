@@ -38,11 +38,14 @@ following code:
 
 ``` r
 library(projWiz)
-(new_proj = proj_equal_area(spData::alaska))
+spain = list(example_country$Spain) |> 
+  sf::st_polygon() |> sf::st_sfc(crs = 4326)
+(new_proj = proj_region(spain, property = "Equal area"))
 ># ## The map extent is relatively large, choose projection considering map shape
-># ## North-south extent
-># ## Select Transverse cylindrical equal area projection
-># [1] "+proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs"
+># ## East-west extent
+># ## Mid-Latitude away from pole and equator
+># ## Select Albers equal area conic projection
+># [1] "+proj=aea +lon_0=-3.1766998 +lat_1=37.247098 +lat_2=42.4480898 +lat_0=39.8475939 +datum=WGS84 +units=m +no_defs"
 ```
 
 Messages starting with `##` indicate how the final projection is
@@ -51,17 +54,12 @@ used with GIS packages like `sf`. You can then reproject your data as
 follows:
 
 ``` r
-sf::st_transform(spData::alaska, new_proj)
-># Simple feature collection with 1 feature and 6 fields
-># Geometry type: MULTIPOLYGON
-># Dimension:     XY
-># Bounding box:  xmin: -533012.6 ymin: 5697401 xmax: 2784099 ymax: 8226065
-># Projected CRS: +proj=tcea +lon_0=-179.683609 +datum=WGS84 +units=m +no_defs
->#   GEOID   NAME REGION           AREA total_pop_10 total_pop_15
-># 1    02 Alaska   West 1718925 [km^2]       691189       733375
->#                         geometry
-># 1 MULTIPOLYGON (((31820.36 57...
+par(mfrow=c(1,2), mar=c(2, 2, 2, 1), oma=c(0, 0, 0, 0), bg="transparent")
+plot(spain, graticule = TRUE, bg = "white", main = "WGS84", col.main = "#0099FF")
+plot(sf::st_transform(spain, new_proj), graticule = TRUE, bg = "white", main="New CRS",col.main = "#0099FF")
 ```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 This is not an ideal example as there’s an official projection for
 Alaska, but you can apply this method to any area of interest.

@@ -38,12 +38,16 @@ You can quickly obtain a proper projection for a region using the following code
 
 ```{r example}
 library(projWiz)
-(new_proj = proj_equal_area(spData::alaska))
+spain = list(example_country$Spain) |> 
+  sf::st_polygon() |> sf::st_sfc(crs = 4326)
+(new_proj = proj_region(spain, property = "Equal area"))
 ```
 Messages starting with `##` indicate how the final projection is selected. The output will be a `PROJ4` or `WKT` string, which can be used with GIS packages like `sf`. You can then reproject your data as follows:
 
-```{r}
-sf::st_transform(spData::alaska, new_proj)
+```{r,fig.width=5,fig.height=3,dpi=300}
+par(mfrow=c(1,2), mar=c(2, 2, 2, 1), oma=c(0, 0, 0, 0), bg="transparent")
+plot(spain, graticule = TRUE, bg = "white", main = "WGS84", col.main = "#0099FF")
+plot(sf::st_transform(spain, new_proj), graticule = TRUE, bg = "white", main="New CRS",col.main = "#0099FF")
 ```
 
 This is not an ideal example as there's an official projection for Alaska, but you can apply this method to any area of interest.

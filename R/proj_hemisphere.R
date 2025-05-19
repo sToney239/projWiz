@@ -32,7 +32,7 @@ proj_hemisphere = function(obj, property="Ortho",output_type = "proj4",datum = "
                         'Equal area' = stringLinks("laea", lat0 = lat, lon0 = lon),
                         "Conformal" = stringLinks("stere", lat0 = lat, lon0 = lon),
                         "Equidistant" = stringLinks("aeqd", lat0 = lat, lon0 = lon),
-                        "Ortho" = stringLinks("Ortho", lat0 = lat, lon0 = lon)
+                        "Ortho" = stringLinks("ortho", lat0 = lat, lon0 = lon)
   )
 
   if(output_type == "proj4") {

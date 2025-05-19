@@ -16,7 +16,7 @@
 #' @examples proj_conformal(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
   input_ext = calc_extent(obj)
-  attach(input_ext)
+  attach(input_ext, warn.conflicts = FALSE)
 
   center = calc_center(lonmin, lonmax, latmin, latmax)
   dlon = calc_dlon(lonmin, lonmax, latmin, latmax)

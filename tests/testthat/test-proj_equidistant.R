@@ -12,7 +12,7 @@ test_that("proj_equidistant works", {
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = -10,ymin = 78,xmax = -4 ,ymax = 80),crs = 4326)),
                "+proj=aeqd +lon_0=-7 +lat_0=79 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = -10,ymin = -80,xmax = -4 ,ymax = -78),crs = 4326), output_type="WKT"),
-               'PROJCS["ProjWiz_Custom_Azimuthal_Equidistant",
+               'PROJCS["Customized_Azimuthal_Equidistant",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
    SPHEROID["WGS_1984",6378137.0,298.257223563]],
@@ -31,4 +31,10 @@ test_that("proj_equidistant works", {
                "+proj=cass +lon_0=75 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equidistant(sf::st_bbox(c(xmin = 70,ymin = -26,xmax =  90,ymax = -2),crs = 4326)),
                "+proj=eqc +lon_0=80 +lat_ts=-14 +datum=WGS84 +units=m +no_defs")
+
+  expect_equal(proj_equidistant(sf::st_bbox(c(xmin = -10,ymin = 78,xmax = -4 ,ymax = 80),crs = 4326)),
+               "+proj=aeqd +lon_0=-7 +lat_0=79 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_equidistant(c(xmin = -14,ymin = 44,xmax = 0 ,ymax = 56) ),
+               "+proj=aeqd +lon_0=-7 +lat_0=50 +datum=WGS84 +units=m +no_defs")
+
 })

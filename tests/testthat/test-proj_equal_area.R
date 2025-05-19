@@ -16,7 +16,7 @@ test_that("proj_equal_area works", {
   expect_equal(proj_equal_area(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326)),
                "+proj=laea +lon_0=-79 +lat_0=0 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_equal_area(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),output_type="WKT"),
-               'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
+               'PROJCS["Customized_Lambert_Azimuthal",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
    SPHEROID["WGS_1984",6378137.0,298.257223563]],

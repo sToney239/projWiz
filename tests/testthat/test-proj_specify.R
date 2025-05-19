@@ -36,6 +36,24 @@ test_that("proj_specify works", {
   expect_error(
     proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"wintri", unit="mile")
   )
+  expect_error(
+    proj_specify(sf::st_bbox(c(xmin = 142,ymin = 25,xmax = -143 ,ymax = 32),crs = 4326),"wintri", datum =NA_real_)
+  )
   expect_equal(proj_specify(sf::st_bbox(c(xmin = 146,ymin = 24,xmax = -174,ymax = 55),crs = 4326),"stere",k0=0.9997),
                "+proj=stere +lon_0=166 +lat_0=39.5 +k_0=0.9997 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = 146,ymin = 24,xmax = -174,ymax = 55),crs = 4326),"latlong"),
+               "+proj=eqc +lon_0=166 +datum=WGS84 +units=m +no_defs")
+  expect_equal(proj_specify(sf::st_bbox(c(xmin = -10,ymin = -80,xmax = -4 ,ymax = -78),crs = 4326),"aeqd",output_type = "WKT"),
+               'PROJCS["Customized_Azimuthal_Equidistant",
+ GEOGCS["GCS_WGS_1984",
+  DATUM["D_WGS_1984",
+   SPHEROID["WGS_1984",6378137.0,298.257223563]],
+  PRIMEM["Greenwich",0.0],
+  UNIT["Degree",0.0174532925199433]],
+ PROJECTION["Azimuthal_Equidistant"],
+ PARAMETER["False_Easting",0.0],
+ PARAMETER["False_Northing",0.0],
+ PARAMETER["Central_Meridian",-7],
+ PARAMETER["Latitude_Of_Origin",-79],
+ UNIT["Meter",1.0]]')
 })

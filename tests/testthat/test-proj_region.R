@@ -13,7 +13,7 @@ test_that("proj_region Equal area works", {
   expect_equal(proj_region(sf::st_bbox(c(xmin = -87,ymin = -4,xmax = -71 ,ymax = 10),crs = 4326),property = "Equal area"),
                "+proj=laea +lon_0=-79 +lat_0=0 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_region(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),property = "Equal area",output_type="WKT"),
-               'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
+               'PROJCS["Customized_Lambert_Azimuthal",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
    SPHEROID["WGS_1984",6378137.0,298.257223563]],
@@ -54,7 +54,7 @@ test_that("proj_region Conformal works", {
   expect_equal(proj_region(sf::st_bbox(c(xmin = 70,ymin = -78,xmax = 162 ,ymax = -67),crs = 4326),property = "Conformal"),
                "+proj=stere +lon_0=116 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_region(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),property = "Conformal",output_type="WKT"),
-               'PROJCS["ProjWiz_Custom_Stereographic",
+               'PROJCS["Customized_Stereographic",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
    SPHEROID["WGS_1984",6378137.0,298.257223563]],

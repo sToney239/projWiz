@@ -19,7 +19,7 @@ test_that("proj_hemisphere works", {
   )
   expect_equal(
     proj_hemisphere(c("x"=123,"y"=13), "Equal area",output_type = "WKT"),
-    'PROJCS["ProjWiz_Custom_Lambert_Azimuthal",
+    'PROJCS["Customized_Lambert_Azimuthal",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
    SPHEROID["WGS_1984",6378137.0,298.257223563]],

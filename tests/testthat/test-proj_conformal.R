@@ -22,7 +22,7 @@ test_that("proj_conformal works", {
   expect_equal(proj_conformal(sf::st_bbox(c(xmin = 70,ymin = -78,xmax = 162 ,ymax = -67),crs = 4326)),
                "+proj=stere +lon_0=116 +lat_0=-90 +datum=WGS84 +units=m +no_defs")
   expect_equal(proj_conformal(sf::st_bbox(c(xmin = 60,ymin = 68,xmax = 119 ,ymax = 80),crs = 4326),output_type="WKT"),
-               'PROJCS["ProjWiz_Custom_Stereographic",
+               'PROJCS["Customized_Stereographic",
  GEOGCS["GCS_WGS_1984",
   DATUM["D_WGS_1984",
    SPHEROID["WGS_1984",6378137.0,298.257223563]],

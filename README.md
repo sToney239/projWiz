@@ -84,9 +84,8 @@ world_lonlat[c(1,1:6 * 60),1:720,1:3] <- 0
 
 # This step is for reprojecting to generating new world map projection and re-project
 central_longitude = -60
-new_world_proj = proj_world(world_proj_list$compromise$barrel_shape$Robinson, 
-                            central_longitude)
-plotRGB(project(world_lonlat, new_world_proj))
+new_world_proj = proj_world(world_proj_list$compromise$barrel_shape$Robinson, central_longitude)
+plotRGB(project(world_lonlat, new_world_proj), bgalpha=0)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />

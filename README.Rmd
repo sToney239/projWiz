@@ -51,7 +51,7 @@ This is not an ideal example as there's an official projection for Alaska, but y
 Additionally, you can modify the central longitude of the world map using the `proj_world` function. This function requires a projection shorthand name (you can find in the `world_proj_list` data within the package), and the central longitude parameter.
 
 
-```{r,message=FALSE, warning=FALSE}
+```{r,message=FALSE, warning=FALSE,dev.args = list(bg = 'transparent'),fig.width=6,fig.height=3.05,dpi=150}
 library(terra)
 library(projWiz)
 # Please note that this step is only loading internal data for illustration.
@@ -64,9 +64,8 @@ world_lonlat[c(1,1:6 * 60),1:720,1:3] <- 0
 
 # This step is for reprojecting to generating new world map projection and re-project
 central_longitude = -60
-new_world_proj = proj_world(world_proj_list$compromise$barrel_shape$Robinson, 
-                            central_longitude)
-plotRGB(project(world_lonlat, new_world_proj))
+new_world_proj = proj_world(world_proj_list$compromise$barrel_shape$Robinson, central_longitude)
+plotRGB(project(world_lonlat, new_world_proj), bgalpha=0)
 ```
 
 ## What this package is doing

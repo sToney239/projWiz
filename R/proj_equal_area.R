@@ -25,7 +25,7 @@ proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m
   dlon = calc_dlon(lonmin, lonmax, latmin, latmax)
 
   # distance check
-  lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
+  lonlat_m = calc_lonlat_dis(latmin, latmax, dlon)
 
   if (max(lonlat_m)  < 1e6) {
     message("## The map extent is not quite large")

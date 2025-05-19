@@ -1,4 +1,4 @@
-check_lonlat_dis = function(latmin, latmax, dlon) {
+calc_lonlat_dis = function(latmin, latmax, dlon) {
   earth_radius <- 6378137
   dlat <- latmax - latmin
   dlat_m <- dlat * (pi / 180) * earth_radius

@@ -25,7 +25,7 @@ proj_conformal <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m"
   dlon = calc_dlon(lonmin, lonmax, latmin, latmax)
 
   # distance check
-  lonlat_m = check_lonlat_dis(latmin, latmax, dlon)
+  lonlat_m = calc_lonlat_dis(latmin, latmax, dlon)
   # ratio check
   ratio <- lonlat_m[["dlat_m"]] / lonlat_m[["dlon_m"]]
   # zone number check

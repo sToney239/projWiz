@@ -27,26 +27,25 @@ library(projWiz)
 
 The main purpose of `projWiz` is for manually specifying regional map projection. There is a function called `proj_region()`, along with simplified versions like `proj_equal_area()`, `proj_conformal()`, and `proj_equidistant()`, corresponding to the map projection properties of preserving **area**, **shape**, and **distance**. For some basic knowledge on these properties, you can refer check [map projection wiki](https://en.wikipedia.org/wiki/Map_projection#Metric_properties_of_maps)
 
-```{r,message=FALSE,fig.width=10, fig.height=3, dpi = 300}
+```{r,message=FALSE,fig.width=5, fig.height=3, dpi = 300}
+par(mfrow=c(1,2), mar=c(2, 2, 2, 1), oma=c(0, 0, 0, 0), bg="transparent")
 # `example_country` is internal data from this package, it's from Natural Earth 1:110m Cultural Vectors
 spain = example_country$Spain |> 
   list() |> 
   st_polygon() |> 
   st_sfc(crs = 4326)
-the_proj = proj_region(spain, property = "Equal area")
+
 quick_proj_region_map = function(proj_type) {
+  the_proj = proj_region(spain, property = proj_type)
   projected = st_transform(spain, the_proj)
   g = st_graticule(projected)
   plot(projected, graticule = g, key.pos = NULL, 
-       axes = FALSE,main = proj_type)
+       axes = FALSE,main = proj_type, bg = "white", col.main = "#0099FF")
 }
-par(mfrow=c(1,3))
+par(mfrow=c(1,2))
+plot(spain, graticule = TRUE, bg = "white", main = "WGS84", col.main = "#0099FF")
 quick_proj_region_map("Equal area")
-quick_proj_region_map("Conformal")
-quick_proj_region_map("Equidistant")
 ```
-
-It's hard to find any difference, right? Haha, that's basically what I found when making this package -- in not quite large scale, projections with similar optimized parameters have little difference.
 
 As mentioned, `proj_equal_area()` is a pre-set parameter version of `proj_region()`. For example:
 

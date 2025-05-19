@@ -16,7 +16,10 @@
 #' @examples proj_equal_area(c(xmax=112,xmin=156,ymin=6,ymax=23))
 proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m") {
   input_ext = calc_extent(obj)
-  attach(input_ext, warn.conflicts = FALSE)
+  lonmax = input_ext[["lonmax"]]
+  lonmin = input_ext[["lonmin"]]
+  latmax = input_ext[["latmax"]]
+  latmin = input_ext[["latmin"]]
 
   center = calc_center(lonmin, lonmax, latmin, latmax)
   dlon = calc_dlon(lonmin, lonmax, latmin, latmax)
@@ -43,7 +46,6 @@ proj_equal_area <- function(obj,output_type = "proj4",datum = "WGS84", unit = "m
       outputTEXT <- printSquareFormat("Equal area", center,latmax,latmin, datum, unit)
     }
   }
-  detach(input_ext)
   if(output_type == "proj4") {
     return(outputTEXT[["PROJ"]])
   } else {

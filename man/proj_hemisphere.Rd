@@ -6,7 +6,7 @@
 \usage{
 proj_hemisphere(
   obj,
-  property = "ortho",
+  property = "Ortho",
   output_type = "proj4",
   datum = "WGS84",
   unit = "m"
@@ -20,7 +20,7 @@ proj_hemisphere(
 \item A named list with longitude and latitude extents with names of "xmin", "xmax" "ymin" and "ymax"
 }}
 
-\item{property}{Projection property, should be one of "Equal area", "Conformal", "Equidistant" and "ortho", the default value is ortho, for orthographic projection.}
+\item{property}{Projection property, should be one of "Equal area", "Conformal", "Equidistant" or "Ortho", the default value is "Ortho", for Orthographic projection.}
 
 \item{output_type}{A string for expected output, either "proj4" or "WKT"}
 

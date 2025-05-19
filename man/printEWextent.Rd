@@ -4,7 +4,15 @@
 \alias{printEWextent}
 \title{Funcion for regional maps with an east-west extent}
 \usage{
-printEWextent(property, center, latmax, latmin, dlon, datum, unit)
+printEWextent(
+  property,
+  center,
+  latmax,
+  latmin,
+  dlon,
+  datum = datum,
+  unit = unit
+)
 }
 \arguments{
 \item{property}{Projection property, should be one of "Equal area", "Conformal" and "Equidistant".}

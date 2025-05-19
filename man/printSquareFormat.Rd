@@ -4,7 +4,7 @@
 \alias{printSquareFormat}
 \title{Funcion for regional maps with an square-shaped extent}
 \usage{
-printSquareFormat(property, center, latmax, latmin, datum, unit)
+printSquareFormat(property, center, latmax, latmin, datum = datum, unit = unit)
 }
 \arguments{
 \item{property}{Projection property, should be one of "Equal area", "Conformal" and "Equidistant".}

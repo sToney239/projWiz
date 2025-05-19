@@ -27,38 +27,28 @@ library(projWiz)
 
 The main purpose of `projWiz` is for manually specifying regional map projection. There is a function called `proj_region()`, along with simplified versions like `proj_equal_area()`, `proj_conformal()`, and `proj_equidistant()`, corresponding to the map projection properties of preserving **area**, **shape**, and **distance**. For some basic knowledge on these properties, you can refer check [map projection wiki](https://en.wikipedia.org/wiki/Map_projection#Metric_properties_of_maps)
 
-```{r,message=FALSE,fig.width=5, fig.height=3, dpi = 300}
+```{r, message=FALSE, fig.width=5, fig.height=3, dpi = 300}
+library(projWiz)
+# load internal data and convert to sf object
+spain = list(example_country$Spain) |> 
+  sf::st_polygon() |> sf::st_sfc(crs = 4326)
+# create new specified projection string
+new_proj = proj_region(spain, property = "Equal area")
+
 par(mfrow=c(1,2), mar=c(2, 2, 2, 1), oma=c(0, 0, 0, 0), bg="transparent")
 # `example_country` is internal data from this package, it's from Natural Earth 1:110m Cultural Vectors
-spain = example_country$Spain |> 
-  list() |> 
-  st_polygon() |> 
-  st_sfc(crs = 4326)
-
-quick_proj_region_map = function(proj_type) {
-  the_proj = proj_region(spain, property = proj_type)
-  projected = st_transform(spain, the_proj)
-  g = st_graticule(projected)
-  plot(projected, graticule = g, key.pos = NULL, 
-       axes = FALSE,main = proj_type, bg = "white", col.main = "#0099FF")
-}
-par(mfrow=c(1,2))
+par(mfrow=c(1,2), mar=c(2, 2, 2, 1), oma=c(0, 0, 0, 0), bg="transparent")
+# this is the original CRS
 plot(spain, graticule = TRUE, bg = "white", main = "WGS84", col.main = "#0099FF")
-quick_proj_region_map("Equal area")
+# this is the CRS calculated by `projWiz`
+plot(sf::st_transform(spain, new_proj), graticule = TRUE, bg = "white", main="New CRS",col.main = "#0099FF")
 ```
 
 As mentioned, `proj_equal_area()` is a pre-set parameter version of `proj_region()`. For example:
 
 ```{r, message=FALSE}
-example_area = matrix(
-  c(10,3, 14, 3, 14,5, 10,5, 10,3),
-  byrow = TRUE, ncol = 2
-) |> 
-  list() |> 
-  st_polygon() |> 
-  st_sfc(crs = 4326) 
-proj_region(example_area,"Equal area")
-proj_equal_area(example_area)
+proj_region(spain ,"Equal area")
+proj_equal_area(spain)
 ```
 They will generate the same result.
 
@@ -124,7 +114,7 @@ plotRGB(project(world_lonlat, new_world_proj), colNA="transparent")
 
 > For more suggestions or references on selecting a world map projection, you can check [here](https://stoney239.github.io/projWiz/articles/world-proj-illustration.html).
 
-## Message Explaination of `proj_region()`
+## Message Explaination for `proj_region()`
 
 When running the `proj_region()` or `proj_equal_area()` or related functions, there will be some messages on the console, which will tell you why the projection is selected.
 
